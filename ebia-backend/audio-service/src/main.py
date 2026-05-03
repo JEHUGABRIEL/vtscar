@@ -4,7 +4,10 @@
 #  Algorithme : Wang 2003 — spectrogramme FFT + hash de paires
 # ============================================================
 
-import os, hashlib, tempfile, time
+import os
+import hashlib
+import tempfile
+import time
 from pathlib import Path
 from typing import Optional
 
