@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Administration — Adjun Immo</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#0D2D5A', fonce: '#071A38', clair: '#1A4A8A' },
+            gold: { DEFAULT: '#C9A84C', clair: '#F0D080' },
+            gris: { DEFAULT: '#F7F7F5', moyen: '#E8E8E4' },
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    .login-card {
+      animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(28px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 1.5px solid #E8E8E4;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: #222;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus {
+      border-color: #0D2D5A;
+      box-shadow: 0 0 0 3px rgba(13,45,90,0.08);
+    }
+    .input-field.error {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 0.88rem;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .input-wrap:focus-within .input-icon {
+      color: #0D2D5A;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: #0D2D5A;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.3px;
+    }
+    .btn-login:hover:not(:disabled) {
+      background: #1A4A8A;
+      box-shadow: 0 4px 16px rgba(13,45,90,0.25);
+      transform: translateY(-1px);
+    }
+    .btn-login:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .btn-login:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .error-msg {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(3px); }
+      30%, 50%, 70% { transform: translateX(-4px); }
+      40%, 60% { transform: translateX(4px); }
+    }
+
+    /* Rate-limit lockout bar */
+    .lockout-bar {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #c2410c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Spinner */
+    .spinner-sm {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Eye toggle */
+    .eye-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #aaa;
+      font-size: 0.88rem;
+      padding: 2px;
+      transition: color 0.2s;
+    }
+    .eye-toggle:hover { color: #0D2D5A; }
+
+    /* BG pattern */
+    .bg-pattern {
+      background-color: #071A38;
+      background-image:
+        radial-gradient(ellipse at 15% 50%, rgba(201,168,76,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 20%, rgba(26,74,138,0.4) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-pattern flex items-center justify-center p-4">
+
+  <div class="login-card w-full max-w-[420px]">
+
+    <!-- Logo / Brand -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl mb-4 backdrop-blur-sm border border-white/10">
+        <svg class="w-9 h-9" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="28" width="30" height="3" rx="1" fill="#C9A84C"/>
+          <rect x="9" y="10" width="14" height="18" rx="1" fill="none" stroke="#fff" stroke-width="1.8"/>
+          <line x1="12" y1="14" x2="20" y2="14" stroke="#fff" stroke-width="1.4"/>
+          <line x1="12" y1="17.5" x2="20" y2="17.5" stroke="#fff" stroke-width="1.4"/>
+          <line x1="12" y1="21" x2="20" y2="21" stroke="#fff" stroke-width="1.4"/>
+          <line x1="12" y1="24.5" x2="20" y2="24.5" stroke="#fff" stroke-width="1.4"/>
+          <rect x="22" y="15" width="11" height="13" rx="1" fill="none" stroke="#fff" stroke-width="1.8"/>
+          <line x1="25" y1="19" x2="30" y2="19" stroke="#fff" stroke-width="1.4"/>
+          <line x1="25" y1="22" x2="30" y2="22" stroke="#fff" stroke-width="1.4"/>
+          <line x1="25" y1="25" x2="30" y2="25" stroke="#fff" stroke-width="1.4"/>
+        </svg>
+      </div>
+      <h1 class="text-white font-extrabold text-xl tracking-wide">ADJUN IMMO</h1>
+      <p class="text-white/40 text-sm tracking-[2px] uppercase mt-1 font-medium">Administration</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.35)] overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="px-7 pt-7 pb-5 border-b border-gris-moyen">
+        <h2 class="text-navy font-bold text-lg flex items-center gap-2.5">
+          <span class="w-8 h-8 bg-navy/8 rounded-lg flex items-center justify-center">
+            <i class="fa-solid fa-lock text-navy text-[0.8rem]"></i>
+          </span>
+          Connexion sécurisée
+        </h2>
+        <p class="text-[#888] text-[0.82rem] mt-1">Accès réservé aux administrateurs autorisés.</p>
+      </div>
+
+      <!-- Form -->
+      <div class="px-7 py-6">
+
+        <!-- Error message -->
+        <div id="errorMsg" class="hidden mb-5"></div>
+
+        <!-- Lockout -->
+        <div id="lockoutMsg" class="hidden mb-5"></div>
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label class="block text-[0.78rem] font-bold text-navy uppercase tracking-[0.5px] mb-1.5">
+            Adresse e-mail
+          </label>
+          <div class="input-wrap relative">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input
+              type="email"
+              id="loginEmail"
+              class="input-field"
+              placeholder="admin@adjunimmo.com"
+              autocomplete="email"
+              autofocus
+            >
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-6">
+          <label class="block text-[0.78rem] font-bold text-navy uppercase tracking-[0.5px] mb-1.5">
+            Mot de passe
+          </label>
+          <div class="input-wrap relative">
+            <i class="fa-solid fa-key input-icon"></i>
+            <input
+              type="password"
+              id="loginPassword"
+              class="input-field pr-10"
+              placeholder="••••••••••"
+              autocomplete="current-password"
+            >
+            <button type="button" class="eye-toggle" id="eyeToggle" tabindex="-1" aria-label="Afficher/masquer">
+              <i class="fa-solid fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button id="loginBtn" class="btn-login" onclick="doLogin()">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          Se connecter
+        </button>
+
+        <!-- Attempt counter (hidden, shown after failures) -->
+        <p id="attemptHint" class="hidden text-center text-[0.78rem] text-[#aaa] mt-4"></p>
+      </div>
+
+    </div>
+
+    <!-- Back link -->
+    <div class="text-center mt-6">
+      <a href="index.html" class="text-white/40 text-[0.82rem] hover:text-white/70 transition-colors no-underline">
+        <i class="fa-solid fa-arrow-left mr-1.5"></i>Retour au site
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // ===== Firebase Init =====
+    var firebaseConfig = {
+      apiKey: "AIzaSyDMU1VU_3W50EwLCwzs6-ElbfCye6LE3mc",
+      authDomain: "project-1871f7bb-347b-4f86-a85.firebaseapp.com",
+      projectId: "project-1871f7bb-347b-4f86-a85",
+      storageBucket: "project-1871f7bb-347b-4f86-a85.firebasestorage.app",
+      messagingSenderId: "971306126898",
+      appId: "1:971306126898:web:67bcf424798776373f362b"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var auth = firebase.auth();
+
+    // ===== State =====
+    var MAX_ATTEMPTS = 5;
+    var LOCKOUT_MS = 15 * 60 * 1000; // 15 min
+    var attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
+    var lockedUntil = parseInt(sessionStorage.getItem('loginLockedUntil') || '0');
+    var loading = false;
+
+    // Si déjà connecté → rediriger directement
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        window.location.replace('admin.html');
+      }
+    });
+
+    // ===== Eye toggle =====
+    document.getElementById('eyeToggle').addEventListener('click', function() {
+      var inp = document.getElementById('loginPassword');
+      var icon = document.getElementById('eyeIcon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash';
+      } else {
+        inp.type = 'password';
+        icon.className = 'fa-solid fa-eye';
+      }
+    });
+
+    // ===== Enter key =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !loading) doLogin();
+    });
+
+    // ===== Helpers =====
+    function showError(msg) {
+      var el = document.getElementById('errorMsg');
+      el.className = 'error-msg mb-5';
+      el.innerHTML = '<i class="fa-solid fa-circle-exclamation flex-shrink-0"></i><span>' + msg + '</span>';
+      el.classList.remove('hidden');
+      // Shake the inputs
+      ['loginEmail','loginPassword'].forEach(function(id) {
+        document.getElementById(id).classList.add('error');
+      });
+    }
+
+    function clearError() {
+      var el = document.getElementById('errorMsg');
+      el.classList.add('hidden');
+      ['loginEmail','loginPassword'].forEach(function(id) {
+        document.getElementById(id).classList.remove('error');
+      });
+    }
+
+    function setLoading(state) {
+      loading = state;
+      var btn = document.getElementById('loginBtn');
+      if (state) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-sm"></span> Vérification...';
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Se connecter';
+      }
+    }
+
+    function showLockout(remaining) {
+      var mins = Math.ceil(remaining / 60000);
+      var el = document.getElementById('lockoutMsg');
+      el.className = 'lockout-bar mb-5';
+      el.innerHTML = '<i class="fa-solid fa-shield-halved flex-shrink-0"></i><span>Trop de tentatives. Réessayez dans <strong>' + mins + ' min</strong>.</span>';
+      el.classList.remove('hidden');
+      document.getElementById('loginBtn').disabled = true;
+
+      // Countdown refresh
+      setTimeout(function() {
+        el.classList.add('hidden');
+        document.getElementById('loginBtn').disabled = false;
+        attempts = 0;
+        sessionStorage.removeItem('loginAttempts');
+        sessionStorage.removeItem('loginLockedUntil');
+      }, remaining);
+    }
+
+    function updateAttemptHint() {
+      if (attempts === 0) return;
+      var remaining = MAX_ATTEMPTS - attempts;
+      var hint = document.getElementById('attemptHint');
+      hint.textContent = remaining > 0
+        ? remaining + ' tentative' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + ' avant blocage temporaire.'
+        : '';
+      hint.classList.remove('hidden');
+    }
+
+    // Check lockout on page load
+    if (lockedUntil && Date.now() < lockedUntil) {
+      showLockout(lockedUntil - Date.now());
+    }
+
+    // ===== Login =====
+    function doLogin() {
+      clearError();
+
+      // Check lockout
+      if (lockedUntil && Date.now() < lockedUntil) {
+        showLockout(lockedUntil - Date.now());
+        return;
+      }
+
+      var email = document.getElementById('loginEmail').value.trim();
+      var password = document.getElementById('loginPassword').value;
+
+      // Basic client-side validation
+      if (!email || !password) {
+        showError('Veuillez remplir tous les champs.');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Adresse e-mail invalide.');
+        return;
+      }
+
+      setLoading(true);
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(function(cred) {
+          // Vérifier le rôle si nécessaire (ici on vérifie juste que l'auth réussit)
+          attempts = 0;
+          sessionStorage.removeItem('loginAttempts');
+          sessionStorage.removeItem('loginLockedUntil');
+          // Rediriger vers le dashboard
+          window.location.replace('admin.html');
+        })
+        .catch(function(err) {
+          setLoading(false);
+          attempts++;
+          sessionStorage.setItem('loginAttempts', attempts);
+
+          if (attempts >= MAX_ATTEMPTS) {
+            lockedUntil = Date.now() + LOCKOUT_MS;
+            sessionStorage.setItem('loginLockedUntil', lockedUntil);
+            showLockout(LOCKOUT_MS);
+            showError('Compte temporairement bloqué après ' + MAX_ATTEMPTS + ' tentatives échouées.');
+            return;
+          }
+
+          // Messages d'erreur Firebase traduits
+          var msg = 'Identifiants incorrects. Vérifiez votre e-mail et mot de passe.';
+          if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+            msg = 'E-mail ou mot de passe incorrect.';
+          } else if (err.code === 'auth/too-many-requests') {
+            msg = 'Trop de tentatives. Veuillez patienter quelques minutes avant de réessayer.';
+          } else if (err.code === 'auth/network-request-failed') {
+            msg = 'Erreur réseau. Vérifiez votre connexion internet.';
+          } else if (err.code === 'auth/user-disabled') {
+            msg = 'Ce compte a été désactivé. Contactez un super-administrateur.';
+          }
+
+          showError(msg);
+          updateAttemptHint();
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merci — Adjun Immo</title>
+  <meta name="description" content="Merci de nous avoir contactés — Adjun Immo vous recontactera sous 24h.">
+  <meta name="robots" content="noindex">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://adjunimmo.com/merci.html">
+  <meta property="og:title" content="Merci — Adjun Immo">
+  <meta property="og:description" content="Votre demande a bien été envoyée. Nous vous recontacterons sous 24h.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#0D2D5A', fonce: '#071A38', clair: '#1A4A8A' },
+            gold: { DEFAULT: '#C9A84C', clair: '#F0D080' },
+            gris: { DEFAULT: '#F7F7F5', moyen: '#E8E8E4' },
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="font-sans text-[#222] bg-white leading-relaxed">
+
+  <!-- ===== HEADER ===== -->
+  <header class="sticky top-0 z-50 bg-white border-b border-gris-moyen shadow-[0_2px_12px_rgba(13,45,90,0.08)]">
+    <div class="max-w-[1200px] mx-auto flex items-center justify-between px-6 py-3.5">
+      <a href="index.html" class="flex items-center gap-3 no-underline">
+        <svg class="w-[42px] h-[42px] shrink-0" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="28" width="30" height="3" rx="1" fill="#0D2D5A"/>
+          <rect x="9" y="10" width="14" height="18" rx="1" fill="none" stroke="#0D2D5A" stroke-width="1.8"/>
+          <line x1="12" y1="14" x2="20" y2="14" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="12" y1="17.5" x2="20" y2="17.5" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="12" y1="21" x2="20" y2="21" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="12" y1="24.5" x2="20" y2="24.5" stroke="#0D2D5A" stroke-width="1.4"/>
+          <rect x="22" y="15" width="11" height="13" rx="1" fill="none" stroke="#0D2D5A" stroke-width="1.8"/>
+          <line x1="25" y1="19" x2="30" y2="19" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="25" y1="22" x2="30" y2="22" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="25" y1="25" x2="30" y2="25" stroke="#0D2D5A" stroke-width="1.4"/>
+        </svg>
+        <div class="leading-tight">
+          <strong class="block text-lg font-extrabold text-navy tracking-[1px]">ADJUN IMMO</strong>
+          <span class="text-[0.68rem] text-gold tracking-[2px] uppercase font-semibold">Bangui &bull; RCA</span>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== CONTENU PRINCIPAL ===== -->
+  <div class="min-h-[calc(100vh-180px)] flex items-center justify-center px-6 py-20">
+    <div class="max-w-[560px] w-full text-center reveal active" data-reveal="up">
+
+      <!-- Carte de confirmation -->
+      <div class="bg-white rounded-xl shadow-[0_8px_32px_rgba(13,45,90,0.08)] border border-gris-moyen p-10 max-md:p-8">
+
+        <!-- Icône succès animée -->
+        <div class="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+
+        <h1 class="text-[1.8rem] font-extrabold text-navy mb-3">Message envoyé !</h1>
+        <p class="text-[#555] text-base leading-relaxed mb-6">
+          Merci de nous avoir contactés. Votre demande a bien été transmise à notre équipe.
+        </p>
+
+        <div class="bg-gris rounded-lg p-5 mb-8 text-left text-sm text-[#555] space-y-2">
+          <p class="flex items-start gap-2.5">
+            <i class="fa-solid fa-clock text-gold mt-0.5"></i>
+            <span><strong>Délai de réponse :</strong> sous 24h ouvrées</span>
+          </p>
+          <p class="flex items-start gap-2.5">
+            <i class="fa-solid fa-phone text-gold mt-0.5"></i>
+            <span><strong>Urgence ?</strong> Appelez-nous au <a href="tel:+23675298984" class="text-navy underline font-semibold">(+236) 75 29 89 84</a></span>
+          </p>
+          <p class="flex items-start gap-2.5">
+            <i class="fa-brands fa-whatsapp text-gold mt-0.5"></i>
+            <span><strong>WhatsApp :</strong> <a href="https://wa.me/23675298984" target="_blank" class="text-navy underline font-semibold">+236 75 29 89 84</a></span>
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="index.html" class="bg-navy text-white no-underline px-8 py-3 rounded font-bold text-[0.95rem] inline-flex items-center justify-center gap-2 hover:bg-navy-clair transition-colors duration-200">
+            <i class="fa-solid fa-house"></i> Retour à l'accueil
+          </a>
+          <a href="biens.html" class="border border-gris-moyen text-navy no-underline px-8 py-3 rounded font-semibold text-[0.95rem] inline-flex items-center justify-center gap-2 hover:border-navy hover:bg-navy/5 transition-all duration-200">
+            <i class="fa-solid fa-building"></i> Voir nos biens
+          </a>
+        </div>
+      </div>
+
+      <!-- Lien contact -->
+      <p class="text-sm text-[#999] mt-6">
+        Vous n'avez pas reçu de confirmation ? <a href="index.html#contact" class="text-navy underline font-medium">Contactez-nous à nouveau</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-navy-fonce">
+    <div class="border-t border-white/8 px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <p class="text-white/40 text-[0.82rem]">
+        &copy; 2026 <span class="text-gold">Adjun Immo</span> &mdash; Agence immobilière à Bangui, République Centrafricaine
+      </p>
+      <a href="index.html" class="inline-flex items-center gap-1.5 text-white/40 text-[0.82rem] no-underline hover:text-gold transition-colors duration-200">
+        <i class="fa-solid fa-arrow-left"></i> Retour au site
+      </a>
+    </div>
+  </footer>
+
+</body>
+</html>

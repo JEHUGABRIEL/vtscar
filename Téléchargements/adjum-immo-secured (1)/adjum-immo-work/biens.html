@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tous nos biens — Adjun Immo | Agence immobilière à Bangui</title>
+  <meta name="description" content="Consultez l'ensemble des biens disponibles à la vente et à la location à Bangui avec Adjun Immo : appartements, villas, terrains, locaux commerciaux.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://adjunimmo.com/biens.html">
+  <meta property="og:title" content="Tous nos biens — Adjun Immo">
+  <meta property="og:description" content="Consultez notre sélection de biens immobiliers à Bangui : achat, vente et location.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Adjun Immo">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tous nos biens — Adjun Immo">
+  <meta name="twitter:description" content="Consultez notre sélection de biens immobiliers à Bangui.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+
+  <!-- View Transitions API (cross-page animations) -->
+  <meta name="view-transition" content="same-origin">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#0D2D5A', fonce: '#071A38', clair: '#1A4A8A' },
+            gold: { DEFAULT: '#C9A84C', clair: '#F0D080' },
+            gris: { DEFAULT: '#F7F7F5', moyen: '#E8E8E4' },
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- View Transition direction (injected before first paint) -->
+  <script>
+  !function(){
+    var d = sessionStorage.getItem('vtDir');
+    sessionStorage.removeItem('vtDir');
+    if (!d) return;
+    var s = document.createElement('style');
+    if (d === 'f') {
+      s.textContent = '::view-transition-old(root){animation:vt-out-left .35s cubic-bezier(.34,1.56,.64,1) both}::view-transition-new(root){animation:vt-in-right .35s cubic-bezier(.34,1.56,.64,1) both}';
+    } else {
+      s.textContent = '::view-transition-old(root){animation:vt-out-right .35s cubic-bezier(.34,1.56,.64,1) both}::view-transition-new(root){animation:vt-in-left .35s cubic-bezier(.34,1.56,.64,1) both}';
+    }
+    document.head.appendChild(s);
+  }();
+  </script>
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "RealEstateAgent",
+        "name": "Adjun Immo",
+        "description": "Agence immobilière à Bangui, achat, vente, location et gestion de biens immobiliers en RCA",
+        "url": "https://adjunimmo.com/biens.html",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bangui",
+          "addressCountry": "CF"
+        },
+        "areaServed": "Bangui"
+      },
+      {
+        "@type": "ItemList",
+        "name": "Tous nos biens immobiliers à Bangui",
+        "description": "Sélection d'appartements, villas, terrains et locaux commerciaux disponibles à la vente et à la location à Bangui",
+        "url": "https://adjunimmo.com/biens.html",
+        "numberOfItems": 12,
+        "itemListOrder": "Descending",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "RealEstateListing",
+              "name": "Villa moderne avec jardin",
+              "description": "Villa moderne de 4 chambres à Boy-Rabe, Bangui",
+              "url": "https://adjunimmo.com/biens.html"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "RealEstateListing",
+              "name": "Appartement meublé standing",
+              "description": "Appartement meublé 3 chambres au centre-ville de Bangui",
+              "url": "https://adjunimmo.com/biens.html"
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "RealEstateListing",
+              "name": "Local commercial — Rez-de-chaussée",
+              "description": "Local commercial de 120 m² à Lakouanga, Bangui",
+              "url": "https://adjunimmo.com/biens.html"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="font-sans text-[#222] bg-white leading-relaxed">
+
+  <!-- ===== Page Loader (spinner) ===== -->
+  <div id="pageLoader">
+    <div>
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="sticky top-0 z-50 bg-white border-b border-gris-moyen shadow-[0_2px_12px_rgba(13,45,90,0.08)]">
+    <div class="max-w-[1200px] mx-auto flex items-center justify-between px-6 py-3.5 relative">
+      <a href="index.html" class="flex items-center gap-3 no-underline">
+        <svg class="w-[42px] h-[42px] shrink-0" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="28" width="30" height="3" rx="1" fill="#0D2D5A"/>
+          <rect x="9" y="10" width="14" height="18" rx="1" fill="none" stroke="#0D2D5A" stroke-width="1.8"/>
+          <line x1="12" y1="14" x2="20" y2="14" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="12" y1="17.5" x2="20" y2="17.5" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="12" y1="21" x2="20" y2="21" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="12" y1="24.5" x2="20" y2="24.5" stroke="#0D2D5A" stroke-width="1.4"/>
+          <rect x="22" y="15" width="11" height="13" rx="1" fill="none" stroke="#0D2D5A" stroke-width="1.8"/>
+          <line x1="25" y1="19" x2="30" y2="19" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="25" y1="22" x2="30" y2="22" stroke="#0D2D5A" stroke-width="1.4"/>
+          <line x1="25" y1="25" x2="30" y2="25" stroke="#0D2D5A" stroke-width="1.4"/>
+        </svg>
+        <div class="leading-tight">
+          <strong class="block text-lg font-extrabold text-navy tracking-[1px]">ADJUN IMMO</strong>
+          <span class="text-[0.68rem] text-gold tracking-[2px] uppercase font-semibold">Bangui &bull; RCA</span>
+        </div>
+      </a>
+
+      <button id="menuToggle" class="hidden max-md:block bg-transparent border-none text-navy text-[1.4rem] cursor-pointer">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav id="navMenu" class="flex gap-7 text-sm max-md:absolute max-md:top-full max-md:right-0 max-md:w-3/4 max-md:bg-white max-md:flex-col max-md:p-6 max-md:pt-16 max-md:gap-4 max-md:opacity-0 max-md:pointer-events-none max-md:translate-y-[-10px] max-md:transition-all max-md:duration-300 max-md:ease-out max-md:border-t max-md:border-gris-moyen max-md:shadow-[0_8px_20px_rgba(13,45,90,0.08)] max-md:open:flex max-md:open:h-[calc(100vh-4rem)] max-md:open:overflow-y-auto">
+        <a href="index.html" class="text-[#222] no-underline font-medium hover:text-navy transition-colors duration-200"><i class="fa-solid fa-house"></i> Accueil</a>
+        <a href="biens.html" class="text-navy no-underline font-semibold border-b-2 border-navy pb-1">Tous nos biens</a>
+        <a href="index.html#apropos" class="text-[#222] no-underline font-medium hover:text-navy transition-colors duration-200">À propos</a>
+        <a href="index.html#contact" class="bg-navy text-white no-underline text-center px-5 py-2.5 rounded font-semibold hover:bg-navy-clair transition-colors duration-200 max-md:block">Nous contacter</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Mobile Menu Overlay ===== -->
+  <div id="menuOverlay" class="fixed inset-0 bg-black/40 z-40 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"></div>
+
+    <!-- ===== HERO CAROUSEL ===== -->
+  <section id="heroCarousel" class="relative overflow-hidden" style="height:420px">
+
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1560185127-6a45c3b0d24a?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=80')"></div>
+
+    <div class="absolute inset-0 bg-gradient-to-t from-navy-fonce/70 via-transparent to-transparent z-[1]"></div>
+    <div class="absolute inset-0 z-[2] flex flex-col justify-center px-6">
+      <div class="max-w-[1200px] mx-auto w-full">
+        <div class="flex items-center gap-2.5 mb-3">
+          <span class="h-[2px] w-8 bg-gold block"></span>
+          <p class="text-[0.75rem] font-bold uppercase tracking-[2.5px] text-gold" id="heroLabel">Notre catalogue</p>
+        </div>
+        <div style="height:3.6rem;overflow:hidden">
+          <h1 id="heroHeadline" class="text-[2.1rem] font-extrabold text-white leading-tight" style="transition:opacity .45s ease,transform .45s cubic-bezier(.25,.46,.45,.94)">
+            Tous nos biens immobiliers
+          </h1>
+        </div>
+        <p id="heroSub" class="text-white/75 text-[0.96rem] max-w-[560px] mt-2" style="transition:opacity .45s ease,transform .45s cubic-bezier(.25,.46,.45,.94)">
+          Découvrez notre sélection de propriétés disponibles à Bangui et ses environs.
+        </p>
+        <div class="mt-6 flex gap-3 items-center flex-wrap">
+          <a href="#" onclick="document.getElementById('biensList').scrollIntoView({behavior:'smooth'});return false;" class="inline-flex items-center gap-2 bg-gold text-navy-fonce px-6 py-2.5 rounded font-bold text-[0.88rem] no-underline hover:bg-gold-clair transition-colors duration-200 shadow-lg">
+            <i class="fa-solid fa-search"></i> Explorer les biens
+          </a>
+          <a href="index.html#contact" class="inline-flex items-center gap-2 border border-white/30 text-white px-5 py-2.5 rounded font-semibold text-[0.88rem] no-underline hover:bg-white/15 transition-colors duration-200">
+            <i class="fa-solid fa-phone"></i> Nous contacter
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-[3] flex gap-2" id="heroDots"></div>
+    <button onclick="heroGo(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-[3] w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 border border-white/20 text-white text-sm flex items-center justify-center transition-all cursor-pointer">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button onclick="heroGo(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-[3] w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 border border-white/20 text-white text-sm flex items-center justify-center transition-all cursor-pointer">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </section>
+
+  <style>
+    @media(max-width:640px){#heroCarousel{height:300px!important}#heroCarousel h1{font-size:1.4rem!important}}
+    .hero-dot-c{width:28px;height:3px;background:rgba(255,255,255,.35);border-radius:2px;cursor:pointer;transition:background .3s,width .3s}
+    .hero-dot-c.active{background:#C9A84C;width:44px}
+    #heroHeadline,#heroSub{will-change:opacity,transform}
+    .htxt-out{opacity:0!important;transform:translateY(14px)!important}
+  </style>
+
+  <script>
+  (function(){
+    var SLIDES=[
+      {label:"Notre catalogue",h:"Tous nos biens immobiliers",sub:"Découvrez notre sélection de propriétés disponibles à Bangui et ses environs."},
+      {label:"Villas & Maisons",h:"Des villas d’exception à Bangui",sub:"Résidences spacieuses avec jardins, gardiennage et finitions haut de gamme pour votre famille."},
+      {label:"Appartements meublés",h:"Standing au cœur de Bangui",sub:"Logements modernes et équipés dans les quartiers les plus prisés de la capitale."},
+      {label:"Investissement",h:"Investissez dans l’immobilier centrafricain",sub:"Locaux commerciaux, immeubles de rapport, terrains — des opportunités uniques en RCA."},
+      {label:"Locations",h:"Trouvez votre prochaine location",sub:"Des biens à louer dans tous les quartiers de Bangui, adaptés à tous les budgets."}
+    ];
+    var slides=document.querySelectorAll("#heroCarousel .hero-slide");
+    var hEl=document.getElementById("heroHeadline");
+    var sEl=document.getElementById("heroSub");
+    var lEl=document.getElementById("heroLabel");
+    var dots=document.getElementById("heroDots");
+    var cur=0,timer;
+    SLIDES.forEach(function(_,i){
+      var d=document.createElement("div");
+      d.className="hero-dot-c"+(i===0?" active":"");
+      d.onclick=function(){go(i);};
+      dots.appendChild(d);
+    });
+    function getDots(){return dots.querySelectorAll(".hero-dot-c")}
+    function go(idx){
+      slides[cur].classList.remove("active");
+      getDots()[cur].classList.remove("active");
+      cur=(idx+SLIDES.length)%SLIDES.length;
+      slides[cur].classList.add("active");
+      getDots()[cur].classList.add("active");
+      hEl.classList.add("htxt-out");sEl.classList.add("htxt-out");
+      setTimeout(function(){
+        lEl.textContent=SLIDES[cur].label;
+        hEl.textContent=SLIDES[cur].h;
+        sEl.textContent=SLIDES[cur].sub;
+        hEl.classList.remove("htxt-out");sEl.classList.remove("htxt-out");
+      },300);
+      clearInterval(timer);timer=setInterval(function(){go(cur+1);},5500);
+    }
+    window.heroGo=function(d){go(cur+d);};
+    var tx=0;
+    var el=document.getElementById("heroCarousel");
+    el.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;},{passive:true});
+    el.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)go(cur+(dx<0?1:-1));});
+    timer=setInterval(function(){go(cur+1);},5500);
+  })();
+  </script>
+
+  <!-- ===== FILTERS BAR ===== -->
+  <div class="bg-white border-b border-gris-moyen px-6 py-5 sticky top-[72px] z-40 max-md:top-[60px]">
+    <div class="max-w-[1200px] mx-auto flex flex-wrap gap-3 items-center">
+      <div class="flex items-center gap-2 text-navy font-semibold text-[0.88rem]">
+        <i class="fa-solid fa-filter"></i> Filtres :
+      </div>
+
+      <select id="filterTransaction" class="px-3 py-2 border border-gris-moyen rounded text-[0.85rem] font-sans outline-none focus:border-navy bg-white cursor-pointer">
+        <option value="all">Tout type</option>
+        <option value="vente">À vendre</option>
+        <option value="location">À louer</option>
+      </select>
+
+      <select id="filterType" class="px-3 py-2 border border-gris-moyen rounded text-[0.85rem] font-sans outline-none focus:border-navy bg-white cursor-pointer">
+        <option value="all">Tout bien</option>
+        <option value="appartement">Appartement</option>
+        <option value="villa">Maison / Villa</option>
+        <option value="local">Bureau / Local</option>
+        <option value="terrain">Terrain</option>
+        <option value="immeuble">Immeuble</option>
+      </select>
+
+      <select id="filterQuartier" class="px-3 py-2 border border-gris-moyen rounded text-[0.85rem] font-sans outline-none focus:border-navy bg-white cursor-pointer">
+        <option value="all">Tout quartier</option>
+        <option value="Centre-ville">Centre-ville</option>
+        <option value="Boy-Rabe">Boy-Rabe</option>
+        <option value="Lakouanga">Lakouanga</option>
+        <option value="Malimaka">Malimaka</option>
+        <option value="PK5">PK5</option>
+        <option value="Autre">Autre</option>
+      </select>
+
+      <button id="clearFiltersBtn" class="text-[0.82rem] text-[#888] bg-transparent border border-gris-moyen px-3 py-2 rounded cursor-pointer hover:text-navy hover:border-navy transition-colors duration-200 flex items-center gap-1.5">
+        <i class="fa-solid fa-rotate-left"></i> Réinitialiser
+      </button>
+
+      <span id="resultCount" class="text-[0.82rem] text-[#888] ml-auto"></span>
+    </div>
+  </div>
+
+  <!-- ===== PROPERTIES GRID ===== -->
+  <div class="bg-gris py-[60px] px-6 min-h-[400px]">
+    <div class="max-w-[1200px] mx-auto">
+      <div id="biensList" class="grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-6"></div>
+      <div id="noResults" class="hidden text-center py-16">
+        <i class="fa-solid fa-house-circle-xmark text-[3rem] text-gris-moyen mb-4"></i>
+        <p class="text-[#888] text-[1.05rem]">Aucun bien ne correspond à vos critères.</p>
+        <button onclick="resetFilters()" class="mt-4 bg-navy text-white border-none px-6 py-2.5 rounded font-semibold text-[0.9rem] cursor-pointer hover:bg-navy-clair transition-colors duration-200">Voir tous les biens</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-drag-handle"><span></span></div>
+      <div class="modal-img-wrap">
+        <div class="modal-img-container">
+          <div class="modal-skeleton"></div>
+          <img id="modalImg" class="modal-img" src="" alt="">
+          <img id="modalImgNext" class="modal-img modal-img--next" src="" alt="">
+          <button id="galleryPrev" class="gallery-arrow gallery-arrow--prev" onclick="navigateGallery(-1)" style="display:none"><i class="fa-solid fa-chevron-left"></i></button>
+          <button id="galleryNext" class="gallery-arrow gallery-arrow--next" onclick="navigateGallery(1)" style="display:none"><i class="fa-solid fa-chevron-right"></i></button>
+          <div class="gallery-counter" id="galleryCounter"></div>
+        </div>
+        <div class="modal-gallery" id="modalGallery"></div>
+      </div>
+      <div class="p-8 max-md:p-5">
+        <div id="modalBadge"></div>
+        <h3 id="modalTitle" class="text-[1.4rem] font-extrabold text-navy mb-1"></h3>
+        <p id="modalLocation" class="text-[0.9rem] text-[#888] mb-2"></p>
+        <p id="modalPrice" class="text-[1.6rem] font-extrabold text-navy mb-5"></p>
+
+        <div id="modalCols" class="grid grid-cols-2 max-sm:grid-cols-1 gap-1 mb-6 p-4 bg-gris rounded-lg"></div>
+
+        <h4 class="font-bold text-navy text-[0.95rem] mb-2">Description</h4>
+        <p id="modalDesc" class="text-[0.92rem] text-[#555] leading-relaxed mb-5"></p>
+
+        <h4 class="font-bold text-navy text-[0.95rem] mb-3">Caractéristiques</h4>
+        <div id="modalFeatures" class="flex flex-wrap gap-2.5 mb-6"></div>
+
+        <div class="flex gap-3">
+          <a id="modalContactBtn" href="index.html#contact" class="flex-1 block text-center bg-navy text-white py-3 rounded font-bold text-[0.95rem] no-underline hover:bg-navy-clair transition-colors duration-200">
+            <i class="fa-solid fa-calendar-check mr-2"></i> Visite
+          </a>
+          <a id="modalWhatsAppBtn" href="#" target="_blank" class="flex-1 block text-center bg-[#25D366] text-white py-3 rounded font-bold text-[0.95rem] no-underline hover:bg-[#1ebe5a] transition-colors duration-200">
+            <i class="fa-brands fa-whatsapp mr-2"></i> Partager
+          </a>
+        </div>
+
+        <!-- ===== Biens similaires ===== -->
+        <div class="mt-8 pt-6 border-t border-gris-moyen" id="modalSimilarSection">
+          <h4 class="font-bold text-navy text-[0.95rem] mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-house-circle-check text-gold"></i> Biens similaires
+          </h4>
+          <div id="modalSimilarList" class="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-navy-fonce">
+    <div class="max-w-[1200px] mx-auto px-6 py-[56px] grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-10">
+
+      <!-- Col 1 : Logo & description -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <svg class="w-[36px] h-[36px] shrink-0" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="28" width="30" height="3" rx="1" fill="#C9A84C"/>
+            <rect x="9" y="10" width="14" height="18" rx="1" fill="none" stroke="#C9A84C" stroke-width="1.8"/>
+            <line x1="12" y1="14" x2="20" y2="14" stroke="#C9A84C" stroke-width="1.4"/>
+            <line x1="12" y1="17.5" x2="20" y2="17.5" stroke="#C9A84C" stroke-width="1.4"/>
+            <line x1="12" y1="21" x2="20" y2="21" stroke="#C9A84C" stroke-width="1.4"/>
+            <line x1="12" y1="24.5" x2="20" y2="24.5" stroke="#C9A84C" stroke-width="1.4"/>
+            <rect x="22" y="15" width="11" height="13" rx="1" fill="none" stroke="#C9A84C" stroke-width="1.8"/>
+            <line x1="25" y1="19" x2="30" y2="19" stroke="#C9A84C" stroke-width="1.4"/>
+            <line x1="25" y1="22" x2="30" y2="22" stroke="#C9A84C" stroke-width="1.4"/>
+            <line x1="25" y1="25" x2="30" y2="25" stroke="#C9A84C" stroke-width="1.4"/>
+          </svg>
+          <div class="leading-tight">
+            <strong class="block text-base font-extrabold text-white tracking-[1px]">ADJUN IMMO</strong>
+            <span class="text-[0.63rem] text-gold tracking-[2px] uppercase font-semibold">Bangui &bull; RCA</span>
+          </div>
+        </div>
+        <p class="text-white/50 text-[0.85rem] leading-relaxed">
+          Votre agence immobilière de confiance à Bangui. Achat, vente, location et gestion de biens en République Centrafricaine.
+        </p>
+      </div>
+
+      <!-- Col 2 : Liens rapides -->
+      <div>
+        <h4 class="text-[0.8rem] font-bold uppercase tracking-[2px] text-gold mb-5">Liens rapides</h4>
+        <ul class="space-y-3">
+          <li><a href="index.html" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200"><i class="fa-solid fa-chevron-right text-[0.6rem] mr-2 text-gold/40"></i>Accueil</a></li>
+          <li><a href="biens.html" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200"><i class="fa-solid fa-chevron-right text-[0.6rem] mr-2 text-gold/40"></i>Tous nos biens</a></li>
+          <li><a href="index.html#services" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200"><i class="fa-solid fa-chevron-right text-[0.6rem] mr-2 text-gold/40"></i>Nos services</a></li>
+          <li><a href="index.html#apropos" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200"><i class="fa-solid fa-chevron-right text-[0.6rem] mr-2 text-gold/40"></i>À propos</a></li>
+          <li><a href="index.html#contact" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200"><i class="fa-solid fa-chevron-right text-[0.6rem] mr-2 text-gold/40"></i>Contact</a></li>
+
+        </ul>
+      </div>
+
+      <!-- Col 3 : Contact -->
+      <div>
+        <h4 class="text-[0.8rem] font-bold uppercase tracking-[2px] text-gold mb-5">Contact</h4>
+        <div class="flex flex-col gap-3.5">
+          <div class="flex items-center gap-3 text-white/60 text-[0.9rem]">
+            <i class="fa-solid fa-location-dot text-gold/60 w-4 text-center shrink-0"></i>
+            <span>Bangui, République Centrafricaine</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-phone text-gold/60 w-4 text-center shrink-0"></i>
+            <a href="tel:+23675298984" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200">(+236) 75 29 89 84 / 72 35 66 76</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-brands fa-whatsapp text-gold/60 w-4 text-center shrink-0"></i>
+            <a href="https://wa.me/23675298984" target="_blank" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200">WhatsApp — +236 75 29 89 84</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-envelope text-gold/60 w-4 text-center shrink-0"></i>
+            <a href="mailto:contact@adjunimmo.com" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200">contact@adjunimmo.com</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-brands fa-instagram text-gold/60 w-4 text-center shrink-0"></i>
+            <a href="https://www.instagram.com/p/DVI3j_YiJk_/" target="_blank" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200">@AdjunImmo</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-brands fa-facebook text-gold/60 w-4 text-center shrink-0"></i>
+            <a href="https://www.facebook.com/61580907617522/" target="_blank" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200">Adjun Immo</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-brands fa-linkedin text-gold/60 w-4 text-center shrink-0"></i>
+            <a href="#" target="_blank" class="text-white/60 no-underline text-[0.9rem] hover:text-gold transition-colors duration-200">Adjun Immo</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-white/8 px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <p class="text-white/40 text-[0.82rem]">
+        &copy; 2026 <span class="text-gold">Adjun Immo</span> &mdash; Agence immobilière à Bangui, République Centrafricaine
+      </p>
+      <a href="#" class="inline-flex items-center gap-1.5 text-white/40 text-[0.82rem] no-underline hover:text-gold transition-colors duration-200">
+        <i class="fa-solid fa-arrow-up"></i> Haut de page
+      </a>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/23675298984" target="_blank" class="fixed bottom-[22px] right-[22px] bg-[#25D366] text-white w-[54px] h-[54px] rounded-full flex items-center justify-center text-[1.5rem] no-underline shadow-[0_4px_14px_rgba(0,0,0,0.25)] z-50 hover:bg-[#1ebe5a] transition-colors duration-200" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+
+  <script src="script.js"></script>
+  <script>
+    // ===== Biens data — chargée depuis Firestore =====
+    var biensData = [];
+
+    function renderBiens(data) {
+      var list = document.getElementById('biensList');
+      var noResults = document.getElementById('noResults');
+      var count = document.getElementById('resultCount');
+
+      if (data.length === 0) {
+        list.innerHTML = '';
+        noResults.classList.remove('hidden');
+        count.textContent = '';
+        return;
+      }
+
+      noResults.classList.add('hidden');
+      count.textContent = data.length + ' bien' + (data.length > 1 ? 's' : '') + ' trouv\u00e9' + (data.length > 1 ? 's' : '');
+
+      list.innerHTML = data.map(function(b) {
+        var badgeBg = b.badgeColor === 'gold' ? 'bg-gold text-navy-fonce' : 'bg-navy text-white';
+        var colsHtml = (b.features || []).slice(0, 3).map(function(f) {
+          return '<div class="flex items-center gap-1.5 text-[0.83rem] text-[#666]"><i class="fa-solid fa-check text-gold text-[0.7rem]"></i> ' + f + '</div>';
+        }).join('');
+        var tagHtml = b.tag ? '<div class="tag-badge tag-badge--' + (b.tag === 'Nouveau' ? 'nouveau' : 'exclusivite') + '">' + b.tag + '</div>' : '';
+        var imgUrl = b.img.replace('w=800', 'w=500');
+
+        return '<div data-id="' + b.id + '" class="rounded-lg overflow-hidden border border-gris-moyen hover:shadow-[0_8px_28px_rgba(13,45,90,0.08)] hover:-translate-y-[3px] transition-all duration-200 bg-white">' +
+          '<div class="relative h-[200px] overflow-hidden cursor-pointer" onclick="openModal(' + b.id + ')">' +
+            '<img src="' + imgUrl + '" alt="' + b.alt + '" class="w-full h-full object-cover hover:scale-105 transition-transform duration-[400ms]">' +
+            '<div class="absolute top-3.5 left-3.5 ' + badgeBg + ' text-[0.75rem] font-bold px-2.5 py-1 rounded-sm tracking-[1px] uppercase">' + b.badge + '</div>' +
+            tagHtml +
+          '</div>' +
+          '<div class="p-[18px_20px] cursor-pointer" onclick="openModal(' + b.id + ')">' +
+            '<h3 class="text-base font-bold text-navy mb-1 hover:text-gold transition-colors">' + b.title + '</h3>' +
+            '<div class="text-[0.85rem] text-[#888] mb-3 flex items-center gap-1.5"><i class="fa-solid fa-location-dot"></i> ' + b.quartier + ', Bangui</div>' +
+            '<div class="text-[1.15rem] font-extrabold text-navy mb-3">' + b.prix + ' <span class="text-[0.8rem] font-normal text-[#888]">' + b.unite + '</span></div>' +
+            '<div class="flex gap-4 pt-3 border-t border-gris-moyen flex-wrap">' + colsHtml + '</div>' +
+          '</div>' +
+          '<div class="flex gap-2 mx-5 mb-[18px]">' +
+            '<button onclick="openModal(' + b.id + ')" class="flex-1 bg-navy text-white py-2.5 font-semibold text-[0.88rem] rounded cursor-pointer border-none hover:bg-navy-clair transition-colors duration-200 flex items-center justify-center gap-1.5"><i class="fa-solid fa-eye"></i> Détails</button>' +
+            '<a href="index.html#contact" class="flex-1 block text-center border border-gris-moyen text-navy py-2.5 font-semibold text-[0.88rem] no-underline rounded hover:border-navy hover:bg-navy/5 transition-all duration-200">Visite</a>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function filterBiens() {
+      var transaction = document.getElementById('filterTransaction').value;
+      var type = document.getElementById('filterType').value;
+      var quartier = document.getElementById('filterQuartier').value;
+
+      var filtered = biensData.filter(function(b) {
+        if (transaction !== 'all' && b.transaction !== transaction) return false;
+        if (type !== 'all' && b.type !== type) return false;
+        if (quartier !== 'all' && b.quartier !== quartier) return false;
+        return true;
+      });
+
+      renderBiens(filtered);
+    }
+
+    window.resetFilters = function() {
+      document.getElementById('filterTransaction').value = 'all';
+      document.getElementById('filterType').value = 'all';
+      document.getElementById('filterQuartier').value = 'all';
+      filterBiens();
+    };
+
+    document.getElementById('filterTransaction').addEventListener('change', filterBiens);
+    document.getElementById('filterType').addEventListener('change', filterBiens);
+    document.getElementById('filterQuartier').addEventListener('change', filterBiens);
+    document.getElementById('clearFiltersBtn').addEventListener('click', resetFilters);
+
+    // Chargement asynchrone depuis le fichier partagé
+    loadBiensData(function(data) {
+      biensData = data;
+      renderBiens(data);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Admin — Adjun Immo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+  <style>
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:#071A38;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:#fff;border-radius:16px;padding:36px;max-width:420px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.4)}
+    input{width:100%;padding:11px 14px;border:1.5px solid #E8E8E4;border-radius:8px;font-size:.9rem;outline:none;margin-top:6px;font-family:inherit;transition:border-color .2s}
+    input:focus{border-color:#0D2D5A}
+    label{font-size:.75rem;font-weight:700;color:#0D2D5A;text-transform:uppercase;letter-spacing:.5px}
+    .btn{width:100%;padding:13px;background:#0D2D5A;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:20px;font-family:inherit;transition:background .2s}
+    .btn:hover:not(:disabled){background:#1A4A8A}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .msg{padding:12px 16px;border-radius:8px;font-size:.875rem;margin-top:16px;display:none}
+    .msg.ok{background:#f0fdf4;border:1px solid #86efac;color:#14532d}
+    .msg.err{background:#fef2f2;border:1px solid #fca5a5;color:#7f1d1d}
+    .warning{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:12px 14px;border-radius:8px;font-size:.82rem;margin-bottom:20px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="width:52px;height:52px;background:#071A38;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px">
+        <i class="fa-solid fa-user-shield" style="color:#C9A84C;font-size:1.3rem"></i>
+      </div>
+      <h1 style="font-size:1.2rem;font-weight:800;color:#0D2D5A;margin:0">Créer le compte Admin</h1>
+      <p style="color:#888;font-size:.82rem;margin-top:4px">Adjun Immo — Configuration initiale</p>
+    </div>
+
+    <div class="warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <strong> Page à usage unique.</strong> Supprimez ce fichier après création du compte admin.
+    </div>
+
+    <div style="margin-bottom:14px">
+      <label>Adresse e-mail admin</label>
+      <input type="email" id="email" placeholder="admin@adjunimmo.com" value="admin@adjunimmo.com">
+    </div>
+    <div style="margin-bottom:4px">
+      <label>Mot de passe (min. 8 caractères)</label>
+      <input type="text" id="password" placeholder="Mot de passe fort" value="AdjunImmo2025!">
+    </div>
+    <p style="color:#aaa;font-size:.75rem;margin-top:6px">
+      <i class="fa-solid fa-info-circle"></i> Modifiez ces valeurs avant de créer le compte.
+    </p>
+
+    <button class="btn" id="createBtn" onclick="createAdmin()">
+      <i class="fa-solid fa-user-plus"></i> Créer le compte admin
+    </button>
+
+    <div id="msg" class="msg"></div>
+
+    <div id="nextSteps" style="display:none;margin-top:20px;padding:14px;background:#f0fdf4;border-radius:8px;border:1px solid #86efac">
+      <p style="font-weight:700;color:#14532d;font-size:.875rem;margin-bottom:8px"><i class="fa-solid fa-circle-check"></i> Compte créé avec succès !</p>
+      <p style="color:#166534;font-size:.82rem;line-height:1.6">
+        ✅ E-mail : <strong id="createdEmail"></strong><br>
+        ✅ Mot de passe enregistré<br><br>
+        👉 <a href="admin-login.html" style="color:#0D2D5A;font-weight:700">Aller à la page de connexion →</a><br>
+        ⚠️ <strong>Supprimez ce fichier setup-admin.html de votre serveur.</strong>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyDMU1VU_3W50EwLCwzs6-ElbfCye6LE3mc",
+      authDomain: "project-1871f7bb-347b-4f86-a85.firebaseapp.com",
+      projectId: "project-1871f7bb-347b-4f86-a85",
+      storageBucket: "project-1871f7bb-347b-4f86-a85.firebasestorage.app",
+      messagingSenderId: "971306126898",
+      appId: "1:971306126898:web:67bcf424798776373f362b"
+    });
+    var auth = firebase.auth();
+
+    function showMsg(text, type) {
+      var el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = 'msg ' + type;
+      el.style.display = 'block';
+    }
+
+    function createAdmin() {
+      var email = document.getElementById('email').value.trim();
+      var password = document.getElementById('password').value;
+      var btn = document.getElementById('createBtn');
+
+      if (!email || !password) { showMsg('Remplissez tous les champs.', 'err'); return; }
+      if (password.length < 8) { showMsg('Mot de passe trop court (min. 8 caractères).', 'err'); return; }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Création en cours...';
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(function(cred) {
+          document.getElementById('createdEmail').textContent = cred.user.email;
+          document.getElementById('nextSteps').style.display = 'block';
+          document.getElementById('msg').style.display = 'none';
+          btn.style.display = 'none';
+        })
+        .catch(function(err) {
+          var msg = err.message;
+          if (err.code === 'auth/email-already-in-use') msg = 'Ce compte existe déjà. Allez directement à la connexion.';
+          if (err.code === 'auth/weak-password') msg = 'Mot de passe trop faible. Utilisez au moins 8 caractères avec chiffres et symboles.';
+          showMsg(msg, 'err');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Créer le compte admin';
+        });
+    }
+  </script>
+</body>
+</html>

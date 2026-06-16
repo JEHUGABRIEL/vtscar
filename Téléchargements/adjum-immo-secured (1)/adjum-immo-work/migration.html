@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration — Adjun Immo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+    pre { background: #f5f5f5; padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 13px; }
+    .btn { background: #0D2D5A; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .success { color: #059669; }
+    .error { color: #dc2626; }
+  </style>
+</head>
+<body>
+  <h1>🔄 Migration JSON → Firestore</h1>
+  <p>Cet outil importe les données de <code>_data/biens.json</code> dans Firestore.</p>
+
+  <div id="status" style="margin: 20px 0; padding: 12px; background: #f0f0f0; border-radius: 6px;">Prêt</div>
+
+  <button id="migrateBtn" class="btn" onclick="runMigration()">Lancer la migration</button>
+
+  <script>
+    // ===== Firebase Init =====
+    firebase.initializeApp({
+      apiKey: "AIzaSyDMU1VU_3W50EwLCwzs6-ElbfCye6LE3mc",
+      authDomain: "project-1871f7bb-347b-4f86-a85.firebaseapp.com",
+      projectId: "project-1871f7bb-347b-4f86-a85",
+      storageBucket: "project-1871f7bb-347b-4f86-a85.firebasestorage.app",
+      messagingSenderId: "971306126898",
+      appId: "1:971306126898:web:67bcf424798776373f362b"
+    });
+    var db = firebase.firestore();
+
+    function setStatus(msg, type) {
+      var el = document.getElementById('status');
+      el.innerHTML = msg;
+      el.style.background = type === 'success' ? '#ecfdf5' : type === 'error' ? '#fef2f2' : '#f0f0f0';
+      el.style.color = type === 'success' ? '#059669' : type === 'error' ? '#dc2626' : '#333';
+    }
+
+    async function runMigration() {
+      var btn = document.getElementById('migrateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Migration en cours...';
+      setStatus('Chargement de _data/biens.json...');
+
+      try {
+        var res = await fetch('_data/biens.json');
+        var json = await res.json();
+        var biens = json.biens;
+        setStatus(biens.length + ' biens trouvés. Importation vers Firestore...');
+
+        var imported = 0;
+        for (var i = 0; i < biens.length; i++) {
+          var b = biens[i];
+          // Reformater pour Firestore
+          var doc = {
+            id: b.id,
+            title: b.title,
+            description: b.description,
+            quartier: b.quartier,
+            prix: b.prix,
+            unite: b.unite,
+            transaction: b.transaction,
+            type: b.type,
+            img: b.img,
+            tag: b.tag || '',
+            cols: (b.cols || []).map(function(c) { return { icon: c.icon, label: c.label }; }),
+            gallery: (b.gallery || []).map(function(g) { return g.url; }),
+            features: (b.features || []).map(function(f) { return f.name; })
+          };
+          await db.collection('biens').add(doc);
+          imported++;
+          setStatus('Importation : ' + imported + '/' + biens.length + ' biens...');
+        }
+
+        setStatus('✅ Migration terminée ! ' + imported + ' biens importés dans Firestore.', 'success');
+        btn.textContent = '✓ Migration terminée';
+      } catch (err) {
+        setStatus('❌ Erreur : ' + err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Réessayer';
+      }
+    }
+  </script>
+</body>
+</html>

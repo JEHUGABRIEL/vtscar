@@ -1,0 +1,563 @@
+/* ===== Cross-page View Transitions ===== */
+@view-transition {
+  navigation: auto;
+}
+
+/* Default keyframes (crossfade — for direct navigation / unsupported direction) */
+@keyframes vt-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(0); }
+}
+@keyframes vt-in {
+  from { opacity: 0; transform: translateX(0); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Directional overrides (injected by inline <script> via sessionStorage) */
+@keyframes vt-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0.3; transform: translateX(-50px); }
+}
+@keyframes vt-in-right {
+  from { opacity: 0; transform: translateX(50px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes vt-out-right {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0.3; transform: translateX(50px); }
+}
+@keyframes vt-in-left {
+  from { opacity: 0; transform: translateX(-50px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+::view-transition-old(root) {
+  animation: vt-out 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Fallback : pas de blend-mode spécial, le navigateur gère le crossfade */
+
+/* ===== Custom styles complementing Tailwind ===== */
+
+/* Hero slideshow */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.hero-slide.active {
+  opacity: 1;
+}
+.hero-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(7,26,56,0.82) 45%, rgba(7,26,56,0.35) 100%);
+}
+
+/* Hero dots */
+.hero-dot {
+  width: 28px;
+  height: 3px;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background .3s, width .3s;
+}
+.hero-dot.active {
+  background: #C9A84C;
+  width: 44px;
+}
+
+/* Testimonial carousel */
+.temo-track {
+  display: flex;
+  transition: transform .6s ease;
+}
+
+/* Process steps connector line */
+.process-steps {
+  position: relative;
+}
+.process-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: #E8E8E4;
+  z-index: 0;
+}
+
+/* Apropos image decorative border */
+.apropos-img-col::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  right: 14px;
+  bottom: 14px;
+  border: 2px solid #C9A84C;
+  border-radius: 8px;
+  z-index: -1;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile menu open state (via JS class) */
+#navMenu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Mobile menu overlay fade */
+#menuOverlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile menu link stagger animation */
+@media (max-width: 767px) {
+  #navMenu a {
+    opacity: 0;
+    transform: translateX(14px);
+    transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-delay: calc(var(--stagger, 0) * 0.06s);
+  }
+  #navMenu.open a {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Testimonial carousel active dot */
+.temo-dot.active {
+  background: #0D2D5A;
+}
+
+/* Testimonial slides — responsive multi-column */
+.temo-slide {
+  flex: 0 0 33.333%;
+  min-width: 33.333%;
+}
+@media (max-width: 1024px) {
+  .temo-slide {
+    flex: 0 0 50%;
+    min-width: 50%;
+  }
+}
+@media (max-width: 640px) {
+  .temo-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+}
+
+/* ===== Property Detail Modal ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(30px) scale(0.96);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+}
+.modal-overlay.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s;
+}
+.modal-close:hover {
+  background: rgba(0,0,0,0.75);
+}
+
+.modal-img-container {
+  position: relative;
+}
+
+/* Skeleton loading placeholder for modal image */
+.modal-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: #E0E0DE;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  transition: opacity 0.35s ease;
+}
+.modal-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+  animation: skeletonShimmer 1.8s ease infinite;
+}
+.modal-skeleton.loaded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes skeletonShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Tag badge (Nouveau / Exclusivité) on property cards */
+.tag-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  animation: tagPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.tag-badge--nouveau {
+  background: #10B981;
+}
+.tag-badge--exclusivite {
+  background: #D97706;
+}
+
+@keyframes tagPop {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* Gallery image counter */
+.gallery-counter {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 5;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Gallery navigation arrows */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  color: #0D2D5A;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.2s, transform 0.2s;
+}
+.gallery-arrow:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+.gallery-arrow--prev { left: 12px; }
+.gallery-arrow--next { right: 12px; }
+
+.modal-img {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  display: block;
+  transition: opacity 0.35s ease;
+  background: #E0E0DE;
+}
+
+/* Cross-fade overlay image */
+.modal-img--next {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 2;
+  border-radius: 12px 12px 0 0;
+  background: #E0E0DE;
+}
+.modal-img--next.active {
+  opacity: 1;
+}
+.modal-img.fading-out {
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Gallery thumbnails */
+.modal-gallery {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px 14px;
+  background: #fafafa;
+  border-bottom: 1px solid #E8E8E4;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.modal-gallery::-webkit-scrollbar { height: 3px; }
+.modal-gallery::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+
+.modal-gallery img {
+  width: 72px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  border: 2px solid transparent;
+  opacity: 0.55;
+  transition: opacity 0.25s, border-color 0.25s, transform 0.2s;
+}
+.modal-gallery img:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+.modal-gallery img.active {
+  opacity: 1;
+  border-color: #C9A84C;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+}
+
+/* Similar cards within modal */
+#modalSimilarList::-webkit-scrollbar {
+  height: 4px;
+}
+#modalSimilarList::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+.similar-card {
+  scroll-snap-align: start;
+}
+#modalSimilarList {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar styling */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .modal-content {
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(50px);
+  }
+  .modal-img {
+    height: 220px;
+  }
+
+  /* Drag handle bar at top of modal */
+  .modal-drag-handle {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 2px;
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: white;
+    border-radius: 16px 16px 0 0;
+  }
+  .modal-drag-handle span {
+    display: block;
+    width: 40px;
+    height: 4px;
+    border-radius: 4px;
+    background: #D0D0D0;
+  }
+}
+
+/* Drag handle hidden by default (desktop) */
+.modal-drag-handle {
+  display: none;
+}
+
+/* ===== Page Loader / Spinner ===== */
+#pageLoader {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+#pageLoader p {
+  color: #0D2D5A;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #E8E8E4;
+  border-top-color: #0D2D5A;
+  border-radius: 50%;
+  animation: spinnerRotate 0.7s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Scroll Reveal Animations ===== */
+
+/* Base state: hidden */
+.reveal {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Visible state */
+.reveal.active {
+  opacity: 1;
+  transform: translate(0) scale(1);
+}
+
+/* Direction variants */
+.reveal[data-reveal="up"] {
+  transform: translateY(36px);
+}
+
+.reveal[data-reveal="down"] {
+  transform: translateY(-36px);
+}
+
+.reveal[data-reveal="left"] {
+  transform: translateX(-36px);
+}
+
+.reveal[data-reveal="right"] {
+  transform: translateX(36px);
+}
+
+.reveal[data-reveal="scale"] {
+  transform: scale(0.92);
+}
+
+/* Staggered delay helpers — applied via data-reveal-delay (in ms) */
+.reveal[data-reveal-delay="100"] { transition-delay: 0.1s; }
+.reveal[data-reveal-delay="150"] { transition-delay: 0.15s; }
+.reveal[data-reveal-delay="200"] { transition-delay: 0.2s; }
+.reveal[data-reveal-delay="250"] { transition-delay: 0.25s; }
+.reveal[data-reveal-delay="300"] { transition-delay: 0.3s; }
+.reveal[data-reveal-delay="350"] { transition-delay: 0.35s; }
+.reveal[data-reveal-delay="400"] { transition-delay: 0.4s; }
+.reveal[data-reveal-delay="450"] { transition-delay: 0.45s; }
+.reveal[data-reveal-delay="500"] { transition-delay: 0.5s; }
+.reveal[data-reveal-delay="600"] { transition-delay: 0.6s; }
+.reveal[data-reveal-delay="700"] { transition-delay: 0.7s; }
+
+/* Hero content fades in on page load (no scroll needed) */
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.hero-reveal:nth-child(1) { animation-delay: 0.2s; }
+.hero-reveal:nth-child(2) { animation-delay: 0.5s; }
+.hero-reveal:nth-child(3) { animation-delay: 0.8s; }
+.hero-reveal:nth-child(4) { animation-delay: 1.1s; }
+
+@keyframes heroFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

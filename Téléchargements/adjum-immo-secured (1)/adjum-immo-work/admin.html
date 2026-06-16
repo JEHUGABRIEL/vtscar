@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — Adjun Immo</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#0D2D5A', fonce: '#071A38', clair: '#1A4A8A' },
+            gold: { DEFAULT: '#C9A84C', clair: '#F0D080' },
+            gris: { DEFAULT: '#F7F7F5', moyen: '#E8E8E4' },
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    /* ===== Auth guard overlay ===== */
+    #authGuard {
+      position: fixed; inset: 0;
+      background: #071A38;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #authGuard .spinner-lg {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: #C9A84C;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== Sidebar ===== */
+    #sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: #071A38;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+    }
+    .sidebar-link:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+    .sidebar-link.active { background: rgba(201,168,76,0.15); color: #C9A84C; }
+    .sidebar-link .icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; background: rgba(255,255,255,0.07); flex-shrink: 0; }
+    .sidebar-link.active .icon { background: rgba(201,168,76,0.2); color: #C9A84C; }
+
+    /* ===== Stat cards ===== */
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 22px;
+      border: 1px solid #E8E8E4;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .stat-card:hover { box-shadow: 0 8px 24px rgba(13,45,90,0.09); transform: translateY(-2px); }
+    .stat-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ===== Admin form ===== */
+    .admin-form input,
+    .admin-form select,
+    .admin-form textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #E8E8E4;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #222;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+    .admin-form input:focus,
+    .admin-form select:focus,
+    .admin-form textarea:focus {
+      border-color: #0D2D5A;
+      box-shadow: 0 0 0 3px rgba(13,45,90,0.07);
+    }
+    .admin-form label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #0D2D5A;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .admin-form .field-hint {
+      font-size: 0.72rem;
+      color: #999;
+      margin-top: 4px;
+    }
+    .form-section-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #0D2D5A;
+      padding: 8px 0 6px;
+      border-bottom: 1px solid #E8E8E4;
+      margin-bottom: 16px;
+      margin-top: 4px;
+    }
+    .form-group { margin-bottom: 14px; }
+
+    /* ===== Table ===== */
+    .admin-table th {
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      padding: 10px 14px;
+    }
+    .admin-table td {
+      font-size: 0.875rem;
+      color: #444;
+      padding: 12px 14px;
+      border-top: 1px solid #F0F0EE;
+      vertical-align: middle;
+    }
+    .admin-table tr:hover td { background: #FAFAF8; }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+    .btn-navy { background: #0D2D5A; color: #fff; }
+    .btn-navy:hover { background: #1A4A8A; box-shadow: 0 4px 14px rgba(13,45,90,0.25); }
+    .btn-gold { background: #C9A84C; color: #071A38; font-weight: 700; }
+    .btn-gold:hover { background: #D4B560; box-shadow: 0 4px 14px rgba(201,168,76,0.35); }
+    .btn-red { background: #dc2626; color: #fff; }
+    .btn-red:hover { background: #b91c1c; }
+    .btn-ghost { background: transparent; color: #666; border: 1.5px solid #E8E8E4; }
+    .btn-ghost:hover { border-color: #0D2D5A; color: #0D2D5A; background: rgba(13,45,90,0.03); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+
+    /* ===== Badge ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-vente { background: rgba(201,168,76,0.15); color: #8a6d0c; }
+    .badge-location { background: rgba(13,45,90,0.08); color: #0D2D5A; }
+    .badge-nouveau { background: rgba(16,185,129,0.1); color: #065f46; }
+    .badge-exclusivite { background: rgba(217,119,6,0.12); color: #92400e; }
+
+    /* ===== Icon selector (cols) ===== */
+    .icon-select-wrap {
+      position: relative;
+    }
+    .icon-preview {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #0D2D5A;
+      font-size: 0.85rem;
+      width: 18px;
+      text-align: center;
+    }
+    .icon-select-wrap input {
+      padding-left: 34px !important;
+    }
+
+    /* ===== Gallery thumbs ===== */
+    .gallery-thumb {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #E8E8E4;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .gallery-thumb:hover { border-color: #C9A84C; transform: scale(1.05); }
+
+    /* ===== Notification toast ===== */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+      pointer-events: none;
+      max-width: 380px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast.success { background: #f0fdf4; border: 1px solid #86efac; color: #14532d; }
+    #toast.error { background: #fef2f2; border: 1px solid #fca5a5; color: #7f1d1d; }
+    #toast.info { background: #eff6ff; border: 1px solid #93c5fd; color: #1e3a5f; }
+
+    /* ===== Modal ===== */
+    #formModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+      backdrop-filter: blur(4px);
+    }
+    #formModal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    #formModal.open .modal-box {
+      transform: translateY(0) scale(1);
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 740px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+      transform: translateY(24px) scale(0.98);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .modal-box::-webkit-scrollbar { width: 5px; }
+    .modal-box::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+    /* ===== Confirm dialog ===== */
+    #confirmDialog {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      backdrop-filter: blur(3px);
+    }
+    #confirmDialog.open { opacity: 1; visibility: visible; }
+    .confirm-box {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+    }
+
+    /* ===== Image upload zone ===== */
+    .upload-zone {
+      border: 2px dashed #E8E8E4;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .upload-zone:hover {
+      border-color: #0D2D5A;
+      background: rgba(13,45,90,0.02);
+    }
+
+    /* ===== Responsive sidebar collapse ===== */
+    @media (max-width: 900px) {
+      #sidebar { display: none; }
+      #mainContent { margin-left: 0; }
+    }
+
+    /* ===== Search bar in table ===== */
+    .search-input {
+      padding: 8px 12px 8px 36px;
+      border: 1.5px solid #E8E8E4;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fff;
+      width: 220px;
+    }
+    .search-input:focus { border-color: #0D2D5A; }
+  </style>
+</head>
+<body class="font-sans bg-gris text-[#222] leading-relaxed" style="display:none">
+
+  <!-- ===== AUTH GUARD ===== -->
+  <div id="authGuard">
+    <div class="text-center">
+      <div class="spinner-lg mx-auto mb-4"></div>
+      <p class="text-white/40 text-sm">Vérification des accès...</p>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast"></div>
+
+  <!-- ===== CONFIRM DIALOG ===== -->
+  <div id="confirmDialog">
+    <div class="confirm-box">
+      <div class="flex items-start gap-3 mb-5">
+        <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+          <i class="fa-solid fa-triangle-exclamation text-red-600 text-sm"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-[#111] text-base" id="confirmTitle">Confirmer la suppression</h3>
+          <p class="text-[#666] text-sm mt-1" id="confirmText">Cette action est irréversible.</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="confirmCancel()" class="btn btn-ghost flex-1 justify-center">Annuler</button>
+        <button id="confirmOkBtn" class="btn btn-red flex-1 justify-center">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LAYOUT ===== -->
+  <div class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar">
+      <!-- Brand -->
+      <div class="px-5 py-5 border-b border-white/8">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 42 42" fill="none">
+              <rect x="6" y="28" width="30" height="3" rx="1" fill="#C9A84C"/>
+              <rect x="9" y="10" width="14" height="18" rx="1" fill="none" stroke="white" stroke-width="1.8"/>
+              <rect x="22" y="15" width="11" height="13" rx="1" fill="none" stroke="white" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div>
+            <div class="text-white font-extrabold text-sm tracking-wide">ADJUN IMMO</div>
+            <div class="text-white/35 text-[0.6rem] tracking-[2px] uppercase">Admin Panel</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav links -->
+      <div class="px-3 py-4 flex-1">
+        <p class="text-white/25 text-[0.6rem] font-bold uppercase tracking-[2px] px-3 mb-2">Navigation</p>
+        <div class="space-y-0.5">
+          <button class="sidebar-link active" onclick="setActiveView('biens')">
+            <span class="icon"><i class="fa-solid fa-building"></i></span>
+            Gestion des biens
+          </button>
+          <a href="biens.html" target="_blank" class="sidebar-link">
+            <span class="icon"><i class="fa-solid fa-eye"></i></span>
+            Voir le site
+          </a>
+        </div>
+
+        <p class="text-white/25 text-[0.6rem] font-bold uppercase tracking-[2px] px-3 mb-2 mt-6">Compte</p>
+        <div class="space-y-0.5">
+          <div class="sidebar-link cursor-default">
+            <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+            <span class="truncate text-xs" id="sidebarEmail">—</span>
+          </div>
+          <button class="sidebar-link text-red-400 hover:text-red-300" onclick="doLogout()">
+            <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+            Déconnexion
+          </button>
+        </div>
+      </div>
+
+      <!-- Version -->
+      <div class="px-5 py-4 border-t border-white/8">
+        <p class="text-white/20 text-[0.68rem]">v2.0 — Adjun Immo Admin</p>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="mainContent" class="flex-1 min-w-0 flex flex-col">
+
+      <!-- TOP BAR -->
+      <header class="bg-white border-b border-gris-moyen sticky top-0 z-50 shadow-[0_1px_8px_rgba(13,45,90,0.06)]">
+        <div class="flex items-center justify-between px-6 py-3.5 gap-4">
+          <div class="flex items-center gap-3">
+            <div class="flex flex-col">
+              <h1 class="font-extrabold text-navy text-[1rem] leading-tight">Tableau de bord</h1>
+              <p class="text-[0.75rem] text-[#999]" id="topbarStatus">Connexion...</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="hidden sm:flex items-center gap-1.5 text-[0.78rem] text-[#888] bg-gris px-3 py-1.5 rounded-lg border border-gris-moyen">
+              <i class="fa-solid fa-circle text-emerald-400 text-[0.5rem]"></i>
+              <span id="topbarEmail">—</span>
+            </span>
+            <button onclick="openAddForm()" class="btn btn-navy">
+              <i class="fa-solid fa-plus text-[0.8rem]"></i>
+              Ajouter un bien
+            </button>
+            <button onclick="doLogout()" class="btn btn-ghost btn-sm" title="Déconnexion">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-6 flex flex-col gap-6 flex-1">
+
+        <!-- KPI CARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="kpiCards">
+          <div class="stat-card">
+            <div class="stat-icon bg-navy/8">
+              <i class="fa-solid fa-building text-navy"></i>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold text-navy" id="kpiTotal">—</div>
+              <div class="text-xs text-[#999] font-medium mt-0.5">Biens total</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-gold/10">
+              <i class="fa-solid fa-tag text-gold"></i>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold text-navy" id="kpiVente">—</div>
+              <div class="text-xs text-[#999] font-medium mt-0.5">À vendre</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-blue-50">
+              <i class="fa-solid fa-key text-blue-500"></i>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold text-navy" id="kpiLocation">—</div>
+              <div class="text-xs text-[#999] font-medium mt-0.5">À louer</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-emerald-50">
+              <i class="fa-solid fa-star text-emerald-500"></i>
+            </div>
+            <div>
+              <div class="text-2xl font-extrabold text-navy" id="kpiNew">—</div>
+              <div class="text-xs text-[#999] font-medium mt-0.5">Nouveautés</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLE CARD -->
+        <div class="bg-white rounded-2xl border border-gris-moyen shadow-[0_2px_12px_rgba(13,45,90,0.04)] overflow-hidden flex-1">
+          <!-- Table header -->
+          <div class="flex items-center justify-between px-5 py-4 border-b border-gris-moyen flex-wrap gap-3">
+            <div>
+              <h2 class="font-bold text-navy text-[0.95rem]">Liste des biens</h2>
+              <p class="text-[0.75rem] text-[#999] mt-0.5" id="tableSubtitle">Chargement...</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <!-- Search -->
+              <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] text-[0.75rem]"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Rechercher..." oninput="filterTable()">
+              </div>
+              <!-- Filter transaction -->
+              <select id="filterTx" onchange="filterTable()" class="text-[0.82rem] border border-gris-moyen rounded-lg px-3 py-2 outline-none text-[#555] bg-white cursor-pointer">
+                <option value="">Tous</option>
+                <option value="vente">Vente</option>
+                <option value="location">Location</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full admin-table">
+              <thead>
+                <tr class="bg-gris/60">
+                  <th class="w-10">#</th>
+                  <th class="w-14">Photo</th>
+                  <th>Titre</th>
+                  <th>Quartier</th>
+                  <th>Prix</th>
+                  <th>Type</th>
+                  <th>Transaction</th>
+                  <th>Tag</th>
+                  <th class="text-right pr-5 w-24">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="biensTableBody">
+                <tr>
+                  <td colspan="9" class="text-center text-[#bbb] py-12">
+                    <div class="inline-flex flex-col items-center gap-2">
+                      <i class="fa-solid fa-spinner fa-spin text-xl text-[#ddd]"></i>
+                      <span class="text-sm">Chargement...</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty state (hidden by default) -->
+          <div id="emptyState" class="hidden py-16 text-center">
+            <div class="inline-flex flex-col items-center gap-3">
+              <div class="w-16 h-16 bg-gris rounded-2xl flex items-center justify-center mb-1">
+                <i class="fa-solid fa-building text-[#ccc] text-2xl"></i>
+              </div>
+              <p class="text-[#999] font-medium">Aucun bien trouvé</p>
+              <p class="text-[#bbb] text-sm">Essayez un autre filtre ou ajoutez un nouveau bien.</p>
+              <button onclick="openAddForm()" class="btn btn-navy mt-2">
+                <i class="fa-solid fa-plus"></i> Ajouter un bien
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== MODAL FORMULAIRE ===== -->
+  <div id="formModal">
+    <div class="modal-box">
+
+      <!-- Modal Header -->
+      <div class="sticky top-0 bg-white border-b border-gris-moyen px-6 py-4 flex items-center justify-between z-10 rounded-t-2xl">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 bg-navy/8 rounded-xl flex items-center justify-center" id="formModalIcon">
+            <i class="fa-solid fa-plus text-navy text-sm"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-navy text-base leading-tight" id="formTitle">Ajouter un bien</h2>
+            <p class="text-[0.72rem] text-[#999]" id="formSubtitle">Remplissez tous les champs requis</p>
+          </div>
+        </div>
+        <button onclick="closeForm()" class="w-8 h-8 rounded-full bg-gris hover:bg-gris-moyen flex items-center justify-center text-[#888] hover:text-navy transition-colors border-none cursor-pointer text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 admin-form">
+        <input type="hidden" id="editId">
+
+        <!-- SECTION 1 : Infos de base -->
+        <div class="form-section-title"><i class="fa-solid fa-info-circle mr-2 text-gold"></i>Informations générales</div>
+
+        <div class="form-group">
+          <label>Titre du bien <span class="text-red-500">*</span></label>
+          <input type="text" id="f_title" placeholder="Ex : Villa moderne avec jardin — Boy-Rabe" required>
+        </div>
+
+        <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-x-4">
+          <div class="form-group">
+            <label>Type de transaction <span class="text-red-500">*</span></label>
+            <select id="f_transaction">
+              <option value="vente">À vendre</option>
+              <option value="location">À louer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Type de bien <span class="text-red-500">*</span></label>
+            <select id="f_type">
+              <option value="appartement">Appartement</option>
+              <option value="villa">Maison / Villa</option>
+              <option value="local">Bureau / Local commercial</option>
+              <option value="terrain">Terrain</option>
+              <option value="immeuble">Immeuble</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Quartier <span class="text-red-500">*</span></label>
+          <select id="f_quartier">
+            <option value="Centre-ville">Centre-ville</option>
+            <option value="Boy-Rabe">Boy-Rabe</option>
+            <option value="Lakouanga">Lakouanga</option>
+            <option value="Malimaka">Malimaka</option>
+            <option value="PK5">PK5</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Description <span class="text-red-500">*</span></label>
+          <textarea id="f_description" rows="3" placeholder="Décrivez le bien : superficie, état, atouts, environnement..." required></textarea>
+          <p class="field-hint">Minimum 30 caractères recommandé pour un bon référencement.</p>
+        </div>
+
+        <!-- SECTION 2 : Prix -->
+        <div class="form-section-title"><i class="fa-solid fa-coins mr-2 text-gold"></i>Prix</div>
+
+        <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-x-4">
+          <div class="form-group">
+            <label>Prix <span class="text-red-500">*</span></label>
+            <input type="text" id="f_prix" placeholder="Ex : 75 000 000" required>
+          </div>
+          <div class="form-group">
+            <label>Unité / Périodicité <span class="text-red-500">*</span></label>
+            <select id="f_unite">
+              <option value="FCFA">FCFA (vente)</option>
+              <option value="FCFA / mois">FCFA / mois (location)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SECTION 3 : Médias -->
+        <div class="form-section-title"><i class="fa-solid fa-images mr-2 text-gold"></i>Photos</div>
+
+        <!-- Image principale -->
+        <div class="form-group">
+          <label>Image principale</label>
+          <div class="flex gap-3 items-stretch">
+            <input type="text" id="f_img" placeholder="URL Cloudinary (ou cliquez Upload)" class="flex-1">
+            <button onclick="uploadMainImage()" class="btn btn-gold whitespace-nowrap">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+            </button>
+          </div>
+          <div id="mainImagePreview" class="hidden mt-3">
+            <div class="relative inline-block">
+              <img src="" alt="Aperçu" class="w-36 h-24 object-cover rounded-lg border border-gris-moyen shadow-sm">
+              <button onclick="clearMainImage()" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-[0.6rem] flex items-center justify-center border-none cursor-pointer hover:bg-red-600 shadow">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Galerie -->
+        <div class="form-group">
+          <label>Galerie d'images</label>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[0.82rem] text-[#888]" id="galleryCount">Aucune image</span>
+            <button onclick="uploadGalleryImage()" class="btn btn-ghost btn-sm">
+              <i class="fa-solid fa-plus"></i> Ajouter
+            </button>
+          </div>
+          <div id="galleryPreview" class="flex gap-2 flex-wrap min-h-[32px]"></div>
+          <input type="hidden" id="f_gallery">
+        </div>
+
+        <!-- SECTION 4 : Caractéristiques -->
+        <div class="form-section-title"><i class="fa-solid fa-list-check mr-2 text-gold"></i>Infos clés & caractéristiques</div>
+
+        <!-- Cols (icône + libellé) -->
+        <div class="form-group">
+          <label>
+            Infos clés
+            <span class="text-[0.68rem] text-[#aaa] font-normal normal-case ml-1">— affichées sous la photo</span>
+          </label>
+          <div id="colsList" class="space-y-2 mb-2"></div>
+          <button onclick="addColRow()" class="text-[0.8rem] text-navy font-semibold bg-transparent border border-dashed border-navy/30 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-navy/4 hover:border-navy/50 transition-all w-full mt-1">
+            <i class="fa-solid fa-plus mr-1.5 text-[0.72rem]"></i>Ajouter une info clé
+          </button>
+          <p class="field-hint mt-1">Icône = nom FontAwesome sans "fa-". Ex: <code class="bg-gris px-1 rounded text-[0.7rem]">bed</code>, <code class="bg-gris px-1 rounded text-[0.7rem]">bath</code>, <code class="bg-gris px-1 rounded text-[0.7rem]">expand</code></p>
+        </div>
+
+        <!-- Features -->
+        <div class="form-group">
+          <label>
+            Équipements & atouts
+            <span class="text-[0.68rem] text-[#aaa] font-normal normal-case ml-1">— liste des caractéristiques</span>
+          </label>
+          <div id="featuresList" class="space-y-2 mb-2"></div>
+          <button onclick="addFeatureRow()" class="text-[0.8rem] text-navy font-semibold bg-transparent border border-dashed border-navy/30 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-navy/4 hover:border-navy/50 transition-all w-full mt-1">
+            <i class="fa-solid fa-plus mr-1.5 text-[0.72rem]"></i>Ajouter un équipement
+          </button>
+          <p class="field-hint mt-1">Ex : Climatisation, Parking, Gardiennage, Groupe électrogène...</p>
+        </div>
+
+        <!-- SECTION 5 : Tag -->
+        <div class="form-section-title"><i class="fa-solid fa-certificate mr-2 text-gold"></i>Mise en avant</div>
+
+        <div class="form-group">
+          <label>Tag promotionnel</label>
+          <select id="f_tag">
+            <option value="">Aucun tag</option>
+            <option value="Nouveau">🟢 Nouveau</option>
+            <option value="Exclusivité">🟠 Exclusivité</option>
+          </select>
+          <p class="field-hint">Le tag apparaît en badge coloré sur la carte du bien.</p>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="sticky bottom-0 bg-white border-t border-gris-moyen px-6 py-4 flex gap-3 rounded-b-2xl">
+        <button onclick="closeForm()" class="btn btn-ghost flex-1 justify-center py-2.5">
+          <i class="fa-solid fa-xmark"></i> Annuler
+        </button>
+        <button onclick="saveBien()" class="btn btn-navy flex-1 justify-center py-2.5" id="saveBtn">
+          <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // ===== Firebase Init =====
+    var firebaseConfig = {
+      apiKey: "AIzaSyDMU1VU_3W50EwLCwzs6-ElbfCye6LE3mc",
+      authDomain: "project-1871f7bb-347b-4f86-a85.firebaseapp.com",
+      projectId: "project-1871f7bb-347b-4f86-a85",
+      storageBucket: "project-1871f7bb-347b-4f86-a85.firebasestorage.app",
+      messagingSenderId: "971306126898",
+      appId: "1:971306126898:web:67bcf424798776373f362b"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var auth = firebase.auth();
+    var db = firebase.firestore();
+
+    // ===== Cloudinary Config =====
+    var CLOUD_NAME = 'dwmrzp61c';
+    var UPLOAD_PRESET = 'adjum_immo_unsigned';
+
+    // ===== État =====
+    var allBiens = [];
+    var filteredBiens = [];
+    var tempGallery = [];
+    var currentUser = null;
+    var confirmCallback = null;
+
+    // ===== AUTH GUARD =====
+    auth.onAuthStateChanged(function(user) {
+      if (!user) {
+        // Non connecté → rediriger vers la page de login
+        window.location.replace('admin-login.html');
+        return;
+      }
+      currentUser = user;
+      document.body.style.display = '';
+      document.getElementById('authGuard').style.display = 'none';
+      document.getElementById('sidebarEmail').textContent = user.email;
+      document.getElementById('topbarEmail').textContent = user.email;
+      loadBiens();
+    });
+
+    // ===== Logout =====
+    function doLogout() {
+      showConfirm(
+        'Déconnexion',
+        'Vous allez être déconnecté de l\'administration. Confirmer ?',
+        function() {
+          auth.signOut().then(function() {
+            window.location.replace('admin-login.html');
+          });
+        },
+        'Déconnexion',
+        'btn-navy'
+      );
+    }
+
+    // ===== Navigation =====
+    function setActiveView(view) {
+      // Future-proofing pour d'autres vues
+    }
+
+    // ===== Toast notifications =====
+    var toastTimer;
+    function showToast(msg, type) {
+      var el = document.getElementById('toast');
+      clearTimeout(toastTimer);
+      el.className = 'show ' + (type || 'info');
+      var icon = type === 'success' ? 'circle-check' : type === 'error' ? 'circle-exclamation' : 'circle-info';
+      el.innerHTML = '<i class="fa-solid fa-' + icon + '"></i><span>' + msg + '</span>';
+      toastTimer = setTimeout(function() {
+        el.classList.remove('show');
+      }, 3800);
+    }
+
+    // ===== Confirm Dialog =====
+    function showConfirm(title, text, onOk, okLabel, okClass) {
+      document.getElementById('confirmTitle').textContent = title || 'Confirmer';
+      document.getElementById('confirmText').textContent = text || '';
+      var btn = document.getElementById('confirmOkBtn');
+      btn.textContent = okLabel || 'Confirmer';
+      btn.className = 'btn ' + (okClass || 'btn-red') + ' flex-1 justify-center';
+      confirmCallback = onOk;
+      document.getElementById('confirmDialog').classList.add('open');
+    }
+    function confirmCancel() {
+      document.getElementById('confirmDialog').classList.remove('open');
+      confirmCallback = null;
+    }
+    document.getElementById('confirmOkBtn').addEventListener('click', function() {
+      document.getElementById('confirmDialog').classList.remove('open');
+      if (confirmCallback) { confirmCallback(); confirmCallback = null; }
+    });
+    // Close on backdrop click
+    document.getElementById('confirmDialog').addEventListener('click', function(e) {
+      if (e.target === this) confirmCancel();
+    });
+
+    // ===== Load biens =====
+    function loadBiens() {
+      document.getElementById('topbarStatus').textContent = 'Chargement...';
+      db.collection('biens').orderBy('id', 'asc').get()
+        .then(function(snapshot) {
+          allBiens = [];
+          snapshot.forEach(function(doc) { allBiens.push({ id: doc.id, data: doc.data() }); });
+          filteredBiens = allBiens.slice();
+          updateKPIs();
+          renderTable(filteredBiens);
+          document.getElementById('topbarStatus').textContent =
+            allBiens.length + ' bien' + (allBiens.length !== 1 ? 's' : '') + ' au total';
+          document.getElementById('tableSubtitle').textContent =
+            allBiens.length + ' bien' + (allBiens.length !== 1 ? 's' : '') + ' enregistré' + (allBiens.length !== 1 ? 's' : '');
+        })
+        .catch(function(err) {
+          document.getElementById('topbarStatus').textContent = '⚠️ Erreur Firestore';
+          showToast('Erreur de connexion : ' + err.message, 'error');
+        });
+    }
+
+    // ===== KPIs =====
+    function updateKPIs() {
+      document.getElementById('kpiTotal').textContent = allBiens.length;
+      document.getElementById('kpiVente').textContent = allBiens.filter(function(b) { return b.data.transaction === 'vente'; }).length;
+      document.getElementById('kpiLocation').textContent = allBiens.filter(function(b) { return b.data.transaction === 'location'; }).length;
+      document.getElementById('kpiNew').textContent = allBiens.filter(function(b) { return b.data.tag === 'Nouveau'; }).length;
+    }
+
+    // ===== Filter =====
+    function filterTable() {
+      var q = (document.getElementById('searchInput').value || '').toLowerCase();
+      var tx = document.getElementById('filterTx').value;
+      filteredBiens = allBiens.filter(function(item) {
+        var b = item.data;
+        if (tx && b.transaction !== tx) return false;
+        if (q) {
+          var text = [(b.title || ''), (b.quartier || ''), (b.type || ''), (b.prix || '')].join(' ').toLowerCase();
+          if (text.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+      renderTable(filteredBiens);
+    }
+
+    // ===== Render table =====
+    function renderTable(items) {
+      var tbody = document.getElementById('biensTableBody');
+      var empty = document.getElementById('emptyState');
+
+      if (!items || items.length === 0) {
+        tbody.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      tbody.innerHTML = items.map(function(item) {
+        var b = item.data;
+        var img = b.img
+          ? '<img src="' + b.img + '" class="w-12 h-9 object-cover rounded-lg" alt="" loading="lazy">'
+          : '<div class="w-12 h-9 bg-gris rounded-lg flex items-center justify-center text-[#ccc]"><i class="fa-solid fa-image text-xs"></i></div>';
+        var txBadge = '<span class="badge badge-' + (b.transaction || 'vente') + '">' + (b.transaction === 'location' ? 'Location' : 'Vente') + '</span>';
+        var tagBadge = b.tag ? '<span class="badge badge-' + (b.tag === 'Nouveau' ? 'nouveau' : 'exclusivite') + '">' + b.tag + '</span>' : '<span class="text-[#ddd] text-xs">—</span>';
+        var typeLabel = { appartement: 'Appartement', villa: 'Villa', local: 'Local', terrain: 'Terrain', immeuble: 'Immeuble' };
+
+        return '<tr>' +
+          '<td class="text-[#bbb] text-xs font-mono pl-5">' + (b.id || '—') + '</td>' +
+          '<td>' + img + '</td>' +
+          '<td>' +
+            '<div class="font-semibold text-navy text-[0.875rem] leading-tight">' + (b.title || '—') + '</div>' +
+            '<div class="text-[0.72rem] text-[#aaa] mt-0.5">' + (typeLabel[b.type] || b.type || '') + '</div>' +
+          '</td>' +
+          '<td>' +
+            '<div class="flex items-center gap-1.5 text-[0.82rem]">' +
+              '<i class="fa-solid fa-location-dot text-[#ccc] text-[0.65rem]"></i>' +
+              (b.quartier || '—') +
+            '</div>' +
+          '</td>' +
+          '<td>' +
+            '<div class="font-bold text-navy text-[0.875rem] whitespace-nowrap">' + (b.prix || '—') + '</div>' +
+            '<div class="text-[0.7rem] text-[#aaa]">' + (b.unite || '') + '</div>' +
+          '</td>' +
+          '<td class="text-[0.82rem] capitalize text-[#666]">' + (typeLabel[b.type] || b.type || '—') + '</td>' +
+          '<td>' + txBadge + '</td>' +
+          '<td>' + tagBadge + '</td>' +
+          '<td class="text-right pr-5">' +
+            '<div class="flex items-center justify-end gap-1">' +
+              '<button onclick="editBien(\'' + item.id + '\')" class="w-8 h-8 rounded-lg border border-gris-moyen bg-white hover:bg-navy hover:border-navy hover:text-white text-[#888] flex items-center justify-center text-xs transition-all cursor-pointer" title="Modifier">' +
+                '<i class="fa-solid fa-pen"></i>' +
+              '</button>' +
+              '<button onclick="confirmDeleteBien(\'' + item.id + '\', ' + (b.id || 0) + ')" class="w-8 h-8 rounded-lg border border-gris-moyen bg-white hover:bg-red-600 hover:border-red-600 hover:text-white text-[#888] flex items-center justify-center text-xs transition-all cursor-pointer" title="Supprimer">' +
+                '<i class="fa-solid fa-trash"></i>' +
+              '</button>' +
+            '</div>' +
+          '</td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    // ===== Formulaire — Open/Close =====
+    function openAddForm() {
+      document.getElementById('editId').value = '';
+      document.getElementById('formTitle').textContent = 'Ajouter un bien';
+      document.getElementById('formSubtitle').textContent = 'Remplissez tous les champs requis';
+      document.getElementById('formModalIcon').innerHTML = '<i class="fa-solid fa-plus text-navy text-sm"></i>';
+      // Reset fields
+      ['f_title','f_description','f_prix','f_img'].forEach(function(id) { document.getElementById(id).value = ''; });
+      document.getElementById('f_unite').value = 'FCFA';
+      document.getElementById('f_transaction').value = 'vente';
+      document.getElementById('f_type').value = 'appartement';
+      document.getElementById('f_quartier').value = 'Centre-ville';
+      document.getElementById('f_tag').value = '';
+      document.getElementById('mainImagePreview').classList.add('hidden');
+      tempGallery = [];
+      updateGalleryUI();
+      resetColsList();
+      resetFeaturesList();
+      document.getElementById('formModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function() { document.getElementById('f_title').focus(); }, 200);
+    }
+
+    function editBien(docId) {
+      var item = allBiens.find(function(b) { return b.id === docId; });
+      if (!item) return;
+      var b = item.data;
+      document.getElementById('editId').value = docId;
+      document.getElementById('formTitle').textContent = 'Modifier le bien';
+      document.getElementById('formSubtitle').textContent = b.title || '';
+      document.getElementById('formModalIcon').innerHTML = '<i class="fa-solid fa-pen text-navy text-sm"></i>';
+      document.getElementById('f_title').value = b.title || '';
+      document.getElementById('f_description').value = b.description || '';
+      document.getElementById('f_prix').value = b.prix || '';
+      document.getElementById('f_unite').value = b.unite || 'FCFA';
+      document.getElementById('f_transaction').value = b.transaction || 'vente';
+      document.getElementById('f_type').value = b.type || 'appartement';
+      document.getElementById('f_quartier').value = b.quartier || 'Centre-ville';
+      document.getElementById('f_img').value = b.img || '';
+      document.getElementById('f_tag').value = b.tag || '';
+      if (b.img) {
+        var preview = document.getElementById('mainImagePreview');
+        preview.querySelector('img').src = b.img;
+        preview.classList.remove('hidden');
+      } else {
+        document.getElementById('mainImagePreview').classList.add('hidden');
+      }
+      tempGallery = (b.gallery || []).slice();
+      updateGalleryUI();
+      resetColsList();
+      (b.cols || []).forEach(function(c) { addColRow(c.icon, c.label); });
+      if ((b.cols || []).length === 0) addColRow('', '');
+      resetFeaturesList();
+      (b.features || []).forEach(function(f) { addFeatureRow(f); });
+      if ((b.features || []).length === 0) addFeatureRow('');
+      document.getElementById('formModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeForm() {
+      document.getElementById('formModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('formModal').addEventListener('click', function(e) {
+      if (e.target === this) closeForm();
+    });
+
+    // ===== Sauvegarde =====
+    function saveBien() {
+      var editId = document.getElementById('editId').value;
+      var title = document.getElementById('f_title').value.trim();
+      var description = document.getElementById('f_description').value.trim();
+      var prix = document.getElementById('f_prix').value.trim();
+
+      if (!title || !description || !prix) {
+        showToast('Veuillez remplir les champs obligatoires (titre, description, prix)', 'error');
+        return;
+      }
+
+      // Collecter cols
+      var cols = [];
+      document.querySelectorAll('#colsList > div').forEach(function(div) {
+        var inputs = div.querySelectorAll('input');
+        if (inputs[1] && inputs[1].value.trim()) {
+          cols.push({ icon: inputs[0].value.trim() || 'circle', label: inputs[1].value.trim() });
+        }
+      });
+
+      // Collecter features
+      var features = [];
+      document.querySelectorAll('#featuresList > div').forEach(function(div) {
+        var input = div.querySelector('input');
+        if (input && input.value.trim()) features.push(input.value.trim());
+      });
+
+      var data = {
+        title: title,
+        description: description,
+        quartier: document.getElementById('f_quartier').value,
+        prix: prix,
+        unite: document.getElementById('f_unite').value,
+        transaction: document.getElementById('f_transaction').value,
+        type: document.getElementById('f_type').value,
+        img: document.getElementById('f_img').value.trim() || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+        gallery: tempGallery,
+        cols: cols,
+        features: features,
+        tag: document.getElementById('f_tag').value
+      };
+
+      var saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enregistrement...';
+
+      if (editId) {
+        db.collection('biens').doc(editId).update(data)
+          .then(function() {
+            showToast('Bien modifié avec succès !', 'success');
+            closeForm();
+            loadBiens();
+          })
+          .catch(function(err) { showToast('Erreur : ' + err.message, 'error'); })
+          .finally(resetSaveBtn);
+      } else {
+        var maxId = 0;
+        allBiens.forEach(function(b) { if (b.data.id > maxId) maxId = b.data.id; });
+        data.id = maxId + 1;
+        db.collection('biens').add(data)
+          .then(function() {
+            showToast('Bien ajouté avec succès ! 🎉', 'success');
+            closeForm();
+            loadBiens();
+          })
+          .catch(function(err) { showToast('Erreur : ' + err.message, 'error'); })
+          .finally(resetSaveBtn);
+      }
+    }
+
+    function resetSaveBtn() {
+      var btn = document.getElementById('saveBtn');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Enregistrer';
+    }
+
+    // ===== Suppression =====
+    function confirmDeleteBien(docId, numericId) {
+      showConfirm(
+        'Supprimer le bien #' + numericId,
+        'Cette action est irréversible. Le bien sera définitivement supprimé de la base de données.',
+        function() { deleteBien(docId, numericId); }
+      );
+    }
+
+    function deleteBien(docId, numericId) {
+      db.collection('biens').doc(docId).delete()
+        .then(function() {
+          showToast('Bien #' + numericId + ' supprimé.', 'success');
+          loadBiens();
+        })
+        .catch(function(err) { showToast('Erreur : ' + err.message, 'error'); });
+    }
+
+    // ===== Cloudinary =====
+    function uploadMainImage() {
+      if (!UPLOAD_PRESET) {
+        showToast('⚠️ Configurez d\'abord un Upload Preset dans Cloudinary', 'error');
+        return;
+      }
+      cloudinary.createUploadWidget({
+        cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET,
+        sources: ['local', 'url'], multiple: false, maxFileSize: 5000000,
+        cropping: true, croppingAspectRatio: 1.6
+      }, function(error, result) {
+        if (!error && result && result.event === 'success') {
+          var url = result.info.secure_url;
+          document.getElementById('f_img').value = url;
+          var preview = document.getElementById('mainImagePreview');
+          preview.querySelector('img').src = url;
+          preview.classList.remove('hidden');
+          showToast('Image principale uploadée !', 'success');
+        }
+      }).open();
+    }
+
+    function clearMainImage() {
+      document.getElementById('f_img').value = '';
+      document.getElementById('mainImagePreview').classList.add('hidden');
+    }
+
+    function uploadGalleryImage() {
+      if (!UPLOAD_PRESET) {
+        showToast('⚠️ Configurez d\'abord un Upload Preset dans Cloudinary', 'error');
+        return;
+      }
+      cloudinary.createUploadWidget({
+        cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET,
+        sources: ['local', 'url'], multiple: true, maxFileSize: 5000000
+      }, function(error, result) {
+        if (!error && result && result.event === 'success') {
+          tempGallery.push(result.info.secure_url);
+          updateGalleryUI();
+          showToast('Image ajoutée à la galerie !', 'success');
+        }
+      }).open();
+    }
+
+    function updateGalleryUI() {
+      var container = document.getElementById('galleryPreview');
+      var count = document.getElementById('galleryCount');
+      if (tempGallery.length === 0) {
+        container.innerHTML = '';
+        count.textContent = 'Aucune image';
+        return;
+      }
+      count.textContent = tempGallery.length + ' image' + (tempGallery.length > 1 ? 's' : '');
+      container.innerHTML = tempGallery.map(function(url, i) {
+        return '<div class="relative group">' +
+          '<img src="' + url + '" class="gallery-thumb">' +
+          '<button onclick="removeGalleryItem(' + i + ')" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-[0.6rem] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border-none cursor-pointer shadow">' +
+            '<i class="fa-solid fa-xmark"></i>' +
+          '</button>' +
+        '</div>';
+      }).join('');
+    }
+
+    function removeGalleryItem(index) {
+      tempGallery.splice(index, 1);
+      updateGalleryUI();
+    }
+
+    // ===== Cols / Features =====
+    function addColRow(icon, label) {
+      var list = document.getElementById('colsList');
+      var div = document.createElement('div');
+      div.className = 'flex gap-2 items-center';
+      div.innerHTML =
+        '<div class="icon-select-wrap flex-[0_0_140px]">' +
+          '<i class="fa-solid fa-' + (icon || 'circle') + ' icon-preview" id="iconPrev_' + Date.now() + '"></i>' +
+          '<input type="text" placeholder="Icône FA (ex: bed)" value="' + (icon || '') + '" class="text-[0.85rem]" oninput="updateIconPreview(this)">' +
+        '</div>' +
+        '<input type="text" placeholder="Libellé (ex: 4 chambres)" class="flex-1 text-[0.85rem]" value="' + (label || '') + '">' +
+        '<button onclick="this.parentElement.remove()" class="w-8 h-8 rounded-lg border border-gris-moyen text-[#bbb] hover:text-red-500 hover:border-red-200 hover:bg-red-50 flex items-center justify-center text-xs transition-all bg-white border-none cursor-pointer flex-shrink-0">' +
+          '<i class="fa-solid fa-trash"></i>' +
+        '</button>';
+      list.appendChild(div);
+    }
+
+    function updateIconPreview(input) {
+      var wrap = input.closest('.icon-select-wrap');
+      var preview = wrap.querySelector('.icon-preview');
+      var val = input.value.trim() || 'circle';
+      preview.className = 'fa-solid fa-' + val + ' icon-preview';
+    }
+
+    function addFeatureRow(name) {
+      var list = document.getElementById('featuresList');
+      var div = document.createElement('div');
+      div.className = 'flex gap-2 items-center';
+      div.innerHTML =
+        '<div class="flex items-center gap-2 flex-1 border border-gris-moyen rounded-lg px-3 bg-white">' +
+          '<i class="fa-solid fa-check text-emerald-400 text-[0.72rem] flex-shrink-0"></i>' +
+          '<input type="text" placeholder="Ex : Climatisation, Parking, Gardiennage..." class="flex-1 text-[0.85rem] border-none bg-transparent py-2 outline-none" value="' + (name || '') + '">' +
+        '</div>' +
+        '<button onclick="this.parentElement.remove()" class="w-8 h-8 rounded-lg border border-gris-moyen text-[#bbb] hover:text-red-500 hover:border-red-200 hover:bg-red-50 flex items-center justify-center text-xs transition-all bg-white border-none cursor-pointer flex-shrink-0">' +
+          '<i class="fa-solid fa-trash"></i>' +
+        '</button>';
+      list.appendChild(div);
+    }
+
+    function resetColsList() {
+      document.getElementById('colsList').innerHTML = '';
+      addColRow('', '');
+    }
+
+    function resetFeaturesList() {
+      document.getElementById('featuresList').innerHTML = '';
+      addFeatureRow('');
+    }
+
+    // ===== Keyboard shortcut =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeForm();
+        confirmCancel();
+      }
+    });
+  </script>
+
+</body>
+</html>
