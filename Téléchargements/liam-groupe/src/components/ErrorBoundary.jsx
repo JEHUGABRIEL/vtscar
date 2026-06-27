@@ -1,7 +1,8 @@
 import { Component } from "react";
+import { withTranslation } from "react-i18next";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 
-export default class ErrorBoundary extends Component {
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -20,6 +21,8 @@ export default class ErrorBoundary extends Component {
   };
 
   render() {
+    const { t } = this.props;
+
     if (this.state.hasError) {
       return (
         <div className="eb-fade-in min-h-screen flex items-center justify-center bg-white px-6">
@@ -31,22 +34,22 @@ export default class ErrorBoundary extends Component {
 
             {/* Title */}
             <h1 className="font-heading font-bold text-2xl md:text-3xl text-gray-900 mb-3">
-              Oups, une erreur est survenue
+              {t("errorBoundary.title")}
             </h1>
 
             {/* Description */}
             <p className="text-gray-500 leading-relaxed mb-2">
-              Un problème inattendu a empêché l'affichage de cette page.
+              {t("errorBoundary.description")}
             </p>
             <p className="text-gray-400 text-sm mb-8">
-              Notre équipe a été informée. Vous pouvez réessayer ou retourner à l'accueil.
+              {t("errorBoundary.subtitle")}
             </p>
 
             {/* Error detail (dev only) */}
             {this.state.error && (
               <details className="text-left mb-8 bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <summary className="text-sm font-medium text-gray-500 cursor-pointer select-none">
-                  Détails techniques
+                  {t("errorBoundary.techDetails")}
                 </summary>
                 <pre className="mt-3 text-xs text-red-600 whitespace-pre-wrap overflow-auto max-h-32 font-mono">
                   {this.state.error.message}
@@ -61,14 +64,14 @@ export default class ErrorBoundary extends Component {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
-                Réessayer
+                {t("common.retry")}
               </button>
               <a
                 href="/"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors"
               >
                 <Home className="w-4 h-4" />
-                Accueil
+                {t("common.home")}
               </a>
             </div>
           </div>
@@ -79,3 +82,5 @@ export default class ErrorBoundary extends Component {
     return this.props.children;
   }
 }
+
+export default withTranslation()(ErrorBoundary);

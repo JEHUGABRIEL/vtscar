@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { ExternalLink } from "lucide-react";
 
 export default function PartnerCard({ partner }) {
+  const { t } = useTranslation();
   return (
     <div className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden flex flex-col h-full hover:lift transition-all duration-300">
       <div className="p-8 pb-6">
@@ -30,7 +32,7 @@ export default function PartnerCard({ partner }) {
         <p className="text-gray-500 leading-relaxed flex-1">{partner.description}</p>
         <div className="mt-5 pt-5 border-t border-gray-200">
           <p className="text-xs font-bold tracking-wide uppercase text-gray-700 mb-1.5">
-            Collaboration
+            {t("partnerCard.collaboration")}
           </p>
           <p className="text-gray-500 text-sm leading-relaxed">{partner.collaboration}</p>
         </div>
@@ -39,7 +41,7 @@ export default function PartnerCard({ partner }) {
             href={partner.website}
             className="mt-4 inline-flex items-center gap-1.5 text-brand-600 font-semibold text-sm"
           >
-            Visiter le site <ExternalLink className="w-3.5 h-3.5" />
+            {t("partnerCard.visitWebsite")} <ExternalLink className="w-3.5 h-3.5" />
           </a>
         )}
       </div>

@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { DomainIcon } from "./DomainIcon";
 
 export default function DomainCard({ domain }) {
+  const { t } = useTranslation();
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-card overflow-hidden flex flex-col hover:lift transition-all duration-300 group">
       <div className="relative h-56 overflow-hidden">
@@ -26,7 +28,7 @@ export default function DomainCard({ domain }) {
           to={`/domaines/${domain.slug}`}
           className="mt-4 inline-flex items-center gap-1.5 text-brand-600 font-semibold hover:gap-2.5 transition-all"
         >
-          Découvrir <ArrowRight className="w-4 h-4" />
+          {t("common.discover")} <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     </div>

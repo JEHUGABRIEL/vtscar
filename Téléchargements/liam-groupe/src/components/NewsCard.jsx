@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 
 export default function NewsCard({ item }) {
+  const { t } = useTranslation();
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-card overflow-hidden flex flex-col h-full hover:lift transition-all duration-300 group">
       <div className="h-56 overflow-hidden">
@@ -19,7 +21,7 @@ export default function NewsCard({ item }) {
           href="#"
           className="mt-4 inline-flex items-center gap-1.5 text-brand-600 font-semibold hover:gap-2.5 transition-all"
         >
-          Lire la suite <ArrowRight className="w-4 h-4" />
+          {t("common.readMore")} <ArrowRight className="w-4 h-4" />
         </a>
       </div>
     </div>

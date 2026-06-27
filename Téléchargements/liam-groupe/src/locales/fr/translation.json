@@ -407,8 +407,28 @@
     "previous": "Précédent",
     "seeMore": "Voir plus",
     "learnMore": "En savoir plus",
-    "elements": "{count} élément{count > 1 ? 's' : ''}",
-    "images": "{count} image{count > 1 ? 's' : ''}",
-    "imagesZero": "—"
+    "readMore": "Lire la suite",
+    "discover": "Découvrir",
+    "retry": "Réessayer",
+    "home": "Accueil",
+    "element_one": "{{count}} élément",
+    "element_other": "{{count}} éléments",
+    "image_one": "{{count}} image",
+    "image_other": "{{count}} images"
+  },
+  "errorBoundary": {
+    "title": "Oups, une erreur est survenue",
+    "description": "Un problème inattendu a empêché l'affichage de cette page.",
+    "subtitle": "Notre équipe a été informée. Vous pouvez réessayer ou retourner à l'accueil.",
+    "techDetails": "Détails techniques"
+  },
+  "partnerCard": {
+    "collaboration": "Collaboration",
+    "visitWebsite": "Visiter le site"
+  },
+  "carousel": {
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page {{page}}"
   }
 }

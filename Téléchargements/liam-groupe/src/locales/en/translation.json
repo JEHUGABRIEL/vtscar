@@ -94,6 +94,10 @@
       "title": "Our mission",
       "text": "To mobilize, train, and support Central African women and youth through concrete programs in six complementary areas of intervention."
     },
+    "stats": {
+      "title": "LIAM Groupe by the numbers",
+      "description": "Since our founding, we work every day for concrete and measurable impact within Central African communities."
+    },
     "team": {
       "eyebrow": "Our team",
       "title": "The faces of LIAM Groupe",
@@ -403,11 +407,30 @@
     "previous": "Previous",
     "seeMore": "See more",
     "learnMore": "Learn more",
+    "readMore": "Read more",
+    "discover": "Discover",
+    "retry": "Try again",
+    "home": "Home",
     "element_zero": "0 elements",
     "element_one": "{{count}} element",
     "element_other": "{{count}} elements",
     "images_zero": "—",
     "images_one": "{{count}} image",
     "images_other": "{{count}} images"
+  },
+  "errorBoundary": {
+    "title": "Oops, an error occurred",
+    "description": "An unexpected error prevented this page from loading.",
+    "subtitle": "Our team has been notified. You can try again or go back to the homepage.",
+    "techDetails": "Technical details"
+  },
+  "partnerCard": {
+    "collaboration": "Collaboration",
+    "visitWebsite": "Visit website"
+  },
+  "carousel": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}}"
   }
 }
