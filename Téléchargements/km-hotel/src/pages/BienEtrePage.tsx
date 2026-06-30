@@ -8,7 +8,6 @@ import {
   Phone,
   Wind,
   Flower2,
-  Heart,
   Star
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -44,8 +43,6 @@ const heroSlides = [
 
 const poolIcons = [<Sun className="w-6 h-6" />, <Waves className="w-6 h-6" />];
 const relaxationIcons = [<Sparkles className="w-6 h-6" />, <Wind className="w-6 h-6" />, <Flower2 className="w-6 h-6" />];
-const statIcons = [<Waves className="w-5 h-5" />, <Sparkles className="w-5 h-5" />, <Wind className="w-5 h-5" />, <Heart className="w-5 h-5" />];
-
 const poolImages = [
   'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&q=80',
   'https://images.unsplash.com/photo-1569025743873-ea3a9ade89f1?auto=format&fit=crop&q=80'
@@ -86,15 +83,6 @@ function buildRelaxationSpaces(t: (key: string) => string) {
   }));
 }
 
-function buildStats(t: (key: string) => string) {
-  // corresponds to the 4 stats in translation.json
-  return [0, 1, 2, 3].map((i) => ({
-    icon: statIcons[i],
-    label: t(`bienEtre.stats.${i}.label`),
-    desc: t(`bienEtre.stats.${i}.desc`)
-  }));
-}
-
 const sectionIds = ['piscines', 'detente'];
 
 export function BienEtrePage() {
@@ -107,7 +95,6 @@ export function BienEtrePage() {
 
   const poolFeatures = useDataBuilder(buildPoolFeatures, t);
   const relaxationSpaces = useDataBuilder(buildRelaxationSpaces, t);
-  const stats = useDataBuilder(buildStats, t);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -204,27 +191,7 @@ export function BienEtrePage() {
             </p>
           </motion.div>
 
-          {/* Quick stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6"
-          >
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center text-center p-5 bg-slate-50 rounded-sm border border-slate-100 hover:bg-brand-50 hover:border-brand-200 transition-all duration-300 group"
-              >
-                <div className="text-brand-500 mb-2.5 group-hover:scale-110 transition-transform duration-300">
-                  {stat.icon}
-                </div>
-                <span className="text-sm font-bold text-slate-800">{stat.label}</span>
-                <span className="text-xs text-slate-500 mt-0.5">{stat.desc}</span>
-              </div>
-            ))}
-          </motion.div>
+
         </div>
       </section>
 

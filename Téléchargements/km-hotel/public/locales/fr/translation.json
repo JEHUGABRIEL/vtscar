@@ -425,12 +425,6 @@
       "title": "L'Art du Bien-Être",
       "text": "Au KM Hotel, nous avons créé un espace dédié à votre bien-être. Entre nos piscines luxueuses, notre spa intimiste et nos espaces de détente verdoyants, chaque instant est une invitation à la relaxation. Laissez-vous porter par une atmosphère apaisante et offrez-vous une parenthèse de sérénité."
     },
-    "stats": [
-      { "label": "2 Piscines", "desc": "Extérieure & Intérieure" },
-      { "label": "Soins Spa", "desc": "Massages & Rituels" },
-      { "label": "Hammam & Sauna", "desc": "Détente absolue" },
-      { "label": "Espace Zen", "desc": "Jardin & Terrasse" }
-    ],
     "pools": {
       "badge": "Piscines",
       "title": "Nagez dans le Luxe",
