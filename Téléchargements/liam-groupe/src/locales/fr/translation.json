@@ -5,54 +5,134 @@
     "domains": "Domaines",
     "events": "Événements",
     "news": "Actualités",
-    "language": "Langue"
+    "language": "Langue",
+    "cta": "Nous contacter",
+    "langFr": "Français",
+    "langEn": "Anglais",
+    "menu": "Menu"
   },
   "heroGrid": {
     "tagline": "Innovation · Ambition · Mission",
     "title1": "Construisons ensemble",
     "title2": "la Centrafrique de demain",
     "description": "LIAM Groupe mobilise les femmes et les jeunes centrafricains à travers le sport, l'entrepreneuriat, la gastronomie solidaire et la formation pour un impact durable au cœur de Bangui.",
+    "ctaPrimary": "En savoir plus",
     "ctaSecondary": "Voir nos événements"
   },
   "hero": {
     "slides": [
       {
-        "tagline": "Innovation · Ambition · Mission",
-        "title1": "Construisons ensemble",
-        "title2": "la Centrafrique de demain",
         "description": "LIAM Groupe mobilise les femmes et les jeunes centrafricains à travers le sport, l'entrepreneuriat, la gastronomie solidaire et la formation pour un impact durable au cœur de Bangui.",
-        "zoom": { "enterScale": 1.12, "duration": 1.0 },
-        "bg": { "type": "gradient", "value": "from-brand-800/50 via-ink/70 to-ink" }
+        "zoom": {
+          "enterScale": 1.12,
+          "duration": 1.0
+        },
+        "bg": {
+          "type": "gradient",
+          "value": "from-brand-700 via-ink to-ink-900"
+        },
+        "eyebrow": "Innovation · Ambition · Mission",
+        "title": "Construisons ensemble",
+        "titleAccent": "la Centrafrique de demain"
       },
       {
-        "tagline": "Sport · Santé · Émancipation",
-        "zoom": { "enterScale": 1.20, "exitScale": 0.88, "duration": 1.3 },
-        "title1": "Le sport au service",
-        "title2": "de l'émancipation féminine",
+        "zoom": {
+          "enterScale": 1.2,
+          "exitScale": 0.88,
+          "duration": 1.3
+        },
         "description": "G-Fitness promeut la santé et le bien-être par le sport, avec des programmes adaptés aux femmes et aux jeunes de Bangui.",
-        "bg": { "type": "pattern", "value": "dots" }
+        "bg": {
+          "type": "pattern",
+          "value": "dots"
+        },
+        "eyebrow": "Sport · Santé · Émancipation",
+        "title": "Le sport au service",
+        "titleAccent": "de l'émancipation féminine"
       },
       {
-        "tagline": "Gastronomie · Culture · Solidarité",
-        "title1": "Valorisons la richesse",
-        "title2": "culinaire centrafricaine",
         "description": "O'GAB crée des opportunités économiques pour les femmes tout en célébrant la gastronomie et les produits locaux de Centrafrique.",
-        "zoom": { "enterScale": 1.04, "duration": 0.6 },
-        "bg": { "type": "solid", "value": "bg-[#1a0a2e]" }
+        "zoom": {
+          "enterScale": 1.04,
+          "duration": 0.6
+        },
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-ink to-ink-900"
+        },
+        "eyebrow": "Gastronomie · Culture · Solidarité",
+        "title": "Valorisons la richesse",
+        "titleAccent": "culinaire centrafricaine"
       },
       {
-        "tagline": "Formation · Insertion · Avenir",
-        "title1": "Former les jeunes",
-        "title2": "pour construire demain",
-        "description": "Des formations pratiques et professionnalisantes pour offrir aux jeunes centrafricains les clés de leur insertion et de leur réussite."
+        "description": "Des formations pratiques et professionnalisantes pour offrir aux jeunes centrafricains les clés de leur insertion et de leur réussite.",
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-brand-800/40 to-ink"
+        },
+        "eyebrow": "Formation · Insertion · Avenir",
+        "title": "Former les jeunes",
+        "titleAccent": "pour construire demain"
       },
       {
-        "tagline": "Partenariat · Engagement · Impact",
-        "title1": "Rejoignez l'aventure",
-        "title2": "humaine et solidaire",
         "description": "Devenez partenaire ou sponsor de LIAM Groupe et associez votre image à des actions concrètes qui changent des vies en République Centrafricaine.",
-        "zoom": { "enterScale": 1.18, "duration": 1.2, "ease": [0.08, 0.8, 0.2, 1.0] },
-        "bg": { "type": "pattern", "value": "grid" }
+        "zoom": {
+          "enterScale": 1.18,
+          "duration": 1.2,
+          "ease": [
+            0.08,
+            0.8,
+            0.2,
+            1.0
+          ]
+        },
+        "bg": {
+          "type": "pattern",
+          "value": "grid"
+        },
+        "eyebrow": "Partenariat · Engagement · Impact",
+        "title": "Rejoignez l'aventure",
+        "titleAccent": "humaine et solidaire"
+      },
+      {
+        "description": "Autonomiser les femmes centrafricaines par la formation au leadership, l'accompagnement entrepreneurial et la mise en réseau pour des projets durables.",
+        "bg": {
+          "type": "pattern",
+          "value": "waves"
+        },
+        "eyebrow": "Leadership · Autonomisation · Réussite",
+        "title": "L'entrepreneuriat au féminin",
+        "titleAccent": "pour une Centrafrique qui entreprend"
+      },
+      {
+        "description": "Assurer la visibilité des actions de LIAM Groupe et promouvoir la culture centrafricaine à travers une stratégie de communication moderne et des productions audiovisuelles.",
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-violet-950/50 to-ink"
+        },
+        "eyebrow": "Médias · Visibilité · Rayonnement",
+        "title": "Donner de la visibilité",
+        "titleAccent": "aux talents centrafricains"
+      },
+      {
+        "description": "Des événements d'envergure qui rassemblent et célèbrent la culture centrafricaine : galas, concours, festivals au cœur de Bangui et dans les préfectures.",
+        "bg": {
+          "type": "pattern",
+          "value": "crosshatch"
+        },
+        "eyebrow": "Culture · Galas · Rassemblement",
+        "title": "Célébrer la richesse",
+        "titleAccent": "culturelle centrafricaine"
+      },
+      {
+        "description": "Offrir aux jeunes centrafricains des formations pratiques et professionnalisantes pour favoriser leur insertion sur le marché du travail et bâtir un avenir meilleur.",
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-brand-700/40 to-ink-900"
+        },
+        "eyebrow": "Éducation · Formation · Avenir",
+        "title": "Investir dans l'éducation",
+        "titleAccent": "des jeunes centrafricains"
       }
     ],
     "ctaEvents": "Voir nos événements",
@@ -117,13 +197,65 @@
       "blockerTitle": "Message non envoyé",
       "blockerText": "Vous avez commencé à écrire un message. Voulez-vous vraiment quitter cette page ?",
       "blockerStay": "Rester",
-      "blockerLeave": "Quitter"
+      "blockerLeave": "Quitter",
+      "formSubjectEventOption": "Inscription à un événement"
     },
     "joinCTA": {
       "title1": "Rejoignez l'aventure",
       "title2": "humaine et solidaire",
       "description": "Devenez partenaire ou sponsor de LIAM Groupe et associez votre image à des actions concrètes qui changent des vies en République Centrafricaine.",
       "cta": "Nous contacter"
+    },
+    "stats": {
+      "items": [
+        {
+          "value": "11",
+          "suffix": "+",
+          "label": "Années d'engagement (depuis 2015)"
+        },
+        {
+          "value": "120",
+          "suffix": "+",
+          "label": "Événements organisés"
+        },
+        {
+          "value": "15000",
+          "suffix": "+",
+          "label": "Bénéficiaires accompagnés"
+        },
+        {
+          "value": "40",
+          "suffix": "+",
+          "label": "Partenaires & sponsors"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Questions fréquentes",
+      "title": "Tout ce qu'il faut savoir",
+      "description": "Les réponses aux questions les plus posées par nos partenaires, bénéficiaires et visiteurs.",
+      "items": [
+        {
+          "question": "Comment devenir partenaire ou sponsor de LIAM Groupe ?",
+          "answer": "Il vous suffit de remplir le formulaire de contact en choisissant « Partenariat » comme sujet, ou de nous écrire directement sur WhatsApp. Notre équipe revient vers vous sous 48h pour discuter de votre projet."
+        },
+        {
+          "question": "Comment s'inscrire à un événement à venir ?",
+          "answer": "Rendez-vous sur la page Événements, repérez l'événement qui vous intéresse et cliquez sur « S'inscrire ». Un formulaire rapide nous permet de recueillir vos coordonnées et de vous confirmer votre place."
+        },
+        {
+          "question": "Puis-je devenir bénévole au sein de LIAM Groupe ?",
+          "answer": "Oui ! Nous accueillons régulièrement des bénévoles sur nos différents programmes (G-Fitness, O'GAB, Formation des Jeunes…). Contactez-nous en précisant le domaine qui vous intéresse."
+        },
+        {
+          "question": "LIAM Groupe intervient-il en dehors de Bangui ?",
+          "answer": "Notre siège est à Bangui, mais plusieurs de nos programmes se déploient progressivement dans d'autres préfectures du pays, notamment via nos partenariats institutionnels."
+        },
+        {
+          "question": "Comment suivre l'actualité de vos actions ?",
+          "answer": "La page Actualités du site est mise à jour régulièrement, et vous pouvez aussi nous suivre sur Facebook, Instagram et WhatsApp pour ne rien manquer."
+        }
+      ]
     }
   },
   "about": {
@@ -151,15 +283,15 @@
       "eyebrow": "Notre raison d'être",
       "title": "Innovation · Ambition · Mission"
     },
-    "intro1": "Fondée en 2015 à Bangui, LIAM Groupe est une organisation non gouvernementale centrafricaine qui œuvre pour le développement durable des communautés à travers l'innovation sociale, le sport, l'entrepreneuriat féminin et la culture.",
+    "intro1": "LIAM Groupe est une structure pluridisciplinaire développant des projets à fort impact social, culturel, sportif, entrepreneurial et gastronomique en République Centrafricaine.",
     "intro2": "Notre nom incarne trois valeurs fondamentales : <1>Innovation</1> dans nos approches, <2>Ambition</2> dans nos objectifs, et <3>Mission</3> dans notre engagement sans faille pour la jeunesse et les femmes centrafricaines.",
     "vision": {
       "title": "Notre vision",
-      "text": "Une Centrafrique où chaque femme et chaque jeune dispose des outils pour s'épanouir et contribuer activement au développement national."
+      "text": "Être un acteur de référence en entrepreneuriat, culture, sport et gastronomie en Afrique centrale."
     },
     "missionBlock": {
       "title": "Notre mission",
-      "text": "Mobiliser, former et accompagner les femmes et les jeunes centrafricains à travers des programmes concrets dans six domaines d'intervention complémentaires."
+      "text": "Révéler les talents et créer des opportunités durables."
     },
     "team": {
       "eyebrow": "Notre équipe",
@@ -169,6 +301,31 @@
     "images": {
       "alt1": "Jeunes en atelier",
       "alt2": "Femmes en réunion"
+    },
+    "acronym": {
+      "eyebrow": "Que signifie LIAM ?",
+      "items": [
+        {
+          "letter": "L",
+          "word": "Leadership",
+          "text": "Promouvoir l'initiative et l'excellence."
+        },
+        {
+          "letter": "I",
+          "word": "Innovation",
+          "text": "Créer des solutions nouvelles et impactantes."
+        },
+        {
+          "letter": "A",
+          "word": "Ambition",
+          "text": "Viser le développement durable et la réussite des talents."
+        },
+        {
+          "letter": "M",
+          "word": "Mission",
+          "text": "Agir avec un objectif clair de valeur sociale et économique."
+        }
+      ]
     }
   },
   "contact": {
@@ -199,10 +356,79 @@
     "formMessagePlaceholder": "Votre message…",
     "formMessageMax": "Maximum 500 caractères",
     "formSubmit": "Envoyer le message",
+    "formSuccess": "✅ Merci ! Votre message a bien été envoyé.",
+    "formFirstNameError": "Veuillez entrer votre prénom",
+    "formLastNameError": "Veuillez entrer votre nom",
+    "formEmailError": "Veuillez entrer une adresse email valide",
+    "formMessageError": "Veuillez entrer votre message",
     "blockerTitle": "Message non envoyé",
     "blockerText": "Vous avez commencé à écrire un message. Voulez-vous vraiment quitter cette page ?",
     "blockerStay": "Rester",
     "blockerLeave": "Quitter"
+  },
+  "domains": {
+    "data": {
+      "g-fitness": {
+        "name": "G-Fitness",
+        "category": "SPORT & BIEN-ÊTRE",
+        "shortDescription": "Promouvoir la santé et le bien-être par le sport, avec des programmes adaptés aux femmes et aux jeunes de Bangui. Tournois de basketball…",
+        "programs": [
+          { "title": "Tournoi Féminin de Basketball", "description": "Compétition inter-quartiers rassemblant 16 équipes féminines à Bangui." },
+          { "title": "G-Fitness Junior", "description": "Programme d'initiation sportive pour les enfants et adolescents des quartiers défavorisés." },
+          { "title": "Santé par le sport", "description": "Ateliers de sensibilisation à l'hygiène de vie et à la nutrition équilibrée." }
+        ]
+      },
+      "ogab": {
+        "name": "O'GAB",
+        "category": "GASTRONOMIE SOLIDAIRE",
+        "shortDescription": "Valoriser la richesse culinaire centrafricaine tout en créant des opportunités économiques pour les femmes. Restauration événementielle, atelie…",
+        "programs": [
+          { "title": "Ateliers culinaires", "description": "Formation en cuisine traditionnelle et moderne pour les femmes entrepreneures." },
+          { "title": "Restauration événementielle", "description": "Service de traiteur pour les événements, valorisant les produits locaux." },
+          { "title": "Restaurant solidaire", "description": "Établissement proposant une cuisine accessible tout en employant des femmes formées." }
+        ]
+      },
+      "entrepreneuriat": {
+        "name": "Entrepreneuriat & Leadership",
+        "category": "LEADERSHIP FÉMININ",
+        "shortDescription": "Autonomiser les femmes centrafricaines par la formation au leadership, l'accompagnement entrepreneurial et la mise en réseau…",
+        "programs": [
+          { "title": "Conférences « Oser Entreprendre »", "description": "Événements inspirants avec des femmes leaders du secteur privé et public." },
+          { "title": "Programme d'incubation", "description": "Accompagnement de 6 mois pour les projets entrepreneuriaux féminins." },
+          { "title": "Mentorat", "description": "Mise en relation entre entrepreneures débutantes et mentors expérimentés." }
+        ]
+      },
+      "formation": {
+        "name": "Formation des Jeunes",
+        "category": "ÉDUCATION & INSERTION",
+        "shortDescription": "Offrir aux jeunes centrafricains des formations pratiques et professionnalisantes pour favoriser leur insertion sur le marché du travail. Ateliers,…",
+        "programs": [
+          { "title": "Formation professionnelle", "description": "Ateliers pratiques dans les métiers du numérique, de la cuisine, de la communication." },
+          { "title": "Stages en entreprise", "description": "Mise en relation avec des partenaires employeurs pour des stages rémunérés." },
+          { "title": "Programme de mentorat", "description": "Accompagnement individuel des jeunes par des professionnels expérimentés." }
+        ]
+      },
+      "communication": {
+        "name": "Communication",
+        "category": "VISIBILITÉ & MÉDIAS",
+        "shortDescription": "Assurer la visibilité des actions de LIAM Groupe et de ses partenaires à travers une stratégie de communication moderne : relations presse,…",
+        "programs": [
+          { "title": "Relations presse", "description": "Couverture médiatique des événements et diffusion des communiqués aux médias locaux et internationaux." },
+          { "title": "Production audiovisuelle", "description": "Création de documentaires, reportages et contenus digitaux mettant en valeur nos actions." },
+          { "title": "Community management", "description": "Gestion des réseaux sociaux et engagement de la communauté en ligne." }
+        ]
+      },
+      "evenementiel": {
+        "name": "Événementiel",
+        "category": "CULTURE & GALAS",
+        "shortDescription": "Organiser des événements d'envergure qui rassemblent, inspirent et célèbrent la culture centrafricaine. Miss Centrafrique, galas de…",
+        "programs": [
+          { "title": "Miss Centrafrique", "description": "Concours national de beauté et de culture célébrant la diversité de la RCA." },
+          { "title": "Gala de charité", "description": "Soirée prestigieuse réunissant partenaires et donateurs pour le financement des programmes." },
+          { "title": "Festivals culturels", "description": "Manifestations artistiques mettant en valeur la musique, la danse et les arts locaux." }
+        ]
+      }
+    }
   },
   "domain": {
     "programs": {
@@ -282,7 +508,11 @@
     "viewDetails": "Voir les détails",
     "register": "S'inscrire",
     "noEvents": "Aucun événement trouvé",
-    "noEventsText": "Il n'y a pas encore d'événements dans cette catégorie."
+    "noEventsText": "Il n'y a pas encore d'événements dans cette catégorie.",
+    "registerModalTitle": "Inscription à l'événement",
+    "registerModalDescription": "Complétez ce formulaire pour vous inscrire à « {{title}} ». Notre équipe vous recontacte pour confirmer votre place.",
+    "registerModalMessage": "Je souhaite m'inscrire à l'événement « {{title}} » ({{date}}).",
+    "registerSuccessText": "Merci {{name}} ! Votre demande d'inscription a bien été reçue, notre équipe vous recontacte rapidement pour la confirmer."
   },
   "news": {
     "heroAlt": "Actualités LIAM Groupe",
@@ -323,7 +553,10 @@
     "domains": "Domaines",
     "act": "Agir",
     "copyright": "© 2026 LIAM Groupe. Tous droits réservés — Bangui, République Centrafricaine",
-    "privacy": "Politique de confidentialité"
+    "privacy": "Politique de confidentialité",
+    "legal": "Mentions légales",
+    "findUs": "Nous Trouver",
+    "openInMaps": "Ouvrir dans Google Maps"
   },
   "gallery": {
     "close": "Fermer",
@@ -334,6 +567,28 @@
     "ariaLabel": "Visionneuse d'images"
   },
   "admin": {
+    "imageUpload": {
+      "dropHere": "Cliquez ou glissez-déposez une image",
+      "dropHint": "PNG, JPG, WebP — max 10 Mo",
+      "uploading": "Upload en cours...",
+      "urlPlaceholder": "URL de l'image...",
+      "pasteUrl": "Collez l'URL de l'image :",
+      "pasteBtn": "URL",
+      "pasteTitle": "Coller une URL",
+      "remove": "Supprimer l'image",
+      "preview": "Aperçu",
+      "uploadError": "Erreur d'upload : ",
+      "networkError": "Erreur réseau : "
+    },
+    "galleryUpload": {
+      "dropHere": "Cliquez ou glissez-déposez des images",
+      "dropHint": "PNG, JPG, WebP, GIF — plusieurs fichiers à la fois",
+      "addMore": "Ajouter d'autres images",
+      "uploading": "Upload en cours...",
+      "remove": "Supprimer",
+      "imageCount_one": "{{count}} image",
+      "imageCount_other": "{{count}} images"
+    },
     "login": {
       "title": "Administration",
       "subtitle": "LIAM Groupe — Accès sécurisé",
@@ -358,16 +613,48 @@
       "team": "Équipe",
       "partners": "Partenaires",
       "testimonials": "Témoignages",
-      "settings": "Paramètres",
-      "logout": "Déconnexion",
-      "admin": "Administration"
+    "messages": "Messages",
+    "registrations": "Inscriptions",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "admin": "Administration"
     },
     "dashboard": {
       "title": "Tableau de bord",
       "description": "Aperçu général des contenus du site LIAM Groupe.",
       "manageTitle": "Gestion des contenus",
       "manageText": "Utilisez la navigation latérale pour gérer chaque type de contenu.",
-      "teamMembers": "Membres équipe"
+      "teamMembers": "Membres équipe",
+      "confirmTitle": "Accéder à cette section ?",
+      "confirmText": "Vous allez accéder à la gestion des « {{section}} ». Voulez-vous continuer ?",
+      "confirmAction": "Accéder"
+    },
+    "registrations": {
+      "title": "Inscriptions aux événements",
+      "total": "{{count}} inscription",
+      "total_other": "{{count}} inscriptions",
+      "pendingCount": "{{count}} en attente",
+      "pendingCount_other": "{{count}} en attente",
+      "search": "Rechercher une inscription…",
+      "filter": {
+        "all": "Toutes",
+        "en_attente": "En attente",
+        "confirme": "Confirmées",
+        "annule": "Annulées"
+      },
+      "empty": "Aucune inscription",
+      "emptyText": "Les inscriptions aux événements apparaîtront ici.",
+      "detailTitle": "Détail de l'inscription",
+      "eventSlug": "Événement (slug)",
+      "changeStatus": "Changer le statut",
+      "statusPending": "En attente",
+      "statusConfirmed": "Confirmée",
+      "statusCancelled": "Annulée",
+      "confirmDelete": "Confirmer la suppression",
+      "confirmDeleteText": "Êtes-vous sûr de vouloir supprimer cette inscription ? Cette action est irréversible.",
+      "messageHistory": "{{count}} message associé",
+      "messageHistory_other": "{{count}} messages associés",
+      "messageHistoryEmpty": "Aucun message trouvé pour cet email."
     },
     "contentManager": {
       "add": "Ajouter",
@@ -377,6 +664,7 @@
       "orderDesc": "Ordre ↓",
       "empty": "Aucun élément",
       "emptyText": "Ajoutez un élément pour commencer.",
+      "perPage": "Par page :",
       "edit": "Modifier",
       "delete": "Supprimer",
       "new": "Nouveau",
@@ -395,8 +683,11 @@
       "confirmDeleteText": "Êtes-vous sûr de vouloir supprimer <1>{{name}}</1> ? Cette action est irréversible.",
       "confirmClose": "Changements non sauvegardés",
       "confirmCloseText": "Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter sans sauvegarder ?",
+      "perPage": "Par page :",
       "confirmCloseStay": "Rester",
       "confirmCloseLeave": "Quitter sans sauvegarder",
+      "toggleStatus": "Basculer le statut",
+      "statusChanged": "Statut mis à jour : {{status}}",
       "error": "Erreur",
       "newItem": "Nouveau",
       "fieldLabels": {
@@ -413,6 +704,7 @@
         "title": "Titre",
         "description": "Description",
         "date": "Date",
+        "end_date": "Date de fin",
         "location": "Lieu",
         "image": "Image",
         "status": "Statut",
@@ -420,6 +712,7 @@
         "tag": "Tag",
         "role": "Rôle",
         "photo": "Photo",
+        "social": "Réseaux sociaux",
         "subtitle": "Sous-titre",
         "logo": "Logo",
         "initial": "Initiale",
@@ -439,13 +732,14 @@
       "slugPlaceholder": "mon-domaine",
       "iconPlaceholder": "heart, briefcase, etc.",
       "datePlaceholder": "15 Août 2026",
+      "end_datePlaceholder": "18 Août 2026 (optionnel)",
       "tagPlaceholder": "ACTUALITÉ",
       "initialPlaceholder": "F",
       "colorPlaceholder": "#8A0015"
     },
     "settings": {
       "title": "Paramètres du site",
-      "description": "Gérez les informations générales, la navigation et les contenus statiques.",
+      "description": "Description",
       "saveAll": "Tout enregistrer",
       "save": "Enregistrer",
       "reset": "Réinitialiser",
@@ -453,7 +747,6 @@
       "navLinks": "Navigation",
       "footerLinks": "Pied de page",
       "homeHeroImages": "Images hero (Accueil)",
-
       "resetToast": "« {{label}} » réinitialisé",
       "savedToast": "« {{label}} » enregistré ✅",
       "allSavedToast": "Tous les paramètres enregistrés ✅",
@@ -461,41 +754,78 @@
       "shortName": "Nom court",
       "fullName": "Nom complet",
       "tagline": "Slogan",
-      "description": "Description",
       "address": "Adresse",
       "phones": "Téléphones",
       "emails": "Emails",
       "hours": "Horaires",
       "contactPage": "Page Contact — Informations spécifiques",
       "addLink": "Ajouter un lien",
-
       "addImage": "Ajouter une image",
       "add": "Ajouter",
       "linkLabel": "Label",
       "linkTo": "Lien (to)",
       "linkDD": "Dropdown",
-
       "navLinksDesc": "Liens de navigation affichés dans le menu principal.",
       "footerLinksDesc": "Colonnes de navigation dans le pied de page.",
       "heroImagesDesc": "Images du carousel hero de la page d'accueil (URLs Cloudinary).",
-
       "addressPlaceholder": "Avenue des Martyrs...",
       "phonePlaceholder": "+236 00 00 00 00",
       "emailPlaceholder": "contact@liamgroupe.org",
       "hoursPlaceholder": "Lundi — Vendredi : 8h00 — 17h00",
-      "heroImagePlaceholder": "https://res.cloudinary.com/..."
+      "heroImagePlaceholder": "https://res.cloudinary.com/...",
+      "formConfigs": "Formulaires",
+      "formContact": "Formulaire de contact",
+      "formChatbot": "Chatbot",
+      "fieldName": "Nom du champ",
+      "fieldLabel": "Clé de traduction (label)",
+      "fieldType": "Type",
+      "fieldRequired": "Requis",
+      "fieldPlaceholder": "Clé de traduction (placeholder)",
+      "fieldOptions": "Options (pour select)",
+      "addField": "Ajouter un champ"
+    },
+    "messages": {
+      "title": "Messages reçus",
+      "total": "{{count}} message",
+      "total_other": "{{count}} messages",
+      "unreadCount": "{{count}} non lu",
+      "unreadCount_other": "{{count}} non lus",
+      "search": "Rechercher un message…",
+      "filter": {
+        "all": "Tous",
+        "unread": "Non lus",
+        "read": "Lus"
+      },
+      "empty": "Aucun message",
+      "emptyText": "Les messages des formulaires de contact apparaîtront ici.",
+      "detailTitle": "Détail du message",
+      "markRead": "Marquer comme lu",
+      "markUnread": "Marquer comme non lu",
+      "fromPage": "Page d'origine",
+      "additionalFields": "Champs supplémentaires",
+      "replyEmail": "Répondre par email",
+      "replyWhatsApp": "Répondre sur WhatsApp",
+      "confirmDelete": "Confirmer la suppression",
+      "confirmDeleteText": "Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible."
     },
     "logoutModal": {
       "title": "Déconnexion",
       "text": "Êtes-vous sûr de vouloir vous déconnecter de l'interface d'administration ?",
       "cancel": "Annuler",
       "confirm": "Se déconnecter"
+    },
+    "inactivityModal": {
+      "title": "Session inactive",
+      "text": "Vous allez être déconnecté pour cause d'inactivité. Cliquez sur « Rester connecté » pour continuer.",
+      "stay": "Rester connecté",
+      "logout": "Se déconnecter"
     }
   },
   "common": {
     "loading": "Chargement…",
     "error": "Une erreur est survenue",
     "noContent": "Aucun contenu disponible",
+    "unknown": "Inconnue",
     "view": "Voir",
     "close": "Fermer",
     "back": "Retour",
@@ -506,6 +836,8 @@
     "readMore": "Lire la suite",
     "discover": "Découvrir",
     "retry": "Réessayer",
+    "required": "Ce champ est requis",
+    "submit": "Envoyer",
     "home": "Accueil",
     "element_one": "{{count}} élément",
     "element_other": "{{count}} éléments",
@@ -525,5 +857,113 @@
     "previous": "Précédent",
     "next": "Suivant",
     "page": "Page {{page}}"
+  },
+  "whatsapp": {
+    "cta": "Discuter sur WhatsApp",
+    "ariaLabel": "Nous contacter sur WhatsApp",
+    "prefilledMessage": "Bonjour LIAM Groupe, je souhaite avoir plus d'informations sur vos actions."
+  },
+  "chatbot": {
+    "greeting": "👋 Bonjour ! Bienvenue sur LIAM Groupe. Comment puis-je vous aider ?",
+    "fallback": "🤔 Je n'ai pas bien compris votre question. Pouvez-vous reformuler ou choisir un sujet ci-dessous ?",
+    "quickReplies": {
+      "about": "Qui sommes-nous ?",
+      "programs": "Nos programmes",
+      "events": "Événements à venir",
+      "volunteer": "Devenir bénévole",
+      "partner": "Partenariat / Sponsor",
+      "news": "Suivre l'actualité",
+      "location": "Nous trouver",
+      "contact": "Nous contacter"
+    },
+    "responses": {
+      "about": "Fondé en 2015 à Bangui, LIAM Groupe est une ONG centrafricaine qui œuvre pour le développement durable des communautés à travers l'innovation sociale, le sport, l'entrepreneuriat féminin, la gastronomie solidaire et la formation des jeunes. Notre mission : révéler les talents et créer des opportunités durables en République Centrafricaine.",
+      "programs": "LIAM Groupe intervient dans 6 domaines :\n🏋️ G-Fitness — sport & bien-être\n🍲 O'GAB — gastronomie solidaire\n💼 Entrepreneuriat & Leadership féminin\n📚 Formation des Jeunes\n📢 Communication & Médias\n🎭 Événementiel & Culture\nSouhaitez-vous en savoir plus sur un domaine en particulier ?",
+      "events": "Retrouvez tous nos événements à venir sur notre page Événements : tournois sportifs, conférences, ateliers culinaires, galas de charité… Consultez notre agenda pour ne rien manquer ! 👉 Rendez-vous sur la page Événements du site.",
+      "volunteer": "Nous serions ravis de vous accueillir comme bénévole ! Vous pouvez nous rejoindre sur nos différents programmes (G-Fitness, O'GAB, Formation des Jeunes…). Laissez-nous vos coordonnées ci-dessous pour qu'un membre de notre équipe vous contacte.",
+      "partner": "Nous sommes ravis de votre intérêt ! Pour devenir partenaire ou sponsor, vous pouvez nous contacter via le formulaire ci-dessous ou directement sur WhatsApp. Notre équipe vous répond sous 48h.",
+      "news": "Vous pouvez suivre toute notre actualité sur la page Actualités du site, et nous rejoindre sur Facebook, Instagram et WhatsApp pour ne rien manquer de nos actions et événements !",
+      "location": "Notre siège est basé à :\nAvenue des Martyrs, Immeuble Salle King\nBangui, République Centrafricaine\n📞 Nous contacter au +236 76 00 00 00",
+      "contact": "Parfait ! Laissez-nous vos coordonnées ci-dessous et notre équipe vous recontactera rapidement."
+    },
+    "inputPlaceholder": "Tapez votre message…",
+    "formName": "Votre nom",
+    "formEmail": "Votre email",
+    "formPhone": "Votre téléphone",
+    "formMessage": "Votre message",
+    "formSubmit": "Envoyer",
+    "formSuccess": "✅ Merci ! Votre message a été envoyé. Nous vous répondrons dans les plus brefs délais.",
+    "openChat": "Discuter avec nous",
+    "closeChat": "Fermer le chat",
+    "chatTitle": "LIAM Groupe",
+    "chatSubtitle": "Nous répondons sous 48h",
+    "typeMessage": "Écrivez votre message…",
+    "viaWhatsapp": "Ou écrivez-nous sur WhatsApp",
+    "viaEmail": "Ou envoyez-nous un email"
+  },
+  "newsArticle": {
+    "back": "Retour aux actualités",
+    "shareTitle": "Partager cet article",
+    "relatedTitle": "À lire aussi"
+  },
+  "notFound": {
+    "title": "Cette page n'existe pas",
+    "text": "La page que vous cherchez a peut-être été déplacée ou n'existe plus. Retournez à l'accueil ou découvrez nos prochains événements.",
+    "home": "Retour à l'accueil",
+    "events": "Voir les événements"
+  },
+  "legal": {
+    "mentions": {
+      "eyebrow": "Informations légales",
+      "title": "Mentions légales",
+      "sections": [
+        {
+          "heading": "Éditeur du site",
+          "text": "Le présent site est édité par {{name}}, organisation à but non lucratif dont le siège social est situé au {{address}}. Contact : {{email}}."
+        },
+        {
+          "heading": "Hébergement",
+          "text": "Le site est hébergé par des prestataires techniques tiers (hébergement web et médias) garantissant sa disponibilité et sa sécurité."
+        },
+        {
+          "heading": "Propriété intellectuelle",
+          "text": "L'ensemble des contenus présents sur ce site (textes, images, logos, vidéos) est la propriété de {{name}} ou de ses partenaires, sauf mention contraire. Toute reproduction sans autorisation préalable est interdite."
+        },
+        {
+          "heading": "Responsabilité",
+          "text": "{{name}} s'efforce d'assurer l'exactitude des informations diffusées sur ce site, sans toutefois garantir qu'elles soient exemptes d'erreurs ou d'omissions."
+        },
+        {
+          "heading": "Contact",
+          "text": "Pour toute question relative aux présentes mentions légales, vous pouvez nous écrire à {{email}}."
+        }
+      ]
+    },
+    "privacy": {
+      "eyebrow": "Vos données",
+      "title": "Politique de confidentialité",
+      "sections": [
+        {
+          "heading": "Données collectées",
+          "text": "Nous collectons uniquement les informations que vous nous transmettez volontairement via nos formulaires de contact, d'inscription ou de newsletter (nom, email, téléphone, message)."
+        },
+        {
+          "heading": "Utilisation des données",
+          "text": "Ces informations sont utilisées exclusivement pour répondre à vos demandes, gérer les inscriptions à nos événements et vous informer de nos actualités si vous y avez consenti."
+        },
+        {
+          "heading": "Partage des données",
+          "text": "Vos données ne sont ni vendues ni cédées à des tiers. Elles peuvent être partagées avec nos prestataires techniques (hébergement, messagerie) dans le seul but d'assurer le bon fonctionnement du site."
+        },
+        {
+          "heading": "Vos droits",
+          "text": "Conformément aux principes de protection des données personnelles, vous pouvez à tout moment demander l'accès, la rectification ou la suppression de vos données en nous écrivant à {{email}}."
+        },
+        {
+          "heading": "Cookies",
+          "text": "Ce site peut utiliser des cookies techniques nécessaires à son bon fonctionnement (préférence de langue, statistiques anonymisées)."
+        }
+      ]
+    }
   }
 }

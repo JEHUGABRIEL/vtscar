@@ -60,16 +60,24 @@ export const imgSizes = (type = 'full') => {
 export const siteInfo = {
   name: "LIAM",
   fullName: "LIAM Groupe",
-  tagline: "Construisons ensemble la Centrafrique de demain",
+  tagline: "Révéler les talents, créer des opportunités durables",
   description:
-    "Organisation centrafricaine à but non lucratif active dans l'événementiel, l'entrepreneuriat féminin, le sport, la gastronomie solidaire et la formation des jeunes à Bangui.",
+    "Structure pluridisciplinaire développant des projets culturels, sportifs, entrepreneuriaux et gastronomiques à fort impact social en République Centrafricaine.",
   address: ["Avenue des Martyrs, Immeuble Salle King", "Bangui, République Centrafricaine"],
-  phones: ["+236 72 00 00 00", "+236 75 00 00 00"],
+  phones: ["+236 76 00 00 00"],
   emails: ["contact@liamgroupe.org", "partenariat@liamgroupe.org"],
   hours: ["Lundi — Vendredi : 8h00 — 17h00", "Samedi : 9h00 — 13h00"],
+  foundingYear: 2015,
+  social: {
+    whatsapp: "23676000000",
+    facebook: "https://www.facebook.com/people/LIAM-Groupe/61585885973346/",
+    instagram: "https://instagram.com/liamgroupe",
+    x: "https://x.com/liamgroupe",
+    youtube: "https://youtube.com/@liamgroupe",
+  },
   contactPage: {
     address: ["Secteur 3, Rue des Martyrs", "Bangui, République Centrafricaine"],
-    phones: ["+236 72 34 56 78", "+236 75 12 34 56"],
+    phones: ["+236 76 00 00 00"],
     emails: ["contact@liamgroupe.cf", "partenariats@liamgroupe.cf"],
     hours: ["Lundi — Vendredi : 8h00 — 17h00", "Samedi : 9h00 — 12h00"],
   },
@@ -261,6 +269,12 @@ export const homeHeroImages = [
   img('evenements-hero', 1920, 1080),
   img('actualites-hero', 1920, 1080),
   img('partenaires-hero', 1920, 1080),
+  img('gfitness-hero', 1920, 1080),
+  img('ogab-hero', 1920, 1080),
+  img('entreprenariat-hero', 1920, 1080),
+  img('formation-hero', 1920, 1080),
+  img('communication-hero', 1920, 1080),
+  img('evenementiel-hero', 1920, 1080),
 ];
 
 export const events = [
@@ -341,6 +355,12 @@ export const news = [
     excerpt:
       "Reconnue pour son impact sur l'entrepreneuriat féminin en Centrafrique, LIAM Groupe a été récompensée lors du…",
     image: img("news-prix", 800, 600),
+    author: "Équipe Communication LIAM Groupe",
+    content: [
+      "Reconnue pour son impact sur l'entrepreneuriat féminin en Centrafrique, LIAM Groupe a été récompensée lors du Forum National de l'Innovation Sociale qui s'est tenu à Bangui. Ce prix salue plus de dix années d'actions concrètes en faveur de l'autonomisation des femmes et des jeunes centrafricains.",
+      "Le jury a particulièrement retenu l'approche intégrée de l'organisation, qui combine formation, accompagnement entrepreneurial et mise en réseau à travers ses différents programmes : G-Fitness, O'GAB, Entrepreneuriat & Leadership et Formation des Jeunes.",
+      "« Cette distinction appartient avant tout aux centaines de femmes et de jeunes qui, chaque jour, portent nos programmes sur le terrain », a déclaré la Présidente de LIAM Groupe lors de la remise du prix. L'organisation entend désormais accélérer le déploiement de ses initiatives dans d'autres préfectures du pays.",
+    ],
   },
   {
     slug: "partenariat-minusca",
@@ -350,6 +370,12 @@ export const news = [
     excerpt:
       "Un accord de coopération a été signé pour organiser des tournois inter-communautaires dans les préfectures de…",
     image: img("news-minusca", 800, 600),
+    author: "Équipe Communication LIAM Groupe",
+    content: [
+      "Un accord de coopération a été signé entre LIAM Groupe et la MINUSCA pour organiser des tournois sportifs inter-communautaires dans plusieurs préfectures du pays. L'objectif : utiliser le sport comme outil de cohésion sociale et de réconciliation entre les communautés.",
+      "Le programme G-Fitness, déjà reconnu à Bangui pour ses tournois féminins de basketball, servira de socle méthodologique à cette initiative élargie. Des rencontres sportives mixtes seront organisées dans les prochains mois, encadrées par des animateurs formés aux enjeux de dialogue communautaire.",
+      "Ce partenariat s'inscrit dans la continuité des actions de LIAM Groupe pour une Centrafrique apaisée, où le sport devient un langage commun au-delà des divisions.",
+    ],
   },
   {
     slug: "ogab-restaurant-solidaire",
@@ -359,6 +385,12 @@ export const news = [
     excerpt:
       "Le restaurant O'GAB emploie 15 femmes formées par LIAM Groupe et propose une cuisine 100% locale à des prix accessibles.",
     image: img("news-ogab", 800, 600),
+    author: "Équipe Communication LIAM Groupe",
+    content: [
+      "Le restaurant O'GAB a ouvert ses portes au cœur de Bangui. Il emploie 15 femmes formées par LIAM Groupe dans le cadre de son programme de gastronomie solidaire, et propose une cuisine 100% locale à des prix accessibles à tous les Banguissois.",
+      "Au-delà de la restauration, l'établissement sert de vitrine pour les produits du terroir centrafricain et de lieu de formation continue pour de nouvelles promotions de femmes entrepreneures.",
+      "« Chaque plat servi ici raconte une histoire de résilience et de savoir-faire », confie l'une des cheffes formées par le programme O'GAB. Le restaurant est ouvert du lundi au samedi, de 11h à 21h.",
+    ],
   },
   {
     slug: "500-jeunes-formes-numerique",
@@ -368,6 +400,12 @@ export const news = [
     excerpt:
       "Bilan de l'année écoulée pour le programme de formation des jeunes : 500 diplômés, 120 emplois créés et 30 startups…",
     image: img("news-formation", 800, 600),
+    author: "Équipe Communication LIAM Groupe",
+    content: [
+      "Le bilan de l'année 2025 pour le programme Formation des Jeunes de LIAM Groupe est sans appel : 500 jeunes diplômés dans les métiers du numérique, du développement web à la communication digitale en passant par la gestion de projet.",
+      "Sur ces 500 diplômés, 120 ont déjà décroché un emploi et une trentaine ont lancé leur propre startup avec l'appui du programme d'incubation de LIAM Groupe. Des résultats qui confirment la pertinence d'une formation courte, pratique et ancrée dans les besoins réels du marché centrafricain.",
+      "Pour 2026, l'organisation prévoit de doubler sa capacité d'accueil et d'ouvrir de nouvelles filières, notamment autour du commerce en ligne et du Mobile Money.",
+    ],
   },
   {
     slug: "tournoi-basketball-10000-spectateurs",
@@ -377,6 +415,12 @@ export const news = [
     excerpt:
       "Record d'affluence battu pour la finale du tournoi inter-quartiers. Un événement qui confirme l'engouement croissant pour le…",
     image: img("news-basketball", 800, 600),
+    author: "Équipe Communication LIAM Groupe",
+    content: [
+      "La finale du Tournoi Féminin de Basketball, organisée par le programme G-Fitness de LIAM Groupe, a rassemblé plus de 10 000 spectateurs au Gymnase Omnisports de Bangui, un record d'affluence pour cet événement désormais incontournable.",
+      "Seize équipes issues de différents quartiers de la capitale se sont affrontées pendant deux semaines dans une ambiance festive. La finale a été marquée par la présence de plusieurs personnalités publiques venues soutenir l'initiative.",
+      "Fort de ce succès, LIAM Groupe annonce déjà une édition 2027 élargie à d'autres villes du pays, avec pour ambition de faire de ce tournoi un rendez-vous national.",
+    ],
   },
   {
     slug: "entretien-marie-claire-ngbokoli",
@@ -386,6 +430,12 @@ export const news = [
     excerpt:
       "La fondatrice de LIAM Groupe se confie sur les défis de l'ONG, ses réussites et ses projets pour les années à venir.",
     image: img("news-portrait", 800, 600),
+    author: "Équipe Communication LIAM Groupe",
+    content: [
+      "Onze ans après la création de LIAM Groupe, sa fondatrice Marie-Claire Ngbokoli revient sur le chemin parcouru : « Nous sommes partis d'un petit groupe de femmes déterminées à Bangui, et aujourd'hui nos programmes touchent des milliers de bénéficiaires à travers le pays. »",
+      "Interrogée sur les défis, elle évoque le manque de financement structurel des ONG centrafricaines et la nécessité de diversifier les partenariats, notamment avec le secteur privé local. « Chaque partenaire qui nous rejoint, c'est un projet de plus qui voit le jour pour une femme ou un jeune de ce pays. »",
+      "Pour les années à venir, elle annonce une ambition claire : étendre les programmes de LIAM Groupe à l'ensemble des préfectures de la République Centrafricaine, en s'appuyant sur les relais locaux formés depuis 2015.",
+    ],
   },
 ];
 
@@ -396,6 +446,12 @@ export const team = [
     image: img("team-marie-claire", 600, 700),
     description:
       "Visionnaire et engagée, elle a fondé LIAM Groupe en 2015 pour offrir aux femmes et aux jeunes centrafricains les outils de leur propre développement.",
+    social: {
+      linkedin: "https://linkedin.com/in/marie-claire-ngbokoli",
+      facebook: "https://facebook.com/marieclaire.ngbokoli",
+      instagram: "https://instagram.com/marieclaire.ngbokoli",
+      x: "https://x.com/marieclaire_ngb",
+    },
   },
   {
     name: "Jean-Pierre Mbaïkoua",
@@ -403,6 +459,12 @@ export const team = [
     image: img("team-jean-pierre", 600, 700),
     description:
       "Pilote la stratégie globale de l'organisation et la coordination des six domaines d'intervention de LIAM Groupe.",
+    social: {
+      linkedin: "https://linkedin.com/in/jean-pierre-mbaikoua",
+      facebook: "https://facebook.com/jeanpierre.mbaikoua",
+      instagram: "https://instagram.com/jeanpierre.mbaikoua",
+      x: "https://x.com/jp_mbaikoua",
+    },
   },
   {
     name: "Aminata Koyambou",
@@ -410,6 +472,12 @@ export const team = [
     image: img("team-aminata", 600, 700),
     description:
       "Ancienne athlète, elle anime les programmes sportifs de LIAM Groupe destinés aux femmes et aux jeunes filles de Bangui.",
+    social: {
+      linkedin: "https://linkedin.com/in/aminata-koyambou",
+      facebook: "https://facebook.com/aminata.koyambou",
+      instagram: "https://instagram.com/aminata_koyambou",
+      x: "https://x.com/aminata_koyambou",
+    },
   },
   {
     name: "Florence Dacko-Posso",
@@ -417,6 +485,12 @@ export const team = [
     image: img("team-florence", 600, 700),
     description:
       "Chef cuisinière et entrepreneure. Elle développe les programmes de gastronomie solidaire et valorise les produits locaux centrafricains à travers des ateliers et événements culinaires.",
+    social: {
+      linkedin: "https://linkedin.com/in/florence-dacko-posso",
+      facebook: "https://facebook.com/florence.dackoposso",
+      instagram: "https://instagram.com/florence_dacko",
+      x: "https://x.com/florence_dacko",
+    },
   },
   {
     name: "Romain Dologuélé",
@@ -424,6 +498,12 @@ export const team = [
     image: img("team-romain", 600, 700),
     description:
       "Organisateur d'événements avec plus de 10 ans d'expérience. Il coordonne les galas, tournois sportifs et manifestations culturelles de LIAM Groupe à travers le pays.",
+    social: {
+      linkedin: "https://linkedin.com/in/romain-dologuele",
+      facebook: "https://facebook.com/romain.dologuele",
+      instagram: "https://instagram.com/romain_dologuele",
+      x: "https://x.com/romain_dologuele",
+    },
   },
   {
     name: "Esther Gbezera",
@@ -431,6 +511,12 @@ export const team = [
     image: img("team-esther", 600, 700),
     description:
       "Journaliste et communicatrice. Elle assure la visibilité des actions de l'ONG et développe les partenariats médias pour amplifier l'impact de nos programmes.",
+    social: {
+      linkedin: "https://linkedin.com/in/esther-gbezera",
+      facebook: "https://facebook.com/esther.gbezera",
+      instagram: "https://instagram.com/esther_gbezera",
+      x: "https://x.com/esther_gbezera",
+    },
   },
 ];
 
@@ -502,6 +588,50 @@ export const partners = [
     description:
       "Organisation non gouvernementale centrafricaine dédiée à l'éducation et à l'insertion professionnelle des jeunes. Ensemble, nous avons formé plus de 500 jeunes aux métiers de la cuisine, de la communication et du sport.",
     collaboration: "Programmes de formation conjoints, bourses d'études, stages professionnels.",
+    website: "#",
+  },
+  {
+    name: "Orange Centrafrique",
+    initial: "O",
+    color: "#FF7900",
+    category: "PARTENAIRE CORPORATE",
+    subtitle: "Orange Centrafrique — Bangui",
+    description:
+      "Premier opérateur de télécommunications en République Centrafricaine. Orange Centrafrique soutient nos événements sportifs et culturels en fournissant connectivité, équipements et visibilité sur ses canaux digitaux auprès de millions d'abonnés.",
+    collaboration: "Connectivité événementielle, soutien logistique, relais médias digitaux.",
+    website: "#",
+  },
+  {
+    name: "UNICEF RCA",
+    initial: "U",
+    color: "#1CABE2",
+    category: "PARTENAIRE INTERNATIONAL",
+    subtitle: "Fonds des Nations Unies pour l'Enfance — RCA",
+    description:
+      "L'UNICEF République Centrafricaine appuie nos programmes de formation des jeunes et de sport au féminin. Grâce à ce partenariat, plus de 200 jeunes filles ont bénéficié d'ateliers de leadership et de sensibilisation aux droits de l'enfant.",
+    collaboration: "Co-financement de programmes jeunesse, formation aux droits de l'enfant, plaidoyer.",
+    website: "#",
+  },
+  {
+    name: "Radio Centrafrique",
+    initial: "R",
+    color: "#2E7D32",
+    category: "PARTENAIRE MÉDIA",
+    subtitle: "Radio Centrafrique — La voix de la Nation",
+    description:
+      "Première radio nationale de la RCA, Radio Centrafrique est notre partenaire média historique. Elle couvre l'ensemble de nos événements et diffuse nos messages d'intérêt général auprès de millions d'auditeurs à travers le pays.",
+    collaboration: "Couverture médiatique, spots radio, interviews, diffusion de nos communiqués.",
+    website: "#",
+  },
+  {
+    name: "Hôtel Ledger Plaza",
+    initial: "H",
+    color: "#8B4513",
+    category: "PARTENAIRE ÉVÉNEMENTIEL",
+    subtitle: "Ledger Plaza Bangui — Hôtel 5 étoiles",
+    description:
+      "Principal hôtel de standing de Bangui, le Ledger Plaza accueille nos galas de charité, conférences de presse et réceptions officielles. Leur équipe événementielle nous accompagne dans l'organisation de nos plus grands rendez-vous.",
+    collaboration: "Mise à disposition de salles, hébergement de nos invités, offre préférentielle pour nos événements.",
     website: "#",
   },
 ];

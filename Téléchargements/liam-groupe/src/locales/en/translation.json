@@ -5,54 +5,134 @@
     "domains": "Domains",
     "events": "Events",
     "news": "News",
-    "language": "Language"
+    "language": "Language",
+    "cta": "Contact us",
+    "langFr": "French",
+    "langEn": "English",
+    "menu": "Menu"
   },
   "heroGrid": {
     "tagline": "Innovation · Ambition · Mission",
     "title1": "Let's build together",
     "title2": "the Central Africa of tomorrow",
     "description": "LIAM Groupe mobilizes Central African women and youth through sports, entrepreneurship, community gastronomy, and training for sustainable impact in the heart of Bangui.",
+    "ctaPrimary": "Learn more",
     "ctaSecondary": "See our events"
   },
   "hero": {
     "slides": [
       {
-        "tagline": "Innovation · Ambition · Mission",
-        "title1": "Let's build together",
-        "title2": "the Central Africa of tomorrow",
         "description": "LIAM Groupe mobilizes Central African women and youth through sports, entrepreneurship, community gastronomy, and training for sustainable impact in the heart of Bangui.",
-        "zoom": { "enterScale": 1.12, "duration": 1.0 },
-        "bg": { "type": "gradient", "value": "from-brand-800/50 via-ink/70 to-ink" }
+        "zoom": {
+          "enterScale": 1.12,
+          "duration": 1.0
+        },
+        "bg": {
+          "type": "gradient",
+          "value": "from-brand-700 via-ink to-ink-900"
+        },
+        "eyebrow": "Innovation · Ambition · Mission",
+        "title": "Let's build together",
+        "titleAccent": "the Central Africa of tomorrow"
       },
       {
-        "tagline": "Sports · Health · Empowerment",
-        "zoom": { "enterScale": 1.20, "exitScale": 0.88, "duration": 1.3 },
-        "title1": "Sports as a catalyst",
-        "title2": "for women's empowerment",
+        "zoom": {
+          "enterScale": 1.2,
+          "exitScale": 0.88,
+          "duration": 1.3
+        },
         "description": "G-Fitness promotes health and well-being through sports, with programs tailored for women and youth in Bangui.",
-        "bg": { "type": "pattern", "value": "dots" }
+        "bg": {
+          "type": "pattern",
+          "value": "dots"
+        },
+        "eyebrow": "Sports · Health · Empowerment",
+        "title": "Sports as a catalyst",
+        "titleAccent": "for women's empowerment"
       },
       {
-        "tagline": "Gastronomy · Culture · Solidarity",
-        "title1": "Celebrating the richness",
-        "title2": "of Central African cuisine",
         "description": "O'GAB creates economic opportunities for women while celebrating the gastronomy and local products of Central Africa.",
-        "zoom": { "enterScale": 1.04, "duration": 0.6 },
-        "bg": { "type": "solid", "value": "bg-[#1a0a2e]" }
+        "zoom": {
+          "enterScale": 1.04,
+          "duration": 0.6
+        },
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-ink to-ink-900"
+        },
+        "eyebrow": "Gastronomy · Culture · Solidarity",
+        "title": "Celebrating the richness",
+        "titleAccent": "of Central African cuisine"
       },
       {
-        "tagline": "Training · Employment · Future",
-        "title1": "Training youth",
-        "title2": "to build tomorrow",
-        "description": "Practical, job-oriented training programs to give Central African youth the keys to employment and success."
+        "description": "Practical, job-oriented training programs to give Central African youth the keys to employment and success.",
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-brand-800/40 to-ink"
+        },
+        "eyebrow": "Training · Employment · Future",
+        "title": "Training youth",
+        "titleAccent": "to build tomorrow"
       },
       {
-        "tagline": "Partnership · Commitment · Impact",
-        "title1": "Join the adventure",
-        "title2": "human and supportive",
         "description": "Become a partner or sponsor of LIAM Groupe and associate your image with concrete actions that change lives in the Central African Republic.",
-        "zoom": { "enterScale": 1.18, "duration": 1.2, "ease": [0.08, 0.8, 0.2, 1.0] },
-        "bg": { "type": "pattern", "value": "grid" }
+        "zoom": {
+          "enterScale": 1.18,
+          "duration": 1.2,
+          "ease": [
+            0.08,
+            0.8,
+            0.2,
+            1.0
+          ]
+        },
+        "bg": {
+          "type": "pattern",
+          "value": "grid"
+        },
+        "eyebrow": "Partnership · Commitment · Impact",
+        "title": "Join the adventure",
+        "titleAccent": "human and supportive"
+      },
+      {
+        "description": "Empowering Central African women through leadership training, entrepreneurial support, and networking for sustainable projects.",
+        "bg": {
+          "type": "pattern",
+          "value": "waves"
+        },
+        "eyebrow": "Leadership · Empowerment · Success",
+        "title": "Women's entrepreneurship",
+        "titleAccent": "for a thriving Central Africa"
+      },
+      {
+        "description": "Ensuring visibility for LIAM Groupe's actions and promoting Central African culture through a modern communication strategy and audiovisual production.",
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-violet-950/50 to-ink"
+        },
+        "eyebrow": "Media · Visibility · Reach",
+        "title": "Giving visibility",
+        "titleAccent": "to Central African talent"
+      },
+      {
+        "description": "Large-scale events that bring people together and celebrate Central African culture: galas, pageants, festivals in the heart of Bangui and beyond.",
+        "bg": {
+          "type": "pattern",
+          "value": "crosshatch"
+        },
+        "eyebrow": "Culture · Galas · Gathering",
+        "title": "Celebrating the richness",
+        "titleAccent": "of Central African culture"
+      },
+      {
+        "description": "Providing Central African youth with practical, job-oriented training programs to foster their integration into the job market and build a brighter future.",
+        "bg": {
+          "type": "gradient",
+          "value": "from-ink-900 via-brand-700/40 to-ink-900"
+        },
+        "eyebrow": "Education · Training · Future",
+        "title": "Investing in education",
+        "titleAccent": "for Central African youth"
       }
     ],
     "ctaEvents": "See our events",
@@ -117,13 +197,65 @@
       "blockerTitle": "Message not sent",
       "blockerText": "You started writing a message. Do you really want to leave this page?",
       "blockerStay": "Stay",
-      "blockerLeave": "Leave"
+      "blockerLeave": "Leave",
+      "formSubjectEventOption": "Event registration"
     },
     "joinCTA": {
       "title1": "Join the adventure",
       "title2": "human and supportive",
       "description": "Become a partner or sponsor of LIAM Groupe and associate your image with concrete actions that change lives in the Central African Republic.",
       "cta": "Contact us"
+    },
+    "stats": {
+      "items": [
+        {
+          "value": "11",
+          "suffix": "+",
+          "label": "Years of commitment (since 2015)"
+        },
+        {
+          "value": "120",
+          "suffix": "+",
+          "label": "Events organized"
+        },
+        {
+          "value": "15000",
+          "suffix": "+",
+          "label": "Beneficiaries supported"
+        },
+        {
+          "value": "40",
+          "suffix": "+",
+          "label": "Partners & sponsors"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Frequently asked questions",
+      "title": "Everything you need to know",
+      "description": "Answers to the questions most often asked by our partners, beneficiaries and visitors.",
+      "items": [
+        {
+          "question": "How can I become a partner or sponsor of LIAM Groupe?",
+          "answer": "Simply fill in the contact form and select 'Partnership' as the subject, or message us directly on WhatsApp. Our team gets back to you within 48 hours to discuss your project."
+        },
+        {
+          "question": "How do I register for an upcoming event?",
+          "answer": "Go to the Events page, find the event you're interested in and click 'Register'. A quick form lets us collect your details and confirm your spot."
+        },
+        {
+          "question": "Can I volunteer with LIAM Groupe?",
+          "answer": "Yes! We regularly welcome volunteers across our programs (G-Fitness, O'GAB, Youth Training…). Contact us and let us know which area interests you."
+        },
+        {
+          "question": "Does LIAM Groupe operate outside of Bangui?",
+          "answer": "Our headquarters are in Bangui, but several of our programs are gradually expanding to other prefectures, notably through our institutional partnerships."
+        },
+        {
+          "question": "How can I follow your news?",
+          "answer": "Our News page is updated regularly, and you can also follow us on Facebook, Instagram and WhatsApp to stay up to date."
+        }
+      ]
     }
   },
   "about": {
@@ -151,15 +283,15 @@
       "eyebrow": "Our reason for being",
       "title": "Innovation · Ambition · Mission"
     },
-    "intro1": "Founded in 2015 in Bangui, LIAM Groupe is a Central African non-governmental organization working for sustainable community development through social innovation, sports, female entrepreneurship, and culture.",
+    "intro1": "LIAM Groupe is a multidisciplinary organization developing projects with strong social, cultural, sporting, entrepreneurial and culinary impact in the Central African Republic.",
     "intro2": "Our name embodies three core values: <1>Innovation</1> in our approaches, <2>Ambition</2> in our goals, and <3>Mission</3> in our unwavering commitment to Central African youth and women.",
     "vision": {
       "title": "Our vision",
-      "text": "A Central Africa where every woman and young person has the tools to thrive and actively contribute to national development."
+      "text": "To be a benchmark player in entrepreneurship, culture, sport and gastronomy in Central Africa."
     },
     "missionBlock": {
       "title": "Our mission",
-      "text": "To mobilize, train, and support Central African women and youth through concrete programs in six complementary areas of intervention."
+      "text": "Reveal talents and create lasting opportunities."
     },
     "team": {
       "eyebrow": "Our team",
@@ -169,6 +301,31 @@
     "images": {
       "alt1": "Youth in workshop",
       "alt2": "Women in meeting"
+    },
+    "acronym": {
+      "eyebrow": "What does LIAM stand for?",
+      "items": [
+        {
+          "letter": "L",
+          "word": "Leadership",
+          "text": "Promoting initiative and excellence."
+        },
+        {
+          "letter": "I",
+          "word": "Innovation",
+          "text": "Creating new, impactful solutions."
+        },
+        {
+          "letter": "A",
+          "word": "Ambition",
+          "text": "Pursuing sustainable growth and the success of talents."
+        },
+        {
+          "letter": "M",
+          "word": "Mission",
+          "text": "Acting with a clear sense of social and economic value."
+        }
+      ]
     }
   },
   "contact": {
@@ -198,11 +355,80 @@
     "formMessage": "Message",
     "formMessagePlaceholder": "Your message…",
     "formMessageMax": "Maximum 500 characters",
+    "formSuccess": "✅ Thank you! Your message has been sent.",
     "formSubmit": "Send message",
+    "formFirstNameError": "Please enter your first name",
+    "formLastNameError": "Please enter your last name",
+    "formEmailError": "Please enter a valid email address",
+    "formMessageError": "Please enter your message",
     "blockerTitle": "Message not sent",
     "blockerText": "You started writing a message. Do you really want to leave this page?",
     "blockerStay": "Stay",
     "blockerLeave": "Leave"
+  },
+  "domains": {
+    "data": {
+      "g-fitness": {
+        "name": "G-Fitness",
+        "category": "SPORTS & WELLNESS",
+        "shortDescription": "Promoting health and well-being through sports, with programs tailored for women and youth in Bangui. Basketball tournaments…",
+        "programs": [
+          { "title": "Women's Basketball Tournament", "description": "Inter-district competition bringing together 16 women's teams in Bangui." },
+          { "title": "G-Fitness Junior", "description": "Sports initiation program for children and teens from underserved neighborhoods." },
+          { "title": "Health through Sports", "description": "Workshops raising awareness about healthy lifestyles and balanced nutrition." }
+        ]
+      },
+      "ogab": {
+        "name": "O'GAB",
+        "category": "COMMUNITY GASTRONOMY",
+        "shortDescription": "Showcasing Central African culinary heritage while creating economic opportunities for women. Event catering, work…",
+        "programs": [
+          { "title": "Cooking Workshops", "description": "Training in traditional and modern cuisine for women entrepreneurs." },
+          { "title": "Event Catering", "description": "Catering service for events, showcasing local products." },
+          { "title": "Community Restaurant", "description": "An establishment offering affordable cuisine while employing trained women." }
+        ]
+      },
+      "entrepreneuriat": {
+        "name": "Entrepreneurship & Leadership",
+        "category": "WOMEN'S LEADERSHIP",
+        "shortDescription": "Empowering Central African women through leadership training, entrepreneurial support, and networking…",
+        "programs": [
+          { "title": "« Dare to Undertake » Conferences", "description": "Inspiring events led by women leaders from the private and public sectors." },
+          { "title": "Incubation Program", "description": "6-month support program for women-led entrepreneurial projects." },
+          { "title": "Mentorship", "description": "Connecting aspiring entrepreneurs with experienced mentors." }
+        ]
+      },
+      "formation": {
+        "name": "Youth Training",
+        "category": "EDUCATION & EMPLOYMENT",
+        "shortDescription": "Providing Central African youth with practical, job-oriented training to foster their integration into the job market. Workshops,…",
+        "programs": [
+          { "title": "Vocational Training", "description": "Hands-on workshops in digital technology, culinary arts, and communications." },
+          { "title": "Internships", "description": "Connecting youth with employer partners for paid internships." },
+          { "title": "Mentorship Program", "description": "One-on-one guidance for youth by experienced professionals." }
+        ]
+      },
+      "communication": {
+        "name": "Communication",
+        "category": "VISIBILITY & MEDIA",
+        "shortDescription": "Ensuring visibility for LIAM Groupe and its partners through a modern communication strategy: press relations,…",
+        "programs": [
+          { "title": "Press Relations", "description": "Media coverage of events and distribution of press releases to local and international media." },
+          { "title": "Audiovisual Production", "description": "Creating documentaries, reports, and digital content showcasing our initiatives." },
+          { "title": "Community Management", "description": "Social media management and online community engagement." }
+        ]
+      },
+      "evenementiel": {
+        "name": "Events",
+        "category": "CULTURE & GALAS",
+        "shortDescription": "Organizing large-scale events that bring people together and celebrate Central African culture. Miss Centrafrique, charity gal…",
+        "programs": [
+          { "title": "Miss Central African Republic", "description": "National beauty and culture pageant celebrating the diversity of the CAR." },
+          { "title": "Charity Gala", "description": "Prestigious evening gathering partners and donors to fund our programs." },
+          { "title": "Cultural Festivals", "description": "Artistic events showcasing music, dance, and local arts." }
+        ]
+      }
+    }
   },
   "domain": {
     "programs": {
@@ -282,7 +508,11 @@
     "register": "Register",
     "viewDetails": "View details",
     "noEvents": "No events found",
-    "noEventsText": "There are no events in this category yet."
+    "noEventsText": "There are no events in this category yet.",
+    "registerModalTitle": "Event registration",
+    "registerModalDescription": "Fill in this form to register for '{{title}}'. Our team will contact you to confirm your spot.",
+    "registerModalMessage": "I would like to register for the event '{{title}}' ({{date}}).",
+    "registerSuccessText": "Thank you {{name}}! Your registration request has been received, our team will contact you shortly to confirm it."
   },
   "news": {
     "heroAlt": "LIAM Groupe News",
@@ -323,7 +553,10 @@
     "domains": "Domains",
     "act": "Take action",
     "copyright": "© 2026 LIAM Groupe. All rights reserved — Bangui, Central African Republic",
-    "privacy": "Privacy policy"
+    "privacy": "Privacy policy",
+    "legal": "Legal notice",
+    "findUs": "Find us",
+    "openInMaps": "Open in Google Maps"
   },
   "gallery": {
     "close": "Close",
@@ -334,6 +567,28 @@
     "ariaLabel": "Image viewer"
   },
   "admin": {
+    "imageUpload": {
+      "dropHere": "Click or drag & drop an image",
+      "dropHint": "PNG, JPG, WebP — max 10 MB",
+      "uploading": "Uploading...",
+      "urlPlaceholder": "Image URL...",
+      "pasteUrl": "Paste the image URL:",
+      "pasteBtn": "URL",
+      "pasteTitle": "Paste URL",
+      "remove": "Remove image",
+      "preview": "Preview",
+      "uploadError": "Upload error: ",
+      "networkError": "Network error: "
+    },
+    "galleryUpload": {
+      "dropHere": "Click or drag & drop images",
+      "dropHint": "PNG, JPG, WebP, GIF — multiple files at once",
+      "addMore": "Add more images",
+      "uploading": "Uploading...",
+      "remove": "Remove",
+      "imageCount_one": "{{count}} image",
+      "imageCount_other": "{{count}} images"
+    },
     "login": {
       "title": "Administration",
       "subtitle": "LIAM Groupe — Secure access",
@@ -358,16 +613,48 @@
       "team": "Team",
       "partners": "Partners",
       "testimonials": "Testimonials",
-      "settings": "Settings",
-      "logout": "Logout",
-      "admin": "Administration"
+    "messages": "Messages",
+    "registrations": "Registrations",
+    "settings": "Settings",
+    "logout": "Logout",
+    "admin": "Administration"
     },
     "dashboard": {
       "title": "Dashboard",
       "description": "Overview of LIAM Groupe website content.",
       "manageTitle": "Content management",
       "manageText": "Use the sidebar navigation to manage each type of content.",
-      "teamMembers": "Team members"
+      "teamMembers": "Team members",
+      "confirmTitle": "Access this section?",
+      "confirmText": "You are about to access the « {{section}} » management. Do you wish to continue?",
+      "confirmAction": "Access"
+    },
+    "registrations": {
+      "title": "Event Registrations",
+      "total_one": "{{count}} registration",
+      "total_other": "{{count}} registrations",
+      "pendingCount_one": "{{count}} pending",
+      "pendingCount_other": "{{count}} pending",
+      "search": "Search registrations…",
+      "filter": {
+        "all": "All",
+        "en_attente": "Pending",
+        "confirme": "Confirmed",
+        "annule": "Cancelled"
+      },
+      "empty": "No registrations",
+      "emptyText": "Event registrations will appear here.",
+      "detailTitle": "Registration Details",
+      "eventSlug": "Event (slug)",
+      "changeStatus": "Change status",
+      "statusPending": "Pending",
+      "statusConfirmed": "Confirmed",
+      "statusCancelled": "Cancelled",
+      "confirmDelete": "Confirm deletion",
+      "confirmDeleteText": "Are you sure you want to delete this registration? This action is irreversible.",
+      "messageHistory_one": "{{count}} related message",
+      "messageHistory_other": "{{count}} related messages",
+      "messageHistoryEmpty": "No messages found for this email."
     },
     "contentManager": {
       "add": "Add",
@@ -395,8 +682,11 @@
       "confirmDeleteText": "Are you sure you want to delete <1>{{name}}</1>? This action is irreversible.",
       "confirmClose": "Unsaved changes",
       "confirmCloseText": "You have unsaved changes. Do you really want to leave without saving?",
+      "perPage": "Per page:",
       "confirmCloseStay": "Stay",
       "confirmCloseLeave": "Leave without saving",
+      "toggleStatus": "Toggle status",
+      "statusChanged": "Status updated: {{status}}",
       "error": "Error",
       "newItem": "New",
       "fieldLabels": {
@@ -413,6 +703,7 @@
         "title": "Title",
         "description": "Description",
         "date": "Date",
+        "end_date": "End date",
         "location": "Location",
         "image": "Image",
         "status": "Status",
@@ -420,6 +711,7 @@
         "tag": "Tag",
         "role": "Role",
         "photo": "Photo",
+        "social": "Social networks",
         "subtitle": "Subtitle",
         "logo": "Logo",
         "initial": "Initial",
@@ -439,13 +731,14 @@
       "slugPlaceholder": "my-domain",
       "iconPlaceholder": "heart, briefcase, etc.",
       "datePlaceholder": "August 15, 2026",
+      "end_datePlaceholder": "August 18, 2026 (optional)",
       "tagPlaceholder": "NEWS",
       "initialPlaceholder": "F",
       "colorPlaceholder": "#8A0015"
     },
     "settings": {
       "title": "Site settings",
-      "description": "Manage general information, navigation and static content.",
+      "description": "Description",
       "saveAll": "Save all",
       "save": "Save",
       "reset": "Reset",
@@ -453,7 +746,6 @@
       "navLinks": "Navigation",
       "footerLinks": "Footer",
       "homeHeroImages": "Hero images (Home)",
-
       "resetToast": "« {{label}} » reset",
       "savedToast": "« {{label}} » saved ✅",
       "allSavedToast": "All settings saved ✅",
@@ -461,41 +753,78 @@
       "shortName": "Short name",
       "fullName": "Full name",
       "tagline": "Tagline",
-      "description": "Description",
       "address": "Address",
       "phones": "Phones",
       "emails": "Emails",
       "hours": "Hours",
       "contactPage": "Contact Page — Specific information",
       "addLink": "Add link",
-
       "addImage": "Add image",
       "add": "Add",
       "linkLabel": "Label",
       "linkTo": "Link (to)",
       "linkDD": "Dropdown",
-
       "navLinksDesc": "Navigation links displayed in the main menu.",
       "footerLinksDesc": "Navigation columns in the footer.",
       "heroImagesDesc": "Hero carousel images on the homepage (Cloudinary URLs).",
-
       "addressPlaceholder": "Avenue des Martyrs...",
       "phonePlaceholder": "+236 00 00 00 00",
       "emailPlaceholder": "contact@liamgroupe.org",
       "hoursPlaceholder": "Monday — Friday: 8:00 AM — 5:00 PM",
-      "heroImagePlaceholder": "https://res.cloudinary.com/..."
+      "heroImagePlaceholder": "https://res.cloudinary.com/...",
+      "formConfigs": "Forms",
+      "formContact": "Contact form",
+      "formChatbot": "Chatbot",
+      "fieldName": "Field name",
+      "fieldLabel": "Translation key (label)",
+      "fieldType": "Type",
+      "fieldRequired": "Required",
+      "fieldPlaceholder": "Translation key (placeholder)",
+      "fieldOptions": "Options (for select)",
+      "addField": "Add field"
+    },
+    "messages": {
+      "title": "Received Messages",
+      "total_one": "{{count}} message",
+      "total_other": "{{count}} messages",
+      "unreadCount_one": "{{count}} unread",
+      "unreadCount_other": "{{count}} unread",
+      "search": "Search messages…",
+      "filter": {
+        "all": "All",
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "empty": "No messages",
+      "emptyText": "Messages from contact forms will appear here.",
+      "detailTitle": "Message Details",
+      "markRead": "Mark as read",
+      "markUnread": "Mark as unread",
+      "fromPage": "Source page",
+      "additionalFields": "Additional fields",
+      "replyEmail": "Reply by email",
+      "replyWhatsApp": "Reply on WhatsApp",
+      "confirmDelete": "Confirm deletion",
+      "confirmDeleteText": "Are you sure you want to delete this message? This action is irreversible."
     },
     "logoutModal": {
       "title": "Logout",
       "text": "Are you sure you want to log out of the administration interface?",
       "cancel": "Cancel",
       "confirm": "Logout"
+    },
+    "inactivityModal": {
+      "title": "Inactive session",
+      "text": "You will be logged out due to inactivity. Click « Stay connected » to continue.",
+      "stay": "Stay connected",
+      "logout": "Log out"
     }
   },
   "common": {
     "loading": "Loading…",
     "error": "An error occurred",
     "noContent": "No content available",
+    "unknown": "Unknown",
     "view": "View",
     "close": "Close",
     "back": "Back",
@@ -506,6 +835,8 @@
     "readMore": "Read more",
     "discover": "Discover",
     "retry": "Try again",
+    "required": "This field is required",
+    "submit": "Submit",
     "home": "Home",
     "element_zero": "0 elements",
     "element_one": "{{count}} element",
@@ -527,5 +858,113 @@
     "previous": "Previous",
     "next": "Next",
     "page": "Page {{page}}"
+  },
+  "whatsapp": {
+    "cta": "Chat on WhatsApp",
+    "ariaLabel": "Contact us on WhatsApp",
+    "prefilledMessage": "Hello LIAM Groupe, I would like more information about your programs."
+  },
+  "chatbot": {
+    "greeting": "👋 Hello! Welcome to LIAM Groupe. How can I help you?",
+    "fallback": "🤔 Sorry, I didn't quite understand your question. Could you rephrase or pick a topic below?",
+    "quickReplies": {
+      "about": "Who are we?",
+      "programs": "Our programs",
+      "events": "Upcoming events",
+      "volunteer": "Become a volunteer",
+      "partner": "Partnership / Sponsor",
+      "news": "Follow our news",
+      "location": "Find us",
+      "contact": "Contact us"
+    },
+    "responses": {
+      "about": "Founded in 2015 in Bangui, LIAM Groupe is a Central African NGO working for sustainable community development through social innovation, sports, female entrepreneurship, community gastronomy, and youth training. Our mission: reveal talents and create lasting opportunities in the Central African Republic.",
+      "programs": "LIAM Groupe operates in 6 areas:\n🏋️ G-Fitness — sports & well-being\n🍲 O'GAB — community gastronomy\n💼 Entrepreneurship & Women's Leadership\n📚 Youth Training\n📢 Communication & Media\n🎭 Events & Culture\nWould you like to know more about a specific area?",
+      "events": "Find all our upcoming events on our Events page: sports tournaments, conferences, cooking workshops, charity galas… Check our calendar to stay updated! 👉 Head over to the Events page on our website.",
+      "volunteer": "We would be delighted to welcome you as a volunteer! You can join us on our various programs (G-Fitness, O'GAB, Youth Training…). Leave your details below and a team member will get back to you.",
+      "partner": "We're thrilled by your interest! To become a partner or sponsor, you can contact us via the form below or directly on WhatsApp. Our team will get back to you within 48 hours.",
+      "news": "You can follow all our news on the News page of our website, and join us on Facebook, Instagram and WhatsApp to never miss our actions and events!",
+      "location": "Our headquarters is located at:\nAvenue des Martyrs, Immeuble Salle King\nBangui, Central African Republic\n📞 Contact us at +236 76 00 00 00",
+      "contact": "Perfect! Leave us your details below and our team will get back to you shortly."
+    },
+    "inputPlaceholder": "Type your message…",
+    "formName": "Your name",
+    "formEmail": "Your email",
+    "formPhone": "Your phone",
+    "formMessage": "Your message",
+    "formSubmit": "Send",
+    "formSuccess": "✅ Thank you! Your message has been sent. We'll get back to you as soon as possible.",
+    "openChat": "Chat with us",
+    "closeChat": "Close chat",
+    "chatTitle": "LIAM Groupe",
+    "chatSubtitle": "We reply within 48h",
+    "typeMessage": "Type your message…",
+    "viaWhatsapp": "Or message us on WhatsApp",
+    "viaEmail": "Or send us an email"
+  },
+  "newsArticle": {
+    "back": "Back to news",
+    "shareTitle": "Share this article",
+    "relatedTitle": "You might also like"
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "text": "The page you're looking for may have been moved or no longer exists. Head back home or check out our upcoming events.",
+    "home": "Back to home",
+    "events": "View events"
+  },
+  "legal": {
+    "mentions": {
+      "eyebrow": "Legal information",
+      "title": "Legal notice",
+      "sections": [
+        {
+          "heading": "Site publisher",
+          "text": "This site is published by {{name}}, a non-profit organization headquartered at {{address}}. Contact: {{email}}."
+        },
+        {
+          "heading": "Hosting",
+          "text": "The site is hosted by third-party technical providers (web and media hosting) ensuring its availability and security."
+        },
+        {
+          "heading": "Intellectual property",
+          "text": "All content on this site (text, images, logos, videos) is the property of {{name}} or its partners, unless otherwise stated. Any reproduction without prior authorization is prohibited."
+        },
+        {
+          "heading": "Liability",
+          "text": "{{name}} strives to ensure the accuracy of the information published on this site, without guaranteeing that it is free of errors or omissions."
+        },
+        {
+          "heading": "Contact",
+          "text": "For any question regarding this legal notice, you can write to us at {{email}}."
+        }
+      ]
+    },
+    "privacy": {
+      "eyebrow": "Your data",
+      "title": "Privacy policy",
+      "sections": [
+        {
+          "heading": "Data collected",
+          "text": "We only collect the information you voluntarily provide through our contact, registration or newsletter forms (name, email, phone, message)."
+        },
+        {
+          "heading": "Use of data",
+          "text": "This information is used solely to respond to your requests, manage registrations for our events, and keep you informed of our news if you have opted in."
+        },
+        {
+          "heading": "Data sharing",
+          "text": "Your data is never sold or transferred to third parties. It may be shared with our technical providers (hosting, messaging) solely to ensure the site runs properly."
+        },
+        {
+          "heading": "Your rights",
+          "text": "In accordance with personal data protection principles, you may at any time request access to, correction of, or deletion of your data by writing to us at {{email}}."
+        },
+        {
+          "heading": "Cookies",
+          "text": "This site may use technical cookies necessary for its proper functioning (language preference, anonymized statistics)."
+        }
+      ]
+    }
   }
 }

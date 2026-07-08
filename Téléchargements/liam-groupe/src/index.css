@@ -7,17 +7,20 @@ html {
 }
 
 body {
-  font-family: "Poppins", ui-sans-serif, sans-serif;
-  color: #1A1A1A;
+  font-family: "Oswald", ui-sans-serif, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #10202E;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, .font-heading {
-  font-family: "Baloo 2", ui-rounded, sans-serif;
+  font-family: "Fraunces", ui-serif, Georgia, serif;
+  letter-spacing: -0.01em;
 }
 
 ::selection {
-  background-color: #E0C2FF;
+  background-color: #FFECB3;
 }
 
 /* Hide scrollbar for testimonial / gallery carousels if needed */

@@ -2,7 +2,7 @@ import { CalendarDays, MapPin, ImageOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SafeImg from "./SafeImg";
 
-export default function EventCard({ event, compact = false }) {
+export default function EventCard({ event, compact = false, onRegister }) {
   const { t } = useTranslation();
   const isUpcoming = event.status === "a_venir";
   return (
@@ -38,7 +38,10 @@ export default function EventCard({ event, compact = false }) {
             {event.category}
           </span>
         ) : isUpcoming ? (
-          <button className="mt-5 w-full py-3 rounded-full border border-brand-100 text-brand-600 font-semibold hover:bg-brand-50 transition-colors">
+          <button
+            onClick={() => onRegister?.(event)}
+            className="mt-5 w-full py-3 rounded-full border border-brand-100 text-brand-600 font-semibold hover:bg-brand-50 transition-colors"
+          >
             {t('events.register')} →
           </button>
         ) : null}

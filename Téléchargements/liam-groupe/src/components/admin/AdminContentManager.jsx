@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback, useMemo, startTransition } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { supabase } from "../../lib/supabase.js";
+import { computeEventStatus } from "../../lib/utils.js";
 import AdminImageUpload from "./AdminImageUpload";
 import AdminGalleryUpload from "./AdminGalleryUpload";
 import {
   Plus, Pencil, Trash2, Search, ArrowUpDown,
   ChevronLeft, ChevronRight,
   X, Save, Loader2, Image as ImageIcon,
-  ExternalLink,
+  ExternalLink, ArrowLeftRight,
 } from "lucide-react";
 
 // ─── Field definitions per table (translated in component) ─────────────────
@@ -41,6 +42,7 @@ function getTableConfig(t) {
         { key: "title", label: fl("title"), type: "text", required: true },
         { key: "description", label: fl("description"), type: "textarea" },
         { key: "date", label: fl("date"), type: "text", placeholder: ph("date") },
+        { key: "end_date", label: fl("end_date"), type: "text", placeholder: ph("end_date") },
         { key: "location", label: fl("location"), type: "text" },
         { key: "image", label: fl("image"), type: "image" },
         { key: "gallery", label: fl("gallery"), type: "gallery" },
@@ -71,6 +73,7 @@ function getTableConfig(t) {
         { key: "role", label: fl("role"), type: "text" },
         { key: "description", label: fl("description"), type: "textarea" },
         { key: "image", label: fl("photo"), type: "image" },
+        { key: "social", label: fl("social"), type: "social" },
       ],
     },
     partners: {
@@ -106,7 +109,7 @@ function getTableConfig(t) {
 // ─── Column display config ─────────────────────────────────────────────────
 const TABLE_COLS = {
   domains: ["slug", "name", "category"],
-  events: ["title", "date", "status", "category", "gallery"],
+  events: ["title", "date", "end_date", "status", "category", "gallery"],
   news: ["title", "date", "tag", "gallery"],
   team: ["name", "role"],
   partners: ["name", "category"],
@@ -121,7 +124,9 @@ export default function AdminContentManager({ table }) {
   const columns = TABLE_COLS[table] || [];
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const ITEMS_PER_PAGE = 10;
+  // Valeur spéciale Infinity signifie "Tout"
+  const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, Infinity];
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [search, setSearch] = useState("");
   const [sortDir, setSortDir] = useState("asc");
   const [page, setPage] = useState(0);
@@ -131,6 +136,7 @@ export default function AdminContentManager({ table }) {
   const [formValues, setFormValues] = useState({});
   const [formDirty, setFormDirty] = useState(false);
   const [confirmClose, setConfirmClose] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -138,7 +144,20 @@ export default function AdminContentManager({ table }) {
       .from(table)
       .select("*")
       .order("order_index", { ascending: true });
-    if (!error) setRows(data || []);
+    if (!error) {
+      let corrected = data || [];
+      // Mise à jour automatique des statuts des événements dont la date est passée
+      if (table === "events") {
+        corrected = corrected.map((evt) => {
+          const correctStatus = computeEventStatus(evt.date, evt.status, evt.end_date);
+          if (correctStatus !== evt.status && evt.id) {
+            supabase.from("events").update({ status: correctStatus }).eq("id", evt.id).then().catch((err) => console.error('AdminContentManager — Erreur mise à jour statut événement:', err));
+          }
+          return { ...evt, status: correctStatus };
+        });
+      }
+      setRows(corrected);
+    }
     setLoading(false);
   }, [table]);
 
@@ -173,12 +192,12 @@ export default function AdminContentManager({ table }) {
     }
   }, [editing, fields]);
 
-  // Reset page quand la recherche ou le tri change
+  // Reset page quand la recherche, le tri ou le nombre d'éléments par page change
   useEffect(() => {
     startTransition(() => {
       setPage(0);
     });
-  }, [search, sortDir]);
+  }, [search, sortDir, itemsPerPage]);
 
   const updateFormValue = (key, value) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
@@ -198,10 +217,11 @@ export default function AdminContentManager({ table }) {
       return sortDir === "asc" ? va - vb : vb - va;
     });
 
-  // Pagination
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  // Pagination — Infinity = pas de pagination (tout afficher)
+  const isAll = itemsPerPage === Infinity;
+  const totalPages = isAll ? 1 : Math.max(1, Math.ceil(filtered.length / itemsPerPage));
   const currentPage = Math.min(page, totalPages - 1);
-  const paginated = filtered.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
+  const paginated = isAll ? filtered : filtered.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   // ── Save ──
   const handleSave = async () => {
@@ -228,12 +248,35 @@ export default function AdminContentManager({ table }) {
       : await supabase.from(table).update(payload).eq("id", editing.id);
 
     setSaving(false);
-    if (!error) {
+    if (error) {
+      console.error("AdminContentManager — Erreur de sauvegarde :", error);
+      setToast({ message: t("admin.contentManager.error") + " : " + error.message, type: "error" });
+    } else {
       setEditing(null);
       setFormDirty(false);
       load();
+    }
+  };
+
+  // Toast auto-dismiss
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 4000);
+      return () => clearTimeout(t);
+    }
+  }, [toast]);
+
+  // ── Toggle event status (quick action sans ouvrir le modal) ──
+  const handleToggleStatus = async (row) => {
+    const newStatus = row.status === "a_venir" ? "passe" : "a_venir";
+    const { error } = await supabase.from(table).update({ status: newStatus }).eq("id", row.id);
+    if (!error) {
+      setRows((prev) =>
+        prev.map((r) => (r.id === row.id ? { ...r, status: newStatus } : r))
+      );
+      setToast({ message: t("admin.contentManager.statusChanged", { status: t(newStatus === "a_venir" ? "admin.contentManager.upcoming" : "admin.contentManager.past") }), type: "success" });
     } else {
-      alert("Erreur : " + error.message);
+      console.error("AdminContentManager — Erreur changement de statut :", error);
     }
   };
 
@@ -242,7 +285,10 @@ export default function AdminContentManager({ table }) {
     const { error } = await supabase.from(table).delete().eq("id", id);
     if (!error) {
       setDeleting(null);
+      setToast({ message: t("admin.contentManager.delete") + " ✅", type: "success" });
       load();
+    } else {
+      console.error("AdminContentManager — Erreur suppression :", error);
     }
   };
 
@@ -264,6 +310,36 @@ export default function AdminContentManager({ table }) {
           value={galleryVal}
           onChange={(urls) => updateFormValue(field.key, urls)}
         />
+      );
+    }
+
+    // Social links — JSON object with linkedin, facebook, instagram, x
+    if (field.type === "social") {
+      const social = (typeof val === "object" && val !== null) ? val : {};
+      const platforms = [
+        { key: "linkedin", label: "LinkedIn", placeholder: "https://linkedin.com/in/..." },
+        { key: "facebook", label: "Facebook", placeholder: "https://facebook.com/..." },
+        { key: "instagram", label: "Instagram", placeholder: "https://instagram.com/..." },
+        { key: "x", label: "X (Twitter)", placeholder: "https://x.com/..." },
+      ];
+      return (
+        <div className="space-y-2">
+          {platforms.map(({ key, label, placeholder }) => (
+            <div key={key} className="flex items-center gap-2">
+              <span className="text-xs font-medium text-gray-500 w-24 shrink-0">{label}</span>
+              <input
+                type="url"
+                value={social[key] || ""}
+                onChange={(e) => {
+                  const updated = { ...social, [key]: e.target.value };
+                  updateFormValue(field.key, updated);
+                }}
+                placeholder={placeholder}
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm"
+              />
+            </div>
+          ))}
+        </div>
       );
     }
 
@@ -314,26 +390,27 @@ export default function AdminContentManager({ table }) {
 
   return (
     <div>
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="font-heading font-bold text-2xl md:text-3xl text-gray-900">
-            {config.name}
-          </h1>
-          <p className="text-gray-500 text-sm mt-0.5">{t("admin.contentManager.elementCount", { count: rows.length })}</p>
+      {/* Sticky header: titre + compteur + bouton Ajouter */}
+      <div className="sticky top-0 z-20 bg-gray-50 pt-0 pb-3 -mx-4 sm:-mx-6 lg:-mx-10 px-4 sm:px-6 lg:px-10 border-b border-gray-100 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h1 className="font-heading font-bold text-2xl md:text-3xl text-gray-900">
+              {config.name}
+            </h1>
+            <p className="text-gray-500 text-sm mt-0.5">{t("admin.contentManager.elementCount", { count: rows.length })}</p>
+          </div>
+          <button
+            onClick={() => setEditing("new")}
+            className="px-5 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm inline-flex items-center gap-2 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            {t("admin.contentManager.add")}
+          </button>
         </div>
-        <button
-          onClick={() => setEditing("new")}
-          className="px-5 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm inline-flex items-center gap-2 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          {t("admin.contentManager.add")}
-        </button>
-      </div>
 
       {/* Search + Sort */}
-      <div className="flex flex-wrap items-center gap-3 mb-5">
-        <div className="relative flex-1 max-w-xs">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[160px] w-full sm:w-auto sm:max-w-xs">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
@@ -347,9 +424,10 @@ export default function AdminContentManager({ table }) {
           onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
           className="px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors inline-flex items-center gap-1.5"
         >
-          <ArrowUpDown className="w-4 h-4" />
-          {sortDir === "asc" ? t("admin.contentManager.orderAsc") : t("admin.contentManager.orderDesc")}
+          <ArrowUpDown className="w-4 h-4 shrink-0" />
+          <span className="hidden sm:inline">{sortDir === "asc" ? t("admin.contentManager.orderAsc") : t("admin.contentManager.orderDesc")}</span>
         </button>
+      </div>
       </div>
 
       {/* Table */}
@@ -364,8 +442,8 @@ export default function AdminContentManager({ table }) {
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto -mx-6 sm:mx-0 rounded-none sm:rounded-2xl border-0 sm:border border-gray-100 bg-white">
+            <table className="w-full text-sm min-w-[600px] sm:min-w-0">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50/50">
                   {columns.map((col) => (
@@ -373,7 +451,7 @@ export default function AdminContentManager({ table }) {
                       {config.fields.find((f) => f.key === col)?.label || col}
                     </th>
                   ))}
-                  <th className="text-right px-5 py-3.5 font-semibold text-gray-600 w-24">{t("admin.contentManager.actions")}</th>
+                  <th className="sticky right-0 z-10 bg-gray-50/50 text-right px-5 py-3.5 font-semibold text-gray-600 w-24 shadow-[inset_4px_0_8px_-4px_rgba(0,0,0,0.08)]">{t("admin.contentManager.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -384,8 +462,21 @@ export default function AdminContentManager({ table }) {
                         {renderCell(row, col, t)}
                       </td>
                     ))}
-                    <td className="px-5 py-3.5 text-right">
+                    <td className="sticky right-0 z-10 bg-white text-right px-5 py-3.5 shadow-[inset_4px_0_8px_-4px_rgba(0,0,0,0.08)]">
                       <div className="flex items-center justify-end gap-1">
+                        {table === "events" && (
+                          <button
+                            onClick={() => handleToggleStatus(row)}
+                            className={`p-2 rounded-lg transition-colors ${
+                              row.status === "a_venir"
+                                ? "text-gray-400 hover:text-amber-600 hover:bg-amber-50"
+                                : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                            }`}
+                            title={t("admin.contentManager.toggleStatus")}
+                          >
+                            <ArrowLeftRight className="w-4 h-4" />
+                          </button>
+                        )}
                         <button
                           onClick={() => setEditing(row)}
                           className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-brand-600 transition-colors"
@@ -408,12 +499,30 @@ export default function AdminContentManager({ table }) {
             </table>
           </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4 px-1">
-              <p className="text-sm text-gray-500">
-                {currentPage * ITEMS_PER_PAGE + 1}–{Math.min((currentPage + 1) * ITEMS_PER_PAGE, filtered.length)} / {filtered.length}
-              </p>
+          {/* Sélecteur d'éléments par page (toujours visible) */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 px-1">
+            <div className="flex items-center gap-3">
+              {!isAll && (
+                <p className="text-sm text-gray-500">
+                  {currentPage * itemsPerPage + 1}–{Math.min((currentPage + 1) * itemsPerPage, filtered.length)} / {filtered.length}
+                </p>
+              )}
+              <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                <span className="hidden sm:inline">{t('admin.contentManager.perPage')}</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="border border-gray-200 rounded-lg px-2 py-1 text-sm outline-none focus:border-brand-400 transition-colors bg-white"
+                >
+                  {ITEMS_PER_PAGE_OPTIONS.map((n) => (
+                    <option key={n} value={n}>{n === Infinity ? 'Tout' : n}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Pagination — cachée quand tout est affiché ou qu'il n'y a qu'une page */}
+            {totalPages > 1 && (
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
@@ -423,13 +532,13 @@ export default function AdminContentManager({ table }) {
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                {Array.from({ length: Math.min(totalPages, 7) }).map((_, i) => {
-                  const pageNum = totalPages <= 7
+                {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
+                  const pageNum = totalPages <= 5
                     ? i
                     : (() => {
-                        if (currentPage < 3) return i;
-                        if (currentPage > totalPages - 4) return totalPages - 7 + i;
-                        return currentPage - 3 + i;
+                        if (currentPage < 2) return i;
+                        if (currentPage > totalPages - 3) return totalPages - 5 + i;
+                        return currentPage - 2 + i;
                       })();
                   return (
                     <button
@@ -454,9 +563,22 @@ export default function AdminContentManager({ table }) {
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </>
+      )}
+
+      {/* Toast notification */}
+      {toast && (
+        <div
+          className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl shadow-xl text-sm font-medium animate-fade-up ${
+            toast.type === "error"
+              ? "bg-red-500 text-white"
+              : "bg-green-600 text-white"
+          }`}
+        >
+          {toast.message}
+        </div>
       )}
 
       {/* ── Edit Modal ── */}

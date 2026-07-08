@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { Mail, ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLangPath } from "../lib/langPath";
 import useScrollReveal from "../hooks/useScrollReveal";
 
 export function ActCTA({ title }) {
   const { t } = useTranslation();
+  const p = useLangPath();
   const sectionRef = useScrollReveal();
   return (
     <section className="bg-brand-50/40 py-20 px-6" ref={sectionRef}>
@@ -18,13 +20,13 @@ export function ActCTA({ title }) {
         <p className="text-gray-500 mb-8 leading-relaxed reveal" dangerouslySetInnerHTML={{ __html: t('domain.cta.description') }} />
         <div className="flex flex-wrap items-center justify-center gap-4 reveal">
           <Link
-            to="/a-propos"
+            to={p("/a-propos")}
             className="px-7 py-3 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
           >
             {t('domain.cta.contact')}
           </Link>
           <Link
-            to="/evenements"
+            to={p("/evenements")}
             className="px-7 py-3 rounded-full border border-gray-300 hover:border-gray-400 font-semibold transition-colors"
           >
             {t('domain.cta.viewEvents')}

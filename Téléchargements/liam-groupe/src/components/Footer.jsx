@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
-import { Send, MessageSquare, Phone } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
+import { Send, MessageSquare, Phone, MapPin, Mail, Clock, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLangPath } from "../lib/langPath";
 import { FacebookIcon, InstagramIcon, XIcon, YoutubeIcon } from "./SocialIcons";
 import { useSiteInfo, useFooterLinks } from "../hooks/useSiteData";
 import useScrollReveal from "../hooks/useScrollReveal";
 
 export default function Footer() {
   const { t } = useTranslation();
+  const p = useLangPath();
   const { data: siteInfo = {} } = useSiteInfo();
   const { data: footerLinks = {} } = useFooterLinks();
   const fLinks = { liamGroupe: [], domaines: [], agir: [], ...footerLinks };
@@ -81,11 +83,12 @@ export default function Footer() {
 
       <footer className="bg-ink text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-16 pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr_1fr_1fr] gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-10">
           <div>
-            <Link to="/" className="font-heading font-extrabold text-2xl">
-              {siteInfo.name}
-              <span className="text-brand-500">.</span>
+            <Link to={p("/")} className="flex items-center gap-2.5 no-underline">
+              <span className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl leading-none tracking-tight text-white">
+                LIAM<span className="text-brand-500">.</span>
+              </span>
             </Link>
             <p className="mt-4 text-white/60 leading-relaxed max-w-sm">
               {t('footer.description')}
@@ -111,31 +114,6 @@ export default function Footer() {
               </button>
             </form>
 
-            <div className="mt-10">
-              <h4 className="font-heading font-bold mb-4">{t('footer.contactTitle')}</h4>
-              <ul className="space-y-3 text-white/60">
-                <li>
-                  <Link to="/a-propos" className="hover:text-white transition-colors">
-                    {t('footer.contactLink')}
-                  </Link>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    WhatsApp
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Facebook
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Instagram
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
 
           <div>
@@ -143,9 +121,19 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               {fLinks.liamGroupe.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to} className="hover:text-white transition-colors">
+                  <NavLink
+                    to={p(l.to)}
+                    end={l.to === "/"}
+                    className={({ isActive }) =>
+                      `transition-colors block ${
+                        isActive
+                          ? "text-brand-400 font-semibold border-l-4 border-brand-500 -ml-1 pl-4"
+                          : "text-white/60 hover:text-white pl-4"
+                      }`
+                    }
+                  >
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -156,9 +144,19 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               {fLinks.domaines.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to} className="hover:text-white transition-colors">
+                  <NavLink
+                    to={p(l.to)}
+                    end={l.to === "/"}
+                    className={({ isActive }) =>
+                      `transition-colors block ${
+                        isActive
+                          ? "text-brand-400 font-semibold border-l-4 border-brand-500 -ml-1 pl-4"
+                          : "text-white/60 hover:text-white pl-4"
+                      }`
+                    }
+                  >
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -169,12 +167,67 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               {fLinks.agir.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to} className="hover:text-white transition-colors">
+                  <NavLink
+                    to={p(l.to)}
+                    end={l.to === "/"}
+                    className={({ isActive }) =>
+                      `transition-colors block ${
+                        isActive
+                          ? "text-brand-400 font-semibold border-l-4 border-brand-500 -ml-1 pl-4"
+                          : "text-white/60 hover:text-white pl-4"
+                      }`
+                    }
+                  >
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div>
+            <h4 className="font-heading font-bold mb-4">{t('footer.findUs')}</h4>
+            <div className="space-y-3 text-white/60 text-sm">
+              {siteInfo.address?.length > 0 && (
+                <p className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 mt-0.5 text-brand-500 shrink-0" />
+                  <span>{siteInfo.address.join(", ")}</span>
+                </p>
+              )}
+              {siteInfo.address?.length > 0 && (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteInfo.address.join(", "))}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-brand-400 hover:text-brand-300 transition-colors text-sm ml-7 -mt-1"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>{t('footer.openInMaps')}</span>
+                </a>
+              )}
+              {siteInfo.phones?.[0] && (
+                <p className="flex items-center gap-3">
+                  <Phone className="w-4 h-4 text-brand-500 shrink-0" />
+                  <a href={`tel:${siteInfo.phones[0].replace(/\s/g, "")}`} className="hover:text-white transition-colors">
+                    {siteInfo.phones[0]}
+                  </a>
+                </p>
+              )}
+              {siteInfo.emails?.[0] && (
+                <p className="flex items-center gap-3">
+                  <Mail className="w-4 h-4 text-brand-500 shrink-0" />
+                  <a href={`mailto:${siteInfo.emails[0]}`} className="hover:text-white transition-colors">
+                    {siteInfo.emails[0]}
+                  </a>
+                </p>
+              )}
+              {siteInfo.hours?.[0] && (
+                <p className="flex items-center gap-3">
+                  <Clock className="w-4 h-4 text-brand-500 shrink-0" />
+                  <span>{siteInfo.hours[0]}</span>
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -183,10 +236,17 @@ export default function Footer() {
             {t('footer.copyright')}
           </p>
           <div className="flex items-center gap-4">
-            {[FacebookIcon, InstagramIcon, XIcon, YoutubeIcon].map((Icon, i) => (
+            {[
+              { Icon: FacebookIcon, href: siteInfo.social?.facebook },
+              { Icon: InstagramIcon, href: siteInfo.social?.instagram },
+              { Icon: XIcon, href: siteInfo.social?.x },
+              { Icon: YoutubeIcon, href: siteInfo.social?.youtube },
+            ].map(({ Icon, href }, i) => (
               <a
                 key={i}
-                href="#"
+                href={href || '#'}
+                target={href ? '_blank' : undefined}
+                rel={href ? 'noopener noreferrer' : undefined}
                 aria-label="social"
                 className="w-9 h-9 rounded-lg border border-white/15 flex items-center justify-center hover:bg-white/10 transition-colors"
               >
@@ -194,9 +254,14 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <a href="#" className="text-white/50 text-sm hover:text-white transition-colors">
-            {t('footer.privacy')}
-          </a>
+          <div className="flex items-center gap-4 text-sm">
+            <NavLink to={p("/mentions-legales")} className={({ isActive }) => `transition-colors ${isActive ? "text-brand-400 font-semibold" : "text-white/50 hover:text-white"}`}>
+              {t('footer.legal')}
+            </NavLink>
+            <NavLink to={p("/politique-de-confidentialite")} className={({ isActive }) => `transition-colors ${isActive ? "text-brand-400 font-semibold" : "text-white/50 hover:text-white"}`}>
+              {t('footer.privacy')}
+            </NavLink>
+          </div>
         </div>
       </div>
     </footer>

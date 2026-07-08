@@ -19,8 +19,9 @@ i18n
       escapeValue: false,
     },
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["path", "localStorage", "navigator"],
       caches: ["localStorage"],
+      lookupFromPathIndex: 0,
     },
   });
 

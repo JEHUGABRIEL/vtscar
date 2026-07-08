@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, startTransition } from "react";
+import { useState, useEffect, useCallback, useMemo, startTransition } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "../../lib/supabase.js";
 import {
@@ -27,6 +27,23 @@ const DEFAULTS = {
   navLinks: [],
   footerLinks: { liamGroupe: [], domaines: [], agir: [] },
   homeHeroImages: [],
+  form_configs: {
+    contact: [
+      { name: "firstname", label: "contact.formFirstName", type: "text", required: true, placeholder: "contact.formFirstNamePlaceholder" },
+      { name: "lastname", label: "contact.formLastName", type: "text", required: true, placeholder: "contact.formLastNamePlaceholder" },
+      { name: "email", label: "contact.formEmail", type: "email", required: true, placeholder: "contact.formEmailPlaceholder" },
+      { name: "phone", label: "contact.formPhone", type: "tel", required: false, placeholder: "contact.formPhonePlaceholder" },
+      { name: "subject", label: "contact.formSubject", type: "select", required: false, placeholder: "contact.formSubjectPlaceholder",
+        options: ["contact.formSubjectOption1","contact.formSubjectOption2","contact.formSubjectOption3","contact.formSubjectOption4"] },
+      { name: "message", label: "contact.formMessage", type: "textarea", required: true, placeholder: "contact.formMessagePlaceholder" },
+    ],
+    chatbot: [
+      { name: "firstname", label: "chatbot.formName", type: "text", required: true, placeholder: "chatbot.formName" },
+      { name: "email", label: "chatbot.formEmail", type: "email", required: true, placeholder: "chatbot.formEmail" },
+      { name: "phone", label: "chatbot.formPhone", type: "tel", required: false, placeholder: "chatbot.formPhone" },
+      { name: "message", label: "chatbot.formMessage", type: "textarea", required: true, placeholder: "chatbot.formMessage" },
+    ],
+  },
 };
 
 const SETTING_ICONS = {
@@ -34,6 +51,7 @@ const SETTING_ICONS = {
   navLinks: "🧭",
   footerLinks: "📄",
   homeHeroImages: "🖼️",
+  form_configs: "📋",
 };
 
 // ─── Utility to safely parse JSONB value ───────────────────────────────────
@@ -49,24 +67,35 @@ function safeParse(value, fallback) {
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
-export default function AdminSiteSettings() {
+export default function AdminSiteSettings({ section: currentSection }) {
   const { t } = useTranslation();
 
-  const SETTING_LABELS = {
+  const SETTING_LABELS = useMemo(() => ({
     siteInfo: t("admin.settings.siteInfo"),
     navLinks: t("admin.settings.navLinks"),
     footerLinks: t("admin.settings.footerLinks"),
     homeHeroImages: t("admin.settings.homeHeroImages"),
-  };
+    form_configs: t("admin.settings.formConfigs"),
+  }), [t]);
 
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("siteInfo");
+  const [activeTab, setActiveTab] = useState(currentSection || "siteInfo");
   const [dirty, setDirty] = useState({});
   const [toast, setToast] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
-  const keys = Object.keys(SETTING_LABELS);
+  const keys = useMemo(() => Object.keys(SETTING_LABELS), [SETTING_LABELS]);
+
+  // Synchroniser activeTab avec la prop reçue
+  useEffect(() => {
+    if (currentSection && currentSection !== activeTab) {
+      startTransition(() => {
+        setActiveTab(currentSection);
+      });
+    }
+  }, [currentSection, activeTab]);
 
   const loadSettings = useCallback(async () => {
     setLoading(true);
@@ -174,10 +203,13 @@ export default function AdminSiteSettings() {
                 className="flex-1 border border-gray-200 rounded-xl px-4 py-2 outline-none focus:border-brand-400 transition-colors text-sm"
               />
               <button
-                onClick={() => {
-                  const next = arr.filter((_, j) => j !== i);
-                  updateValue(key, { ...settings[key], [arrayKey]: next });
-                }}
+                onClick={() => setDeleteConfirm({
+                  action: () => {
+                    const next = arr.filter((_, j) => j !== i);
+                    updateValue(key, { ...settings[key], [arrayKey]: next });
+                  },
+                  label: `${arrayKey} #${i + 1}`,
+                })}
                 className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
@@ -258,7 +290,10 @@ export default function AdminSiteSettings() {
                   className="flex-1 border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm"
                 />
                 <button
-                  onClick={() => updateNested(field, arr.filter((_, j) => j !== i))}
+                  onClick={() => setDeleteConfirm({
+                    action: () => updateNested(field, arr.filter((_, j) => j !== i)),
+                    label: `${field} #${i + 1}`,
+                  })}
                   className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -293,9 +328,11 @@ export default function AdminSiteSettings() {
         {links.map((link, i) => (
           <div key={i} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-gray-400 uppercase">Lien #{i + 1}</span>
-              <button
-                onClick={() => updateValue("navLinks", links.filter((_, j) => j !== i))}
+              <span className="text-xs font-semibold text-gray-400 uppercase">Lien #{i + 1}</span>                <button
+                onClick={() => setDeleteConfirm({
+                  action: () => updateValue("navLinks", links.filter((_, j) => j !== i)),
+                  label: `Lien de navigation #${i + 1}`,
+                })}
                 className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
@@ -404,7 +441,10 @@ export default function AdminSiteSettings() {
                       className="flex-1 border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm"
                     />
                     <button
-                      onClick={() => updateSection(sectionKey, items.filter((_, j) => j !== i))}
+                      onClick={() => setDeleteConfirm({
+                        action: () => updateSection(sectionKey, items.filter((_, j) => j !== i)),
+                        label: `Lien footer #${i + 1}`,
+                      })}
                       className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -433,9 +473,11 @@ export default function AdminSiteSettings() {
         {images.map((url, i) => (
           <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-semibold text-gray-400">#{i + 1}</span>
-              <button
-                onClick={() => updateValue("homeHeroImages", images.filter((_, j) => j !== i))}
+              <span className="text-xs font-semibold text-gray-400">#{i + 1}</span>                <button
+                onClick={() => setDeleteConfirm({
+                  action: () => updateValue("homeHeroImages", images.filter((_, j) => j !== i)),
+                  label: `Image hero #${i + 1}`,
+                })}
                 className="ml-auto p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -473,12 +515,162 @@ export default function AdminSiteSettings() {
     );
   };
 
+  const renderFormConfigs = () => {
+    const configs = settings.form_configs ?? DEFAULTS.form_configs;
+    const formTypes = ["contact", "chatbot"];
+
+    const updateFormType = (formType, fields) => {
+      updateValue("form_configs", { ...configs, [formType]: fields });
+    };
+
+    const FIELD_TYPES = ["text", "email", "tel", "textarea", "select"];
+
+    const renderFieldEditor = (formType, field, idx, fields) => {
+      const update = (key, val) => {
+        const next = fields.map((f, i) => i === idx ? { ...f, [key]: val } : f);
+        updateFormType(formType, next);
+      };
+
+      return (
+        <div key={idx} className="bg-gray-50 rounded-xl p-4 border border-gray-100 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-gray-400 uppercase">#{idx + 1}</span>
+            <button
+              onClick={() => setDeleteConfirm({
+                action: () => updateFormType(formType, fields.filter((_, j) => j !== idx)),
+                label: `Champ formulaire #${idx + 1}`,
+              })}
+              className="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t("admin.settings.fieldName")}</label>
+              <input
+                type="text"
+                value={field.name || ""}
+                onChange={(e) => update("name", e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t("admin.settings.fieldLabel")}</label>
+              <input
+                type="text"
+                value={field.label || ""}
+                onChange={(e) => update("label", e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm font-mono"
+                placeholder="contact.formFirstName"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t("admin.settings.fieldType")}</label>
+              <select
+                value={field.type || "text"}
+                onChange={(e) => update("type", e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm"
+              >
+                {FIELD_TYPES.map((ft) => (
+                  <option key={ft} value={ft}>{ft}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-end pb-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!!field.required}
+                  onChange={(e) => update("required", e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+                />
+                <span className="text-xs font-medium text-gray-500">{t("admin.settings.fieldRequired")}</span>
+              </label>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-gray-500 mb-1">{t("admin.settings.fieldPlaceholder")}</label>
+              <input
+                type="text"
+                value={field.placeholder || ""}
+                onChange={(e) => update("placeholder", e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-brand-400 transition-colors text-sm font-mono"
+                placeholder="contact.formFirstNamePlaceholder"
+              />
+            </div>
+            {field.type === "select" && (
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-medium text-gray-500 mb-1">{t("admin.settings.fieldOptions")}</label>
+                <div className="space-y-1.5">
+                  {(field.options || []).map((opt, oi) => (
+                    <div key={oi} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={opt}
+                        onChange={(e) => {
+                          const next = [...(field.options || [])];
+                          next[oi] = e.target.value;
+                          update("options", next);
+                        }}
+                        className="flex-1 border border-gray-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-brand-400 transition-colors text-xs font-mono"
+                      />
+                      <button
+                        onClick={() => setDeleteConfirm({
+                          action: () => update("options", (field.options || []).filter((_, j) => j !== oi)),
+                          label: `Option #${oi + 1}`,
+                        })}
+                        className="p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => update("options", [...(field.options || []), ""])}
+                  className="mt-1.5 text-xs text-brand-600 hover:text-brand-700 font-medium inline-flex items-center gap-1"
+                >
+                  <Plus className="w-3 h-3" /> {t("admin.settings.add")}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    return (
+      <div className="space-y-6">
+        {formTypes.map((formType) => {
+          const fields = configs[formType] ?? [];
+          return (
+            <div key={formType}>
+              <h4 className="text-sm font-semibold text-gray-700 capitalize mb-2">
+                {formType === "contact" ? t("admin.settings.formContact") : t("admin.settings.formChatbot")}
+              </h4>
+              <div className="space-y-3">
+                {fields.map((field, idx) => renderFieldEditor(formType, field, idx, fields))}
+              </div>
+              <button
+                onClick={() => updateFormType(formType, [...fields, { name: "", label: "", type: "text", required: false, placeholder: "" }])}
+                className="mt-3 px-4 py-2 rounded-full border border-dashed border-gray-300 text-sm text-gray-500 hover:border-brand-400 hover:text-brand-600 transition-colors inline-flex items-center gap-1.5"
+              >
+                <Plus className="w-4 h-4" /> {t("admin.settings.addField")}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const renderEditor = () => {
     switch (activeTab) {
       case "siteInfo": return renderSiteInfo();
       case "navLinks": return renderNavLinks();
       case "footerLinks": return renderFooterLinks();
       case "homeHeroImages": return renderHeroImages();
+      case "form_configs": return renderFormConfigs();
       default: return null;
     }
   };
@@ -515,26 +707,28 @@ export default function AdminSiteSettings() {
         </button>
       </div>
 
-      {/* Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {keys.map((key) => (
-          <button
-            key={key}
-            onClick={() => setActiveTab(key)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              activeTab === key
-                ? "bg-brand-500 text-white shadow-sm"
-                : `bg-white border border-gray-200 text-gray-600 hover:border-brand-300 hover:text-brand-600 ${
-                    dirty[key] ? "ring-2 ring-amber-300" : ""
-                  }`
-            }`}
-          >
-            <span className="mr-1.5">{SETTING_ICONS[key]}</span>
-            {SETTING_LABELS[key]}
-            {dirty[key] && <span className="ml-1.5 w-2 h-2 bg-amber-400 rounded-full inline-block" />}
-          </button>
-        ))}
-      </div>
+      {/* Tabs — cachés quand on est dans une sous-page spécifique */}
+      {!currentSection && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {keys.map((key) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                activeTab === key
+                  ? "bg-brand-500 text-white shadow-sm"
+                  : `bg-white border border-gray-200 text-gray-600 hover:border-brand-300 hover:text-brand-600 ${
+                      dirty[key] ? "ring-2 ring-amber-300" : ""
+                    }`
+              }`}
+            >
+              <span className="mr-1.5">{SETTING_ICONS[key]}</span>
+              {SETTING_LABELS[key]}
+              {dirty[key] && <span className="ml-1.5 w-2 h-2 bg-amber-400 rounded-full inline-block" />}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Editor card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-card">
@@ -578,6 +772,41 @@ export default function AdminSiteSettings() {
           }`}
         >
           {toast.message}
+        </div>
+      )}
+
+      {/* Modal de confirmation de suppression */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 animate-fade-in">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setDeleteConfirm(null)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center animate-scale-in">
+            <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center ring-1 ring-red-200">
+              <Trash2 className="w-6 h-6 text-red-500" />
+            </div>
+            <h3 className="font-heading font-bold text-lg mb-2">{t("admin.contentManager.confirmDelete")}</h3>
+            <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+              Êtes-vous sûr de vouloir supprimer <strong>{deleteConfirm.label}</strong> ? Cette action est irréversible.
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                autoFocus
+                className="flex-1 px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-all"
+              >
+                {t("admin.contentManager.cancel")}
+              </button>
+              <button
+                onClick={() => {
+                  deleteConfirm.action();
+                  showToast("Élément supprimé ✅");
+                  setDeleteConfirm(null);
+                }}
+                className="flex-1 px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold shadow-lg shadow-red-500/25 transition-all"
+              >
+                {t("admin.contentManager.delete")}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

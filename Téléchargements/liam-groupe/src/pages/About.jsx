@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Target, Compass, Flag, MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SectionHeading from "../components/SectionHeading";
 import TeamCard from "../components/TeamCard";
 import HeroSlider from "../components/HeroSlider";
 import { FacebookIcon, InstagramIcon, XIcon, YoutubeIcon } from "../components/SocialIcons";
+import ContactForm from "../components/ContactForm";
 import { useSiteInfo, useTeam } from "../hooks/useSiteData";
 import { img, imgHero, imgBlur, imgSrcSet, imgSizes } from "../data/siteData";
 import useScrollReveal from "../hooks/useScrollReveal";
@@ -42,6 +43,7 @@ export default function About() {
           })) : [];
         })()}
         preloadSeed="apropos-hero"
+        defaultBg={{ type: "gradient", value: "from-ink-900 via-ink to-ink-900" }}
       />
 
       {/* MISSION */}
@@ -60,16 +62,26 @@ export default function About() {
               <p className="text-gray-500 leading-relaxed mb-5">
                 {t('about.intro1')}
               </p>
-              <p className="text-gray-500 leading-relaxed mb-8">
-                <Trans i18nKey="about.intro2">
-                  Notre nom incarne trois valeurs fondamentales :{' '}
-                  <strong className="text-ink">Innovation</strong> dans nos
-                  approches, <strong className="text-ink">Ambition</strong> dans
-                  nos objectifs, et <strong className="text-ink">Mission</strong>{' '}
-                  dans notre engagement sans faille pour la jeunesse et les
-                  femmes centrafricaines.
-                </Trans>
+
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400 mb-3">
+                {t('about.acronym.eyebrow')}
               </p>
+              <div className="grid grid-cols-2 gap-3 mb-8">
+                {(t('about.acronym.items', { returnObjects: true }) || []).map((item, i) => {
+                  const tileColors = ["bg-coral-500", "bg-violet-500", "bg-green-500", "bg-brand-500"];
+                  return (
+                    <div key={item.letter} className="flex items-start gap-3 p-3 rounded-xl border border-gray-100">
+                      <span className={`w-8 h-8 shrink-0 rounded-full ${tileColors[i % 4]} text-white flex items-center justify-center font-heading font-bold text-sm`}>
+                        {item.letter}
+                      </span>
+                      <div>
+                        <p className="font-heading font-bold text-sm text-ink">{item.word}</p>
+                        <p className="text-gray-500 text-xs leading-snug mt-0.5">{item.text}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
               <div className="space-y-6 stagger-children">
                 <div className="flex gap-4 reveal">
@@ -148,76 +160,47 @@ export default function About() {
           <div className="reveal">
             <SectionHeading icon={MapPin} eyebrow={t('contact.eyebrow')} title={t('contact.title')} align="left" />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 gap-12">
             <div className="reveal">
-              <p className="text-gray-500 leading-relaxed mb-8 -mt-4 max-w-md">
+              <p className="text-gray-500 leading-relaxed mb-8 -mt-4">
                 {t('contact.intro')}
               </p>
-              <div className="space-y-7 stagger-children">
-                <div className="reveal"><ContactItem icon={MapPin} label={t('contact.address')} lines={info.address} /></div>
-                <div className="reveal"><ContactItem icon={Phone} label={t('contact.phone')} lines={info.phones} /></div>
-                <div className="reveal"><ContactItem icon={Mail} label={t('contact.email')} lines={info.emails} /></div>
-                <div className="reveal"><ContactItem icon={Clock} label={t('contact.hours')} lines={info.hours} /></div>
-              </div>
-
-              <div className="mt-10 bg-brand-50/60 rounded-2xl p-7">
-                <h3 className="font-heading font-bold mb-1">{t('contact.socialTitle')}</h3>
-                <p className="text-gray-500 mb-5">{t('contact.socialText')}</p>
-                <div className="flex items-center gap-3">
-                  {[FacebookIcon, InstagramIcon, XIcon, YoutubeIcon].map((Icon, i) => (
-                    <a
-                      key={i}
-                      href="#"
-                      aria-label="social"
-                      className="w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors"
-                    >
-                      <Icon className="w-4 h-4" />
-                    </a>
-                  ))}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 stagger-children">
+                <div className="space-y-6">
+                  <div className="reveal"><ContactItem icon={MapPin} label={t('contact.address')} lines={info.address} /></div>
+                  <div className="reveal"><ContactItem icon={Clock} label={t('contact.hours')} lines={info.hours} /></div>
+                </div>
+                <div className="space-y-6">
+                  <div className="reveal"><ContactItem icon={Phone} label={t('contact.phone')} lines={info.phones} /></div>
+                  <div className="reveal"><ContactItem icon={Mail} label={t('contact.email')} lines={info.emails} /></div>
+                </div>
+                <div className="reveal bg-brand-50/60 rounded-2xl p-7">
+                  <h3 className="font-heading font-bold mb-1">{t('contact.socialTitle')}</h3>
+                  <p className="text-gray-500 mb-5">{t('contact.socialText')}</p>
+                  <div className="flex items-center gap-3">
+                    {[
+                      { Icon: FacebookIcon, href: siteInfo.social?.facebook },
+                      { Icon: InstagramIcon, href: siteInfo.social?.instagram },
+                      { Icon: XIcon, href: siteInfo.social?.x },
+                      { Icon: YoutubeIcon, href: siteInfo.social?.youtube },
+                    ].map(({ Icon, href }, i) => (
+                      <a
+                        key={i}
+                        href={href || '#'}
+                        target={href ? '_blank' : undefined}
+                        rel={href ? 'noopener noreferrer' : undefined}
+                        aria-label="social"
+                        className="w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors"
+                      >
+                        <Icon className="w-4 h-4" />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <form
-              onSubmit={(e) => { e.preventDefault(); setContactDirty(false); }}
-              className="bg-white border border-gray-100 shadow-card rounded-2xl p-8 space-y-5 h-fit reveal"
-              onInput={() => setContactDirty(true)}
-            >
-              <h3 className="font-heading font-bold text-lg">{t('contact.formTitle')}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Field label={t('contact.formFirstName')} placeholder={t('contact.formFirstNamePlaceholder')} name="contact-firstname" />
-                <Field label={t('contact.formLastName')} placeholder={t('contact.formLastNamePlaceholder')} name="contact-lastname" />
-              </div>
-              <Field label={t('contact.formEmail')} placeholder={t('contact.formEmailPlaceholder')} type="email" name="contact-email" />
-              <div>
-                <label htmlFor="about-subject" className="block text-sm font-medium mb-2">{t('contact.formSubject')}</label>
-                <select id="about-subject" name="subject" className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400 text-gray-600">
-                  <option>{t('contact.formSubjectPlaceholder')}</option>
-                  <option>{t('contact.formSubjectOption1')}</option>
-                  <option>{t('contact.formSubjectOption2')}</option>
-                  <option>{t('contact.formSubjectOption3')}</option>
-                  <option>{t('contact.formSubjectOption4')}</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="about-message" className="block text-sm font-medium mb-2">{t('contact.formMessage')}</label>
-                <textarea
-                  id="about-message"
-                  name="message"
-                  rows={5}
-                  maxLength={500}
-                  placeholder={t('contact.formMessagePlaceholder')}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400 resize-none"
-                />
-                <p className="text-gray-400 text-xs mt-1.5">{t('contact.formMessageMax')}</p>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold inline-flex items-center justify-center gap-2 transition-colors"
-              >
-                {t('contact.formSubmit')} <Send className="w-4 h-4" />
-              </button>
-            </form>
+            <ContactForm page="about" onDirty={setContactDirty} formId="about" />
 
             {/* Blocker modal — changements non sauvegardés */}
             {blocker.state === "blocked" && (
@@ -292,18 +275,4 @@ function ContactItem({ icon: Icon, label, lines = [] }) {
   );
 }
 
-function Field({ label, placeholder, type = "text", name }) {
-  const fieldId = name || `field-${label?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
-  return (
-    <div>
-      <label htmlFor={fieldId} className="block text-sm font-medium mb-2">{label}</label>
-      <input
-        id={fieldId}
-        name={fieldId}
-        type={type}
-        placeholder={placeholder}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400"
-      />
-    </div>
-  );
-}
+

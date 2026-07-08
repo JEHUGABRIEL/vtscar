@@ -44,3 +44,13 @@ export function YoutubeIcon({ className = "w-4 h-4" }) {
     </svg>
   );
 }
+
+export function LinkedInIcon({ className = "w-4 h-4" }) {
+  return (
+    <svg className={className} {...base}>
+      <rect x="2" y="2" width="20" height="20" rx="4" />
+      <path d="M8 11v5M8 8v.01" />
+      <path d="M12 16v-4c0-1.1.9-2 2-2s2 .9 2 2v4" />
+    </svg>
+  );
+}

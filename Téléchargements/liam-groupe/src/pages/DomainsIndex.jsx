@@ -32,6 +32,7 @@ export default function DomainsIndex() {
           })) : [];
         })()}
         preloadSeed="domaines-hero"
+        defaultBg={{ type: "gradient", value: "from-ink-900 via-ink to-ink-900" }}
       />
 
       <section className="py-24 px-6" ref={sectionRef}>

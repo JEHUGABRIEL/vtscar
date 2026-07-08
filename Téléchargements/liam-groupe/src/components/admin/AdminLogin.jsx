@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useLangPath } from "../../lib/langPath";
 import { supabase } from "../../lib/supabase.js";
 import { Shield, Lock, Eye, EyeOff, LogIn, Loader2, Mail, ArrowLeft } from "lucide-react";
 import { createHash } from "../../lib/crypto.js";
@@ -59,6 +60,7 @@ function resetRateLimit() {
 
 export default function AdminLogin({ onLogin }) {
   const { t } = useTranslation();
+  const p = useLangPath();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
@@ -231,7 +233,7 @@ export default function AdminLogin({ onLogin }) {
 
         <div className="mt-8 text-center">
           <Link
-            to="/"
+            to={p("/")}
             className="inline-flex items-center gap-1.5 text-white/40 hover:text-white text-sm transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
