@@ -11,15 +11,16 @@ import GalleryLightbox from "../../components/GalleryLightbox";
 import HeroSlider from "../../components/HeroSlider";
 import { supabase } from "../../lib/supabase.js";
 import useScrollReveal from "../../hooks/useScrollReveal";
+import useFormValidation from "../../hooks/useFormValidation";
 
-const CONTACT_STORAGE_KEY = "gfit-contact-data";
+const CONTACT_STORAGE_KEY = "gfit-registration-data";
 
-const getSavedContactData = () => {
+const getSavedRegistrationData = () => {
   try {
     const d = JSON.parse(localStorage.getItem(CONTACT_STORAGE_KEY) || "{}");
-    return { name: d.name || "", email: d.email || "", phone: d.phone || "" };
+    return { name: d.name || "", email: d.email || "", phone: d.phone || "", plan: d.plan || "" };
   } catch {
-    return { name: "", email: "", phone: "" };
+    return { name: "", email: "", phone: "", plan: "" };
   }
 };
 
@@ -34,11 +35,12 @@ export default function FitnessDomain({ domain, events }) {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [programIdx, setProgramIdx] = useState(0);
   const [programPaused, setProgramPaused] = useState(false);
-  const [regForm, setRegForm] = useState({ ...getSavedContactData(), plan: localStorage.getItem("gfit-selected-plan") || "" });
+  const [regForm, setRegForm] = useState(getSavedRegistrationData());
   const [showForm, setShowForm] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const { errors, touched, hasErrors, validateField, handleBlur, validateAll, resetValidation, setFieldError } = useFormValidation();
   const programsRef = useScrollReveal();
   const pricingRef = useScrollReveal();
   const galleryRef = useScrollReveal();
@@ -48,9 +50,11 @@ export default function FitnessDomain({ domain, events }) {
   const updateAndSave = (field, value) => {
     setRegForm(p => {
       const next = { ...p, [field]: value };
-      localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify({ name: next.name, email: next.email, phone: next.phone }));
+      localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify({ name: next.name, email: next.email, phone: next.phone, plan: next.plan }));
       return next;
     });
+    // Validation en temps réel
+    setFieldError(field, value);
   };
 
   // Fermeture avec délai pour laisser l'exit animation se jouer
@@ -59,8 +63,8 @@ export default function FitnessDomain({ domain, events }) {
     setTimeout(() => {
       setFormSubmitted(false);
       setFormLoading(false);
-      const saved = getSavedContactData();
-      setRegForm({ name: saved.name, email: saved.email, phone: saved.phone, plan: localStorage.getItem("gfit-selected-plan") || "" });
+      resetValidation();
+      setRegForm(getSavedRegistrationData());
     }, 450);
   };
 
@@ -352,9 +356,7 @@ export default function FitnessDomain({ domain, events }) {
                       <button
                         type="button"
                         onClick={() => {
-                          const p = plan.plan;
-                          localStorage.setItem("gfit-selected-plan", p);
-                          setRegForm((prev) => ({ ...prev, plan: p }));
+                          updateAndSave("plan", plan.plan);
                           setShowForm(true);
                           setTimeout(() => {
                             document.getElementById("gfit-reg-name")?.focus();
@@ -433,7 +435,7 @@ export default function FitnessDomain({ domain, events }) {
                   </p>
                   <button
                     type="button"
-                    onClick={() => { localStorage.removeItem(CONTACT_STORAGE_KEY); localStorage.removeItem("gfit-selected-plan"); setFormSubmitted(false); setRegForm({ name: "", email: "", phone: "", plan: "" }); }}
+                    onClick={() => { localStorage.removeItem(CONTACT_STORAGE_KEY); setFormSubmitted(false); resetValidation(); setRegForm({ name: "", email: "", phone: "", plan: "" }); }}
                     className="mt-6 text-sm text-brand-500 font-semibold hover:underline"
                   >
                     Nouvelle inscription
@@ -443,7 +445,8 @@ export default function FitnessDomain({ domain, events }) {
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault();
-                    if (!regForm.name || !regForm.email || !regForm.plan) return;
+                    const submitErrors = validateAll(regForm);
+                    if (submitErrors.name || submitErrors.email || !regForm.plan) return;
                     setFormLoading(true);
                     try {
                       const { error } = await supabase.from("registrations").insert({
@@ -456,7 +459,6 @@ export default function FitnessDomain({ domain, events }) {
                       });
                       if (error) throw error;
                       localStorage.removeItem(CONTACT_STORAGE_KEY);
-                      localStorage.removeItem("gfit-selected-plan");
                       setFormSubmitted(true);
                       setToast({ message: "Inscription réussie ! Nous te contacterons très vite.", type: "success" });
                     } catch (err) {
@@ -468,15 +470,51 @@ export default function FitnessDomain({ domain, events }) {
                   }}
                   className="space-y-5"
                 >
-                  {/* Plan sélectionné */}
-                  <div className="flex flex-wrap items-center gap-3 p-4 rounded-xl bg-brand-50/60 border border-brand-100">
-                    <span className="text-sm font-semibold text-brand-600">Plan sélectionné :</span>
-                    <span className="text-sm font-bold text-ink uppercase">
-                      {regForm.plan || "Aucun"}
-                    </span>
-                    {!regForm.plan && (
-                      <span className="text-xs text-gray-400">(Choisis un plan ci-dessus)</span>
-                    )}
+                  {/* Sélection du plan — radio group */}
+                  <div>
+                    <label className="block text-sm font-semibold text-ink mb-3">
+                      Choisis ton abonnement <span className="text-red-400">*</span>
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {domain.pricing.map((plan) => {
+                        const isSelected = regForm.plan === plan.plan;
+                        return (
+                          <label
+                            key={plan.plan}
+                            className={`relative flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                              isSelected
+                                ? "border-brand-500 bg-brand-50/60 shadow-sm"
+                                : "border-gray-200 bg-white hover:border-gray-300"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="gfit-plan"
+                              value={plan.plan}
+                              checked={isSelected}
+                              onChange={() => updateAndSave("plan", plan.plan)}
+                              className="mt-0.5 accent-brand-500"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className={`font-semibold text-sm ${isSelected ? "text-brand-600" : "text-ink"}`}>
+                                  {plan.plan}
+                                </span>
+                                <span className={`font-bold text-sm ${isSelected ? "text-brand-600" : "text-brand-500"}`}>
+                                  {plan.price}
+                                  {!plan.featured && <span className="font-normal text-gray-400 text-xs">/mois</span>}
+                                </span>
+                              </div>
+                              {plan.featured && (
+                                <span className="inline-block mt-1 text-xs font-semibold text-brand-500 bg-brand-100 px-2 py-0.5 rounded-full">
+                                  Le plus populaire
+                                </span>
+                              )}
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -490,9 +528,17 @@ export default function FitnessDomain({ domain, events }) {
                         required
                         value={regForm.name}
                         onChange={(e) => updateAndSave("name", e.target.value)}
+                        onBlur={() => handleBlur("name", regForm)}
                         placeholder="Jean Dupont"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition-all placeholder:text-gray-300"
+                        className={`w-full px-4 py-3 rounded-xl bg-white text-sm outline-none transition-all placeholder:text-gray-300 ${
+                          errors.name && touched.name
+                            ? "border-2 border-red-300 focus:ring-2 focus:ring-red-500/30 focus:border-red-500"
+                            : "border-2 border-gray-200 focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500"
+                        }`}
                       />
+                      {errors.name && touched.name && (
+                        <p className="text-red-500 text-xs mt-1.5">{errors.name}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="gfit-reg-email" className="block text-sm font-semibold text-ink mb-1.5">
@@ -504,29 +550,44 @@ export default function FitnessDomain({ domain, events }) {
                         required
                         value={regForm.email}
                         onChange={(e) => updateAndSave("email", e.target.value)}
+                        onBlur={() => handleBlur("email", regForm)}
                         placeholder="jean@email.com"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition-all placeholder:text-gray-300"
+                        className={`w-full px-4 py-3 rounded-xl bg-white text-sm outline-none transition-all placeholder:text-gray-300 ${
+                          errors.email && touched.email
+                            ? "border-2 border-red-300 focus:ring-2 focus:ring-red-500/30 focus:border-red-500"
+                            : "border-2 border-gray-200 focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500"
+                        }`}
                       />
+                      {errors.email && touched.email && (
+                        <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>
+                      )}
                     </div>
                   </div>
 
                   <div>
                     <label htmlFor="gfit-reg-phone" className="block text-sm font-semibold text-ink mb-1.5">
                       Téléphone
-                    </label>
-                    <input
-                      id="gfit-reg-phone"
-                      type="tel"
-                      value={regForm.phone}
-                      onChange={(e) => updateAndSave("phone", e.target.value)}
-                      placeholder="+236 XX XX XX XX"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition-all placeholder:text-gray-300"
-                    />
+                    </label>                      <input
+                        id="gfit-reg-phone"
+                        type="tel"
+                        value={regForm.phone}
+                        onChange={(e) => updateAndSave("phone", e.target.value)}
+                        onBlur={() => handleBlur("phone", regForm)}
+                        placeholder="+236 XX XX XX XX"
+                        className={`w-full px-4 py-3 rounded-xl bg-white text-sm outline-none transition-all placeholder:text-gray-300 ${
+                          errors.phone && touched.phone
+                            ? "border-2 border-red-300 focus:ring-2 focus:ring-red-500/30 focus:border-red-500"
+                            : "border-2 border-gray-200 focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500"
+                        }`}
+                      />
+                      {errors.phone && touched.phone && (
+                        <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>
+                      )}
                   </div>
 
                   <button
                     type="submit"
-                    disabled={formLoading || !regForm.plan}
+                    disabled={formLoading || !regForm.plan || hasErrors}
                     className={`w-full inline-flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-sm uppercase tracking-wide transition-all ${
                       formLoading || !regForm.plan
                         ? "bg-gray-200 text-gray-400 cursor-not-allowed"
