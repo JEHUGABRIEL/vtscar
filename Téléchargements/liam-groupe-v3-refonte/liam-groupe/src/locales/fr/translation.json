@@ -5,13 +5,18 @@
     "domains": "Domaines",
     "events": "Événements",
     "news": "Actualités",
-    "language": "Langue"
+    "language": "Langue",
+    "cta": "Nous contacter",
+    "langFr": "Français",
+    "langEn": "Anglais",
+    "menu": "Menu"
   },
   "heroGrid": {
     "tagline": "Innovation · Ambition · Mission",
     "title1": "Construisons ensemble",
     "title2": "la Centrafrique de demain",
     "description": "LIAM Groupe mobilise les femmes et les jeunes centrafricains à travers le sport, l'entrepreneuriat, la gastronomie solidaire et la formation pour un impact durable au cœur de Bangui.",
+    "ctaPrimary": "En savoir plus",
     "ctaSecondary": "Voir nos événements"
   },
   "hero": {
@@ -351,10 +356,79 @@
     "formMessagePlaceholder": "Votre message…",
     "formMessageMax": "Maximum 500 caractères",
     "formSubmit": "Envoyer le message",
+    "formSuccess": "✅ Merci ! Votre message a bien été envoyé.",
+    "formFirstNameError": "Veuillez entrer votre prénom",
+    "formLastNameError": "Veuillez entrer votre nom",
+    "formEmailError": "Veuillez entrer une adresse email valide",
+    "formMessageError": "Veuillez entrer votre message",
     "blockerTitle": "Message non envoyé",
     "blockerText": "Vous avez commencé à écrire un message. Voulez-vous vraiment quitter cette page ?",
     "blockerStay": "Rester",
     "blockerLeave": "Quitter"
+  },
+  "domains": {
+    "data": {
+      "g-fitness": {
+        "name": "G-Fitness",
+        "category": "SPORT & BIEN-ÊTRE",
+        "shortDescription": "Promouvoir la santé et le bien-être par le sport, avec des programmes adaptés aux femmes et aux jeunes de Bangui. Tournois de basketball…",
+        "programs": [
+          { "title": "Tournoi Féminin de Basketball", "description": "Compétition inter-quartiers rassemblant 16 équipes féminines à Bangui." },
+          { "title": "G-Fitness Junior", "description": "Programme d'initiation sportive pour les enfants et adolescents des quartiers défavorisés." },
+          { "title": "Santé par le sport", "description": "Ateliers de sensibilisation à l'hygiène de vie et à la nutrition équilibrée." }
+        ]
+      },
+      "ogab": {
+        "name": "O'GAB",
+        "category": "GASTRONOMIE SOLIDAIRE",
+        "shortDescription": "Valoriser la richesse culinaire centrafricaine tout en créant des opportunités économiques pour les femmes. Restauration événementielle, atelie…",
+        "programs": [
+          { "title": "Ateliers culinaires", "description": "Formation en cuisine traditionnelle et moderne pour les femmes entrepreneures." },
+          { "title": "Restauration événementielle", "description": "Service de traiteur pour les événements, valorisant les produits locaux." },
+          { "title": "Restaurant solidaire", "description": "Établissement proposant une cuisine accessible tout en employant des femmes formées." }
+        ]
+      },
+      "entrepreneuriat": {
+        "name": "Entrepreneuriat & Leadership",
+        "category": "LEADERSHIP FÉMININ",
+        "shortDescription": "Autonomiser les femmes centrafricaines par la formation au leadership, l'accompagnement entrepreneurial et la mise en réseau…",
+        "programs": [
+          { "title": "Conférences « Oser Entreprendre »", "description": "Événements inspirants avec des femmes leaders du secteur privé et public." },
+          { "title": "Programme d'incubation", "description": "Accompagnement de 6 mois pour les projets entrepreneuriaux féminins." },
+          { "title": "Mentorat", "description": "Mise en relation entre entrepreneures débutantes et mentors expérimentés." }
+        ]
+      },
+      "formation": {
+        "name": "Formation des Jeunes",
+        "category": "ÉDUCATION & INSERTION",
+        "shortDescription": "Offrir aux jeunes centrafricains des formations pratiques et professionnalisantes pour favoriser leur insertion sur le marché du travail. Ateliers,…",
+        "programs": [
+          { "title": "Formation professionnelle", "description": "Ateliers pratiques dans les métiers du numérique, de la cuisine, de la communication." },
+          { "title": "Stages en entreprise", "description": "Mise en relation avec des partenaires employeurs pour des stages rémunérés." },
+          { "title": "Programme de mentorat", "description": "Accompagnement individuel des jeunes par des professionnels expérimentés." }
+        ]
+      },
+      "communication": {
+        "name": "Communication",
+        "category": "VISIBILITÉ & MÉDIAS",
+        "shortDescription": "Assurer la visibilité des actions de LIAM Groupe et de ses partenaires à travers une stratégie de communication moderne : relations presse,…",
+        "programs": [
+          { "title": "Relations presse", "description": "Couverture médiatique des événements et diffusion des communiqués aux médias locaux et internationaux." },
+          { "title": "Production audiovisuelle", "description": "Création de documentaires, reportages et contenus digitaux mettant en valeur nos actions." },
+          { "title": "Community management", "description": "Gestion des réseaux sociaux et engagement de la communauté en ligne." }
+        ]
+      },
+      "evenementiel": {
+        "name": "Événementiel",
+        "category": "CULTURE & GALAS",
+        "shortDescription": "Organiser des événements d'envergure qui rassemblent, inspirent et célèbrent la culture centrafricaine. Miss Centrafrique, galas de…",
+        "programs": [
+          { "title": "Miss Centrafrique", "description": "Concours national de beauté et de culture célébrant la diversité de la RCA." },
+          { "title": "Gala de charité", "description": "Soirée prestigieuse réunissant partenaires et donateurs pour le financement des programmes." },
+          { "title": "Festivals culturels", "description": "Manifestations artistiques mettant en valeur la musique, la danse et les arts locaux." }
+        ]
+      }
+    }
   },
   "domain": {
     "programs": {
@@ -493,6 +567,28 @@
     "ariaLabel": "Visionneuse d'images"
   },
   "admin": {
+    "imageUpload": {
+      "dropHere": "Cliquez ou glissez-déposez une image",
+      "dropHint": "PNG, JPG, WebP — max 10 Mo",
+      "uploading": "Upload en cours...",
+      "urlPlaceholder": "URL de l'image...",
+      "pasteUrl": "Collez l'URL de l'image :",
+      "pasteBtn": "URL",
+      "pasteTitle": "Coller une URL",
+      "remove": "Supprimer l'image",
+      "preview": "Aperçu",
+      "uploadError": "Erreur d'upload : ",
+      "networkError": "Erreur réseau : "
+    },
+    "galleryUpload": {
+      "dropHere": "Cliquez ou glissez-déposez des images",
+      "dropHint": "PNG, JPG, WebP, GIF — plusieurs fichiers à la fois",
+      "addMore": "Ajouter d'autres images",
+      "uploading": "Upload en cours...",
+      "remove": "Supprimer",
+      "imageCount_one": "{{count}} image",
+      "imageCount_other": "{{count}} images"
+    },
     "login": {
       "title": "Administration",
       "subtitle": "LIAM Groupe — Accès sécurisé",
@@ -517,16 +613,48 @@
       "team": "Équipe",
       "partners": "Partenaires",
       "testimonials": "Témoignages",
-      "settings": "Paramètres",
-      "logout": "Déconnexion",
-      "admin": "Administration"
+    "messages": "Messages",
+    "registrations": "Inscriptions",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "admin": "Administration"
     },
     "dashboard": {
       "title": "Tableau de bord",
       "description": "Aperçu général des contenus du site LIAM Groupe.",
       "manageTitle": "Gestion des contenus",
       "manageText": "Utilisez la navigation latérale pour gérer chaque type de contenu.",
-      "teamMembers": "Membres équipe"
+      "teamMembers": "Membres équipe",
+      "confirmTitle": "Accéder à cette section ?",
+      "confirmText": "Vous allez accéder à la gestion des « {{section}} ». Voulez-vous continuer ?",
+      "confirmAction": "Accéder"
+    },
+    "registrations": {
+      "title": "Inscriptions aux événements",
+      "total": "{{count}} inscription",
+      "total_other": "{{count}} inscriptions",
+      "pendingCount": "{{count}} en attente",
+      "pendingCount_other": "{{count}} en attente",
+      "search": "Rechercher une inscription…",
+      "filter": {
+        "all": "Toutes",
+        "en_attente": "En attente",
+        "confirme": "Confirmées",
+        "annule": "Annulées"
+      },
+      "empty": "Aucune inscription",
+      "emptyText": "Les inscriptions aux événements apparaîtront ici.",
+      "detailTitle": "Détail de l'inscription",
+      "eventSlug": "Événement (slug)",
+      "changeStatus": "Changer le statut",
+      "statusPending": "En attente",
+      "statusConfirmed": "Confirmée",
+      "statusCancelled": "Annulée",
+      "confirmDelete": "Confirmer la suppression",
+      "confirmDeleteText": "Êtes-vous sûr de vouloir supprimer cette inscription ? Cette action est irréversible.",
+      "messageHistory": "{{count}} message associé",
+      "messageHistory_other": "{{count}} messages associés",
+      "messageHistoryEmpty": "Aucun message trouvé pour cet email."
     },
     "contentManager": {
       "add": "Ajouter",
@@ -536,6 +664,7 @@
       "orderDesc": "Ordre ↓",
       "empty": "Aucun élément",
       "emptyText": "Ajoutez un élément pour commencer.",
+      "perPage": "Par page :",
       "edit": "Modifier",
       "delete": "Supprimer",
       "new": "Nouveau",
@@ -554,9 +683,13 @@
       "confirmDeleteText": "Êtes-vous sûr de vouloir supprimer <1>{{name}}</1> ? Cette action est irréversible.",
       "confirmClose": "Changements non sauvegardés",
       "confirmCloseText": "Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter sans sauvegarder ?",
+      "perPage": "Par page :",
       "confirmCloseStay": "Rester",
       "confirmCloseLeave": "Quitter sans sauvegarder",
+      "toggleStatus": "Basculer le statut",
+      "statusChanged": "Statut mis à jour : {{status}}",
       "error": "Erreur",
+      "deleted": "Élément supprimé",
       "newItem": "Nouveau",
       "fieldLabels": {
         "slug": "Slug",
@@ -572,6 +705,7 @@
         "title": "Titre",
         "description": "Description",
         "date": "Date",
+        "end_date": "Date de fin",
         "location": "Lieu",
         "image": "Image",
         "status": "Statut",
@@ -599,6 +733,7 @@
       "slugPlaceholder": "mon-domaine",
       "iconPlaceholder": "heart, briefcase, etc.",
       "datePlaceholder": "15 Août 2026",
+      "end_datePlaceholder": "18 Août 2026 (optionnel)",
       "tagPlaceholder": "ACTUALITÉ",
       "initialPlaceholder": "F",
       "colorPlaceholder": "#8A0015"
@@ -638,19 +773,60 @@
       "phonePlaceholder": "+236 00 00 00 00",
       "emailPlaceholder": "contact@liamgroupe.org",
       "hoursPlaceholder": "Lundi — Vendredi : 8h00 — 17h00",
-      "heroImagePlaceholder": "https://res.cloudinary.com/..."
+      "heroImagePlaceholder": "https://res.cloudinary.com/...",
+      "formConfigs": "Formulaires",
+      "formContact": "Formulaire de contact",
+      "formChatbot": "Chatbot",
+      "fieldName": "Nom du champ",
+      "fieldLabel": "Clé de traduction (label)",
+      "fieldType": "Type",
+      "fieldRequired": "Requis",
+      "fieldPlaceholder": "Clé de traduction (placeholder)",
+      "fieldOptions": "Options (pour select)",
+      "addField": "Ajouter un champ"
+    },
+    "messages": {
+      "title": "Messages reçus",
+      "total": "{{count}} message",
+      "total_other": "{{count}} messages",
+      "unreadCount": "{{count}} non lu",
+      "unreadCount_other": "{{count}} non lus",
+      "search": "Rechercher un message…",
+      "filter": {
+        "all": "Tous",
+        "unread": "Non lus",
+        "read": "Lus"
+      },
+      "empty": "Aucun message",
+      "emptyText": "Les messages des formulaires de contact apparaîtront ici.",
+      "detailTitle": "Détail du message",
+      "markRead": "Marquer comme lu",
+      "markUnread": "Marquer comme non lu",
+      "fromPage": "Page d'origine",
+      "additionalFields": "Champs supplémentaires",
+      "replyEmail": "Répondre par email",
+      "replyWhatsApp": "Répondre sur WhatsApp",
+      "confirmDelete": "Confirmer la suppression",
+      "confirmDeleteText": "Êtes-vous sûr de vouloir supprimer ce message ? Cette action est irréversible."
     },
     "logoutModal": {
       "title": "Déconnexion",
       "text": "Êtes-vous sûr de vouloir vous déconnecter de l'interface d'administration ?",
       "cancel": "Annuler",
       "confirm": "Se déconnecter"
+    },
+    "inactivityModal": {
+      "title": "Session inactive",
+      "text": "Vous allez être déconnecté pour cause d'inactivité. Cliquez sur « Rester connecté » pour continuer.",
+      "stay": "Rester connecté",
+      "logout": "Se déconnecter"
     }
   },
   "common": {
     "loading": "Chargement…",
     "error": "Une erreur est survenue",
     "noContent": "Aucun contenu disponible",
+    "unknown": "Inconnue",
     "view": "Voir",
     "close": "Fermer",
     "back": "Retour",
@@ -661,6 +837,8 @@
     "readMore": "Lire la suite",
     "discover": "Découvrir",
     "retry": "Réessayer",
+    "required": "Ce champ est requis",
+    "submit": "Envoyer",
     "home": "Accueil",
     "element_one": "{{count}} élément",
     "element_other": "{{count}} éléments",
@@ -688,6 +866,7 @@
   },
   "chatbot": {
     "greeting": "👋 Bonjour ! Bienvenue sur LIAM Groupe. Comment puis-je vous aider ?",
+    "fallback": "🤔 Je n'ai pas bien compris votre question. Pouvez-vous reformuler ou choisir un sujet ci-dessous ?",
     "quickReplies": {
       "about": "Qui sommes-nous ?",
       "programs": "Nos programmes",

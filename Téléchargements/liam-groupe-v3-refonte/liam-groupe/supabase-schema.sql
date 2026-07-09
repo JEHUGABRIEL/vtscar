@@ -25,6 +25,7 @@ CREATE TABLE events (
   title TEXT NOT NULL,
   description TEXT,
   date TEXT,
+  end_date TEXT,
   location TEXT,
   image TEXT,
   gallery JSONB DEFAULT '[]',
@@ -90,12 +91,47 @@ CREATE TABLE testimonials (
 );
 
 -- Paramètres du site (siteInfo, navLinks, footerLinks, stats, hero images)
+-- Inscriptions aux événements
+CREATE TABLE registrations (
+  id BIGSERIAL PRIMARY KEY,
+  event_slug TEXT,
+  event_title TEXT,
+  first_name TEXT NOT NULL,
+  last_name TEXT,
+  email TEXT NOT NULL,
+  phone TEXT,
+  message TEXT,
+  status TEXT DEFAULT 'en_attente', -- en_attente | confirme | annule
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_registrations_event_slug ON registrations(event_slug);
+CREATE INDEX idx_registrations_created_at ON registrations(created_at DESC);
+
 CREATE TABLE site_settings (
   id BIGSERIAL PRIMARY KEY,
   key TEXT UNIQUE NOT NULL,
   value JSONB NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- Messages des formulaires de contact
+CREATE TABLE messages (
+  id BIGSERIAL PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT NOT NULL,
+  phone TEXT,
+  subject TEXT,
+  message TEXT NOT NULL,
+  page TEXT DEFAULT 'home',
+  is_read BOOLEAN DEFAULT false,
+  data JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_messages_is_read ON messages(is_read);
+CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 -- Index
 CREATE INDEX idx_domains_slug ON domains(slug);
@@ -122,6 +158,8 @@ ALTER TABLE news ENABLE ROW LEVEL SECURITY;
 ALTER TABLE team ENABLE ROW LEVEL SECURITY;
 ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
 ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE registrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
 
@@ -132,6 +170,8 @@ CREATE POLICY "Lecture publique news" ON news FOR SELECT USING (true);
 CREATE POLICY "Lecture publique team" ON team FOR SELECT USING (true);
 CREATE POLICY "Lecture publique partners" ON partners FOR SELECT USING (true);
 CREATE POLICY "Lecture publique testimonials" ON testimonials FOR SELECT USING (true);
+CREATE POLICY "Lecture publique registrations" ON registrations FOR SELECT USING (true);
+CREATE POLICY "Lecture publique messages" ON messages FOR SELECT USING (true);
 CREATE POLICY "Lecture publique site_settings" ON site_settings FOR SELECT USING (true);
 CREATE POLICY "Lecture publique admins" ON admins FOR SELECT USING (true);
 
@@ -163,6 +203,14 @@ CREATE POLICY "Suppression publique testimonials" ON testimonials FOR DELETE USI
 CREATE POLICY "Écriture publique site_settings" ON site_settings FOR INSERT WITH CHECK (true);
 CREATE POLICY "Modification publique site_settings" ON site_settings FOR UPDATE USING (true);
 CREATE POLICY "Suppression publique site_settings" ON site_settings FOR DELETE USING (true);
+
+CREATE POLICY "Écriture publique messages" ON messages FOR INSERT WITH CHECK (true);
+CREATE POLICY "Modification publique messages" ON messages FOR UPDATE USING (true);
+CREATE POLICY "Suppression publique messages" ON messages FOR DELETE USING (true);
+
+CREATE POLICY "Écriture publique registrations" ON registrations FOR INSERT WITH CHECK (true);
+CREATE POLICY "Modification publique registrations" ON registrations FOR UPDATE USING (true);
+CREATE POLICY "Suppression publique registrations" ON registrations FOR DELETE USING (true);
 
 -- Administrateurs (pour le script create-admin.js)
 CREATE POLICY "Écriture publique admins" ON admins FOR INSERT WITH CHECK (true);

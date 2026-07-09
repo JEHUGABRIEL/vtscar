@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, startTransition } from "react";
 import { Upload, X, Loader2, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const CLOUD_NAME = "dwmrzp61c";
 const UPLOAD_PRESET = "liam-groupe";
@@ -14,6 +15,7 @@ const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
  * @param {(urls: string[]) => void} onChange
  */
 export default function AdminGalleryUpload({ value = [], onChange }) {
+  const { t } = useTranslation();
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -112,7 +114,7 @@ export default function AdminGalleryUpload({ value = [], onChange }) {
                   type="button"
                   onClick={() => handleRemove(idx)}
                   className="p-1.5 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors"
-                  title="Supprimer"
+                  title={t('admin.galleryUpload.remove')}
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -141,7 +143,7 @@ export default function AdminGalleryUpload({ value = [], onChange }) {
           <div className="flex flex-col items-center gap-2">
             <Loader2 className="w-6 h-6 text-brand-500 animate-spin" />
             <p className="text-sm text-gray-500">
-              Upload en cours... {uploadProgress}/{uploadTotal}
+              {t('admin.galleryUpload.uploading')} {uploadProgress}/{uploadTotal}
             </p>
             <div className="w-full max-w-xs h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <div
@@ -155,16 +157,16 @@ export default function AdminGalleryUpload({ value = [], onChange }) {
             {images.length > 0 ? (
               <>
                 <Plus className="w-6 h-6 text-gray-300" />
-                <p className="text-sm text-gray-500">Ajouter d'autres images</p>
+                <p className="text-sm text-gray-500">{t('admin.galleryUpload.addMore')}</p>
               </>
             ) : (
               <>
                 <Upload className="w-8 h-8 text-gray-300" />
                 <p className="text-sm font-medium text-gray-600">
-                  Cliquez ou glissez-déposez des images
+                  {t('admin.galleryUpload.dropHere')}
                 </p>
                 <p className="text-xs text-gray-400">
-                  PNG, JPG, WebP, GIF — plusieurs fichiers à la fois
+                  {t('admin.galleryUpload.dropHint')}
                 </p>
               </>
             )}
@@ -182,7 +184,7 @@ export default function AdminGalleryUpload({ value = [], onChange }) {
 
       {/* Compteur */}
       <p className="text-xs text-gray-400 text-right">
-        {images.length} image{images.length !== 1 ? "s" : ""}
+        {t('admin.galleryUpload.imageCount', { count: images.length })}
       </p>
     </div>
   );

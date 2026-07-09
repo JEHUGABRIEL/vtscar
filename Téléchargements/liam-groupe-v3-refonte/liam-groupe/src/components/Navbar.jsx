@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ChevronDown, Globe, Menu, X, ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useNavLinks, useDomains, useSiteInfo } from "../hooks/useSiteData";
+import { useNavLinks, useDomains } from "../hooks/useSiteData";
 import { prefetchRoute } from "../lib/routePrefetch";
+import { langPath } from "../lib/langPath";
 import { DomainIcon } from "./DomainIcon";
+import ContactModal from "./ContactModal";
 
 /**
  * Navbar — barre de navigation fixe qui démarre transparente sur les pages
@@ -18,15 +20,17 @@ export default function Navbar({ transparentOnTop = true }) {
   const [domainsOpen, setDomainsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
   const location = useLocation();
   const closeTimer = useRef(null);
   const langTimer = useRef(null);
+  const { lang } = useParams();
+  const navigate = useNavigate();
   const [prevPath, setPrevPath] = useState(location.pathname);
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language?.startsWith("en") ? "EN" : "FR";
   const { data: navLinks = [] } = useNavLinks();
   const { data: domains = [] } = useDomains();
-  const { data: siteInfo = {} } = useSiteInfo();
 
   useEffect(() => {
     if (!transparentOnTop) return;
@@ -61,7 +65,7 @@ export default function Navbar({ transparentOnTop = true }) {
         }`}
       >
         <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-[84px] flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5 shrink-0 no-underline">
+          <Link to={langPath(lang || "fr", "/")} className="flex items-center gap-2.5 shrink-0 no-underline">
             <span className={`font-heading font-bold text-3xl sm:text-4xl lg:text-5xl leading-none tracking-tight transition-colors ${
               isTransparent ? "text-white" : "text-ink"
             }`}>
@@ -93,7 +97,7 @@ export default function Navbar({ transparentOnTop = true }) {
                       {domains.map((d) => (
                         <Link
                           key={d.slug}
-                          to={`/domaines/${d.slug}`}
+                          to={langPath(lang || "fr", `/domaines/${d.slug}`)}
                           onMouseEnter={() => prefetchRoute(`/domaines/${d.slug}`)}
                           className="flex items-start gap-3 px-3 py-3 rounded-xl text-gray-700 hover:bg-brand-50 hover:text-brand-600 transition-colors"
                         >
@@ -101,8 +105,8 @@ export default function Navbar({ transparentOnTop = true }) {
                             <DomainIcon icon={d.icon} className="w-4.5 h-4.5" />
                           </span>
                           <span>
-                            <span className="block font-semibold text-sm">{d.name}</span>
-                            <span className="block text-xs text-gray-400 mt-0.5">{d.category}</span>
+                            <span className="block font-semibold text-sm">{t(`domains.data.${d.slug}.name`, d.name)}</span>
+                            <span className="block text-xs text-gray-400 mt-0.5">{t(`domains.data.${d.slug}.category`, d.category)}</span>
                           </span>
                         </Link>
                       ))}
@@ -110,9 +114,10 @@ export default function Navbar({ transparentOnTop = true }) {
                   )}
                 </div>
               ) : (
-                <NavLink
+              <NavLink
                   key={link.label}
-                  to={link.to}
+                  to={langPath(lang || "fr", link.to)}
+                  end={link.to === "/"}
                   onMouseEnter={() => prefetchRoute(link.to)}
                   className={({ isActive }) =>
                     `relative font-medium py-1 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:bg-brand-500 after:transition-all ${
@@ -146,38 +151,38 @@ export default function Navbar({ transparentOnTop = true }) {
               {langOpen && (
                 <div className="absolute top-full right-0 mt-3 w-32 bg-white rounded-xl shadow-xl border border-gray-100 py-2 overflow-hidden">
                   <button
-                    onClick={() => { i18n.changeLanguage("fr"); setLangOpen(false); }}
+                    onClick={() => { i18n.changeLanguage("fr"); navigate(langPath("fr", location.pathname.replace(/^\/[a-z]{2}/, "") || "/")); setLangOpen(false); }}
                     className={`w-full text-left px-4 py-2 text-sm transition-colors ${currentLang === "FR" ? "text-brand-600 font-semibold bg-brand-50" : "text-gray-700 hover:bg-gray-50"}`}
                   >
-                    Français
+                    {t('nav.langFr')}
                   </button>
                   <button
-                    onClick={() => { i18n.changeLanguage("en"); setLangOpen(false); }}
+                    onClick={() => { i18n.changeLanguage("en"); navigate(langPath("en", location.pathname.replace(/^\/[a-z]{2}/, "") || "/")); setLangOpen(false); }}
                     className={`w-full text-left px-4 py-2 text-sm transition-colors ${currentLang === "EN" ? "text-brand-600 font-semibold bg-brand-50" : "text-gray-700 hover:bg-gray-50"}`}
                   >
-                    English
+                    {t('nav.langEn')}
                   </button>
                 </div>
               )}
             </div>
 
-            <Link
-              to="/a-propos"
+            <button
+              onClick={() => setContactOpen(true)}
               className={`inline-flex items-center gap-1.5 pl-5 pr-4 py-2.5 rounded-full font-semibold text-sm transition-all ${
                 isTransparent
                   ? "bg-white text-ink hover:bg-white/90"
                   : "bg-brand-500 text-white hover:bg-brand-600"
               }`}
             >
-              {t("nav.cta", "Nous contacter")}
+              {t("nav.cta")}
               <ArrowUpRight className="w-4 h-4" />
-            </Link>
+            </button>
           </div>
 
           <button
             className={`lg:hidden transition-colors ${isTransparent ? "text-white" : "text-ink"}`}
             onClick={() => setMobileOpen((o) => !o)}
-            aria-label="Menu"
+            aria-label={mobileOpen ? t('common.close') : t('nav.menu')}
           >
             {mobileOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
           </button>
@@ -201,54 +206,67 @@ export default function Navbar({ transparentOnTop = true }) {
                     {domainsOpen && (
                       <div className="pl-4 flex flex-col gap-1 pb-2">
                         {domains.map((d) => (
-                          <Link
+                          <NavLink
                             key={d.slug}
-                            to={`/domaines/${d.slug}`}
+                            to={langPath(lang || "fr", `/domaines/${d.slug}`)}
+                            end
                             onMouseEnter={() => prefetchRoute(`/domaines/${d.slug}`)}
-                            className="py-2.5 text-gray-600 hover:text-brand-600 transition-colors"
+                            className={({ isActive }) =>
+                              `block py-2.5 font-medium transition-colors ${
+                                isActive
+                                  ? "text-brand-600 border-l-4 border-brand-500 pl-4"
+                                  : "text-gray-600 hover:text-brand-600 pl-4"
+                              }`
+                            }
                             onClick={() => setMobileOpen(false)}
                           >
-                            {d.name}
-                          </Link>
+                            {t(`domains.data.${d.slug}.name`, d.name)}
+                          </NavLink>
                         ))}
                       </div>
                     )}
                   </div>
                 ) : (
-                  <Link
+                  <NavLink
                     key={link.label}
-                    to={link.to}
+                    to={langPath(lang || "fr", link.to)}
+                    end={link.to === "/"}
                     onMouseEnter={() => prefetchRoute(link.to)}
-                    className="block py-3 font-medium text-gray-800 hover:text-brand-600 transition-colors"
+                    className={({ isActive }) =>
+                      `block py-3 font-medium transition-colors ${
+                        isActive
+                          ? "text-brand-600 border-l-4 border-brand-500 pl-4"
+                          : "text-gray-800 hover:text-brand-600 pl-4"
+                      }`
+                    }
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.label}
-                  </Link>
+                  </NavLink>
                 )
               )}
-              <Link
-                to="/a-propos"
+              <button
+                onClick={() => { setContactOpen(true); setMobileOpen(false); }}
                 className="mt-3 inline-flex items-center justify-center gap-1.5 w-full py-3.5 rounded-full bg-brand-500 text-white font-semibold"
-                onClick={() => setMobileOpen(false)}
               >
-                {t("nav.cta", "Nous contacter")}
+                {t("nav.cta")}
                 <ArrowUpRight className="w-4 h-4" />
-              </Link>
+              </button>
 
               <div className="border-t border-gray-100 pt-4 mt-4">
                 <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">{t('nav.language')}</p>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => { i18n.changeLanguage("fr"); setMobileOpen(false); }}
+                    onClick={() => { i18n.changeLanguage("fr"); navigate(langPath("fr", location.pathname.replace(/^\/[a-z]{2}/, "") || "/")); setMobileOpen(false); }}
                     className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${currentLang === "FR" ? "bg-brand-500 text-white" : "bg-gray-100 text-gray-600"}`}
                   >
-                    Français
+                    {t('nav.langFr')}
                   </button>
                   <button
-                    onClick={() => { i18n.changeLanguage("en"); setMobileOpen(false); }}
+                    onClick={() => { i18n.changeLanguage("en"); navigate(langPath("en", location.pathname.replace(/^\/[a-z]{2}/, "") || "/")); setMobileOpen(false); }}
                     className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${currentLang === "EN" ? "bg-brand-500 text-white" : "bg-gray-100 text-gray-600"}`}
                   >
-                    English
+                    {t('nav.langEn')}
                   </button>
                 </div>
               </div>
@@ -256,6 +274,12 @@ export default function Navbar({ transparentOnTop = true }) {
           </div>
         )}
       </header>
+
+      {/* Contact Modal */}
+      <ContactModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+      />
     </>
   );
 }

@@ -5,13 +5,18 @@
     "domains": "Domains",
     "events": "Events",
     "news": "News",
-    "language": "Language"
+    "language": "Language",
+    "cta": "Contact us",
+    "langFr": "French",
+    "langEn": "English",
+    "menu": "Menu"
   },
   "heroGrid": {
     "tagline": "Innovation · Ambition · Mission",
     "title1": "Let's build together",
     "title2": "the Central Africa of tomorrow",
     "description": "LIAM Groupe mobilizes Central African women and youth through sports, entrepreneurship, community gastronomy, and training for sustainable impact in the heart of Bangui.",
+    "ctaPrimary": "Learn more",
     "ctaSecondary": "See our events"
   },
   "hero": {
@@ -350,11 +355,80 @@
     "formMessage": "Message",
     "formMessagePlaceholder": "Your message…",
     "formMessageMax": "Maximum 500 characters",
+    "formSuccess": "✅ Thank you! Your message has been sent.",
     "formSubmit": "Send message",
+    "formFirstNameError": "Please enter your first name",
+    "formLastNameError": "Please enter your last name",
+    "formEmailError": "Please enter a valid email address",
+    "formMessageError": "Please enter your message",
     "blockerTitle": "Message not sent",
     "blockerText": "You started writing a message. Do you really want to leave this page?",
     "blockerStay": "Stay",
     "blockerLeave": "Leave"
+  },
+  "domains": {
+    "data": {
+      "g-fitness": {
+        "name": "G-Fitness",
+        "category": "SPORTS & WELLNESS",
+        "shortDescription": "Promoting health and well-being through sports, with programs tailored for women and youth in Bangui. Basketball tournaments…",
+        "programs": [
+          { "title": "Women's Basketball Tournament", "description": "Inter-district competition bringing together 16 women's teams in Bangui." },
+          { "title": "G-Fitness Junior", "description": "Sports initiation program for children and teens from underserved neighborhoods." },
+          { "title": "Health through Sports", "description": "Workshops raising awareness about healthy lifestyles and balanced nutrition." }
+        ]
+      },
+      "ogab": {
+        "name": "O'GAB",
+        "category": "COMMUNITY GASTRONOMY",
+        "shortDescription": "Showcasing Central African culinary heritage while creating economic opportunities for women. Event catering, work…",
+        "programs": [
+          { "title": "Cooking Workshops", "description": "Training in traditional and modern cuisine for women entrepreneurs." },
+          { "title": "Event Catering", "description": "Catering service for events, showcasing local products." },
+          { "title": "Community Restaurant", "description": "An establishment offering affordable cuisine while employing trained women." }
+        ]
+      },
+      "entrepreneuriat": {
+        "name": "Entrepreneurship & Leadership",
+        "category": "WOMEN'S LEADERSHIP",
+        "shortDescription": "Empowering Central African women through leadership training, entrepreneurial support, and networking…",
+        "programs": [
+          { "title": "« Dare to Undertake » Conferences", "description": "Inspiring events led by women leaders from the private and public sectors." },
+          { "title": "Incubation Program", "description": "6-month support program for women-led entrepreneurial projects." },
+          { "title": "Mentorship", "description": "Connecting aspiring entrepreneurs with experienced mentors." }
+        ]
+      },
+      "formation": {
+        "name": "Youth Training",
+        "category": "EDUCATION & EMPLOYMENT",
+        "shortDescription": "Providing Central African youth with practical, job-oriented training to foster their integration into the job market. Workshops,…",
+        "programs": [
+          { "title": "Vocational Training", "description": "Hands-on workshops in digital technology, culinary arts, and communications." },
+          { "title": "Internships", "description": "Connecting youth with employer partners for paid internships." },
+          { "title": "Mentorship Program", "description": "One-on-one guidance for youth by experienced professionals." }
+        ]
+      },
+      "communication": {
+        "name": "Communication",
+        "category": "VISIBILITY & MEDIA",
+        "shortDescription": "Ensuring visibility for LIAM Groupe and its partners through a modern communication strategy: press relations,…",
+        "programs": [
+          { "title": "Press Relations", "description": "Media coverage of events and distribution of press releases to local and international media." },
+          { "title": "Audiovisual Production", "description": "Creating documentaries, reports, and digital content showcasing our initiatives." },
+          { "title": "Community Management", "description": "Social media management and online community engagement." }
+        ]
+      },
+      "evenementiel": {
+        "name": "Events",
+        "category": "CULTURE & GALAS",
+        "shortDescription": "Organizing large-scale events that bring people together and celebrate Central African culture. Miss Centrafrique, charity gal…",
+        "programs": [
+          { "title": "Miss Central African Republic", "description": "National beauty and culture pageant celebrating the diversity of the CAR." },
+          { "title": "Charity Gala", "description": "Prestigious evening gathering partners and donors to fund our programs." },
+          { "title": "Cultural Festivals", "description": "Artistic events showcasing music, dance, and local arts." }
+        ]
+      }
+    }
   },
   "domain": {
     "programs": {
@@ -493,6 +567,28 @@
     "ariaLabel": "Image viewer"
   },
   "admin": {
+    "imageUpload": {
+      "dropHere": "Click or drag & drop an image",
+      "dropHint": "PNG, JPG, WebP — max 10 MB",
+      "uploading": "Uploading...",
+      "urlPlaceholder": "Image URL...",
+      "pasteUrl": "Paste the image URL:",
+      "pasteBtn": "URL",
+      "pasteTitle": "Paste URL",
+      "remove": "Remove image",
+      "preview": "Preview",
+      "uploadError": "Upload error: ",
+      "networkError": "Network error: "
+    },
+    "galleryUpload": {
+      "dropHere": "Click or drag & drop images",
+      "dropHint": "PNG, JPG, WebP, GIF — multiple files at once",
+      "addMore": "Add more images",
+      "uploading": "Uploading...",
+      "remove": "Remove",
+      "imageCount_one": "{{count}} image",
+      "imageCount_other": "{{count}} images"
+    },
     "login": {
       "title": "Administration",
       "subtitle": "LIAM Groupe — Secure access",
@@ -517,16 +613,48 @@
       "team": "Team",
       "partners": "Partners",
       "testimonials": "Testimonials",
-      "settings": "Settings",
-      "logout": "Logout",
-      "admin": "Administration"
+    "messages": "Messages",
+    "registrations": "Registrations",
+    "settings": "Settings",
+    "logout": "Logout",
+    "admin": "Administration"
     },
     "dashboard": {
       "title": "Dashboard",
       "description": "Overview of LIAM Groupe website content.",
       "manageTitle": "Content management",
       "manageText": "Use the sidebar navigation to manage each type of content.",
-      "teamMembers": "Team members"
+      "teamMembers": "Team members",
+      "confirmTitle": "Access this section?",
+      "confirmText": "You are about to access the « {{section}} » management. Do you wish to continue?",
+      "confirmAction": "Access"
+    },
+    "registrations": {
+      "title": "Event Registrations",
+      "total_one": "{{count}} registration",
+      "total_other": "{{count}} registrations",
+      "pendingCount_one": "{{count}} pending",
+      "pendingCount_other": "{{count}} pending",
+      "search": "Search registrations…",
+      "filter": {
+        "all": "All",
+        "en_attente": "Pending",
+        "confirme": "Confirmed",
+        "annule": "Cancelled"
+      },
+      "empty": "No registrations",
+      "emptyText": "Event registrations will appear here.",
+      "detailTitle": "Registration Details",
+      "eventSlug": "Event (slug)",
+      "changeStatus": "Change status",
+      "statusPending": "Pending",
+      "statusConfirmed": "Confirmed",
+      "statusCancelled": "Cancelled",
+      "confirmDelete": "Confirm deletion",
+      "confirmDeleteText": "Are you sure you want to delete this registration? This action is irreversible.",
+      "messageHistory_one": "{{count}} related message",
+      "messageHistory_other": "{{count}} related messages",
+      "messageHistoryEmpty": "No messages found for this email."
     },
     "contentManager": {
       "add": "Add",
@@ -554,9 +682,13 @@
       "confirmDeleteText": "Are you sure you want to delete <1>{{name}}</1>? This action is irreversible.",
       "confirmClose": "Unsaved changes",
       "confirmCloseText": "You have unsaved changes. Do you really want to leave without saving?",
+      "perPage": "Per page:",
       "confirmCloseStay": "Stay",
       "confirmCloseLeave": "Leave without saving",
+      "toggleStatus": "Toggle status",
+      "statusChanged": "Status updated: {{status}}",
       "error": "Error",
+      "deleted": "Item deleted",
       "newItem": "New",
       "fieldLabels": {
         "slug": "Slug",
@@ -572,6 +704,7 @@
         "title": "Title",
         "description": "Description",
         "date": "Date",
+        "end_date": "End date",
         "location": "Location",
         "image": "Image",
         "status": "Status",
@@ -599,6 +732,7 @@
       "slugPlaceholder": "my-domain",
       "iconPlaceholder": "heart, briefcase, etc.",
       "datePlaceholder": "August 15, 2026",
+      "end_datePlaceholder": "August 18, 2026 (optional)",
       "tagPlaceholder": "NEWS",
       "initialPlaceholder": "F",
       "colorPlaceholder": "#8A0015"
@@ -638,19 +772,60 @@
       "phonePlaceholder": "+236 00 00 00 00",
       "emailPlaceholder": "contact@liamgroupe.org",
       "hoursPlaceholder": "Monday — Friday: 8:00 AM — 5:00 PM",
-      "heroImagePlaceholder": "https://res.cloudinary.com/..."
+      "heroImagePlaceholder": "https://res.cloudinary.com/...",
+      "formConfigs": "Forms",
+      "formContact": "Contact form",
+      "formChatbot": "Chatbot",
+      "fieldName": "Field name",
+      "fieldLabel": "Translation key (label)",
+      "fieldType": "Type",
+      "fieldRequired": "Required",
+      "fieldPlaceholder": "Translation key (placeholder)",
+      "fieldOptions": "Options (for select)",
+      "addField": "Add field"
+    },
+    "messages": {
+      "title": "Received Messages",
+      "total_one": "{{count}} message",
+      "total_other": "{{count}} messages",
+      "unreadCount_one": "{{count}} unread",
+      "unreadCount_other": "{{count}} unread",
+      "search": "Search messages…",
+      "filter": {
+        "all": "All",
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "empty": "No messages",
+      "emptyText": "Messages from contact forms will appear here.",
+      "detailTitle": "Message Details",
+      "markRead": "Mark as read",
+      "markUnread": "Mark as unread",
+      "fromPage": "Source page",
+      "additionalFields": "Additional fields",
+      "replyEmail": "Reply by email",
+      "replyWhatsApp": "Reply on WhatsApp",
+      "confirmDelete": "Confirm deletion",
+      "confirmDeleteText": "Are you sure you want to delete this message? This action is irreversible."
     },
     "logoutModal": {
       "title": "Logout",
       "text": "Are you sure you want to log out of the administration interface?",
       "cancel": "Cancel",
       "confirm": "Logout"
+    },
+    "inactivityModal": {
+      "title": "Inactive session",
+      "text": "You will be logged out due to inactivity. Click « Stay connected » to continue.",
+      "stay": "Stay connected",
+      "logout": "Log out"
     }
   },
   "common": {
     "loading": "Loading…",
     "error": "An error occurred",
     "noContent": "No content available",
+    "unknown": "Unknown",
     "view": "View",
     "close": "Close",
     "back": "Back",
@@ -661,6 +836,8 @@
     "readMore": "Read more",
     "discover": "Discover",
     "retry": "Try again",
+    "required": "This field is required",
+    "submit": "Submit",
     "home": "Home",
     "element_zero": "0 elements",
     "element_one": "{{count}} element",
@@ -690,6 +867,7 @@
   },
   "chatbot": {
     "greeting": "👋 Hello! Welcome to LIAM Groupe. How can I help you?",
+    "fallback": "🤔 Sorry, I didn't quite understand your question. Could you rephrase or pick a topic below?",
     "quickReplies": {
       "about": "Who are we?",
       "programs": "Our programs",

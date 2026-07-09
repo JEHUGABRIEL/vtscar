@@ -55,39 +55,43 @@ export default function Home() {
     <div className="font-body">
       <Navbar />
 
-      {/* HERO SLIDER avec images multiples */}
+      {/* HERO SLIDER avec images multiples en fond */}
       <HeroSlider
         slides={(() => {
           const raw = t('hero.slides', { returnObjects: true });
           const images = homeHeroImages.length > 0 ? homeHeroImages : [imgHero("home-hero")];
-          return Array.isArray(raw) ? raw.map((s, i) => ({
-            image: images[i % images.length],
-            imageBlur: imgBlur("home-hero"),
-            imageSrcSet: imgSrcSet("home-hero", [480, 768, 1024, 1280, 1600], 900, 'fill'),
-            sizes: imgSizes('full'),
-            cta: (
-              <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  to={p("/domaines")}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
-                >
-                  {t('home.domains.eyebrow', 'Nos domaines')}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to={p("/evenements")}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/30 text-white hover:bg-white/10 font-semibold transition-colors backdrop-blur-sm"
-                >
-                  {t('hero.ctaEvents')}
-                </Link>
-              </div>
-            ),
-            ...s,
-          })) : [];
+          return Array.isArray(raw) ? raw.map((s, i) => {
+            const imgUrl = images[i % images.length];
+            return {
+              image: imgUrl,
+              imageBlur: imgBlur("home-hero"),
+              imageSrcSet: imgSrcSet("home-hero", [480, 768, 1024, 1280, 1600], 900, 'fill'),
+              sizes: imgSizes('full'),
+              width: 1920,
+              height: 1080,
+              cta: (
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link
+                    to={p("/domaines")}
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
+                  >
+                    {t('home.domains.eyebrow', 'Nos domaines')}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    to={p("/evenements")}
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/30 text-white hover:bg-white/10 font-semibold transition-colors backdrop-blur-sm"
+                  >
+                    {t('hero.ctaEvents')}
+                  </Link>
+                </div>
+              ),
+              ...s,
+            };
+          }) : [];
         })()}
         heightClass="min-h-[600px]"
         preloadSeed="home-hero"
-        showcaseMode
         defaultBg={{ type: "gradient", value: "from-brand-800/60 via-ink/80 to-ink" }}
       />
 

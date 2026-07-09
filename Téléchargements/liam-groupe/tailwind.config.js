@@ -4,48 +4,69 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        heading: ["Baloo 2", "ui-rounded", "sans-serif"],
-        body: ["Poppins", "ui-sans-serif", "sans-serif"],
+        heading: ["Fraunces", "ui-serif", "Georgia", "serif"],
+        body: ["Oswald", "ui-sans-serif", "sans-serif"],
+        mono: ["\"Space Mono\"", "ui-monospace", "monospace"],
       },
       colors: {
+        // Rouge — couleur d'action principale, reprise du drapeau centrafricain
         brand: {
-          50: "#FDE8E8",
-          100: "#FBC5C5",
-          400: "#E84A4F",
-          500: "#E21B22",
-          600: "#C0171D",
-          700: "#9A1217",
+          50: "#FDEAE9",
+          100: "#FAD0CD",
+          400: "#DE4A3E",
+          500: "#CE1126",
+          600: "#A80E1F",
+          700: "#7D0A17",
         },
+        // Bleu ardoise — utilisé pour les badges informatifs (remplace l'ancien violet générique)
         violet: {
-          50: "#FDE8E8",
-          100: "#FBC5C5",
-          200: "#F8A0A0",
-          500: "#E21B22",
-          600: "#C0171D",
-          700: "#9A1217",
+          50: "#EAF1F8",
+          100: "#CFE0EF",
+          200: "#A8C8E0",
+          500: "#2E6DA4",
+          600: "#24567F",
+          700: "#1B4361",
+          900: "#0F2A3D",
         },
+        // Or — accent secondaire, repris du drapeau centrafricain
         coral: {
-          50: "#FFF1F1",
-          100: "#FFE1E2",
-          400: "#ED625E",
-          500: "#F5323D",
-          600: "#DE1C28",
+          50: "#FFF8E1",
+          100: "#FFECB3",
+          400: "#FFC933",
+          500: "#F4B400",
+          600: "#C98E00",
         },
+        gold: {
+          50: "#FFF8E1",
+          100: "#FFECB3",
+          400: "#FFC933",
+          500: "#F4B400",
+          600: "#C98E00",
+        },
+        // Vert — accent tertiaire, repris du drapeau centrafricain
+        green: {
+          50: "#E8F5EC",
+          100: "#C6E8D0",
+          400: "#3FA35F",
+          500: "#237A45",
+          600: "#1B5E35",
+        },
+        // Navy — couleur d'encre reprise du logotype LIAM Groupe (texte + fonds sombres)
         ink: {
-          DEFAULT: "#130025",
-          900: "#0F001D",
-          800: "#1B0331",
+          DEFAULT: "#0E2A45",
+          900: "#081A2C",
+          800: "#123354",
         },
         rose: {
-          50: "#FFF8F7",
-          600: "#C81E2E",
-          700: "#8A0015",
+          50: "#F1F3F5",
+          600: "#64748B",
+          700: "#475569",
         },
       },
       boxShadow: {
-        card: "0 10px 30px -12px rgba(19,0,37,0.15)",
-        "card-hover": "0 20px 50px -16px rgba(19,0,37,0.25)",
-        "hero": "0 30px 80px rgba(226,27,34,0.15)",
+        card: "0 10px 30px -12px rgba(14,42,69,0.15)",
+        "card-hover": "0 20px 50px -16px rgba(14,42,69,0.25)",
+        "hero": "0 30px 80px rgba(206,17,38,0.15)",
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",

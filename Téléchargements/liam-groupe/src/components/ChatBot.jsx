@@ -318,10 +318,46 @@ export default function ChatBot() {
   );
   const chatEndRef = useRef(null);
   const inputRef = useRef(null);
+  const panelRef = useRef(null);
 
   const rawNumber = siteInfo?.social?.whatsapp || siteInfo?.phones?.[0] || "";
   const whatsappNumber = String(rawNumber).replace(/\D/g, "");
   const contactEmail = siteInfo?.emails?.[0] || "contact@liamgroupe.org";
+
+  // Empêche le scroll du body quand le chatbot est ouvert
+  useEffect(() => {
+    if (open) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
+  }, [open]);
+
+  // Ferme le chatbot quand on clique en dehors
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (e) => {
+      // Ne pas fermer si on clique sur le bouton flottant ou dans le panneau
+      if (
+        panelRef.current?.contains(e.target) ||
+        e.target.closest(".chatbot-toggle-btn")
+      ) {
+        return;
+      }
+      setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
 
   // Greeting on first open
   useEffect(() => {
@@ -578,7 +614,7 @@ export default function ChatBot() {
       <button
         onClick={handleToggle}
         aria-label={open ? t("chatbot.closeChat") : t("chatbot.openChat")}
-        className="group fixed bottom-6 right-6 z-40 flex items-center gap-0 overflow-hidden rounded-full bg-brand-500 text-white shadow-lg shadow-black/20 transition-all duration-300 hover:gap-3 hover:pr-5 hover:shadow-xl active:scale-95"
+        className="chatbot-toggle-btn group fixed bottom-6 right-6 z-40 flex items-center gap-0 overflow-hidden rounded-full bg-brand-500 text-white shadow-lg shadow-black/20 transition-all duration-300 hover:gap-3 hover:pr-5 hover:shadow-xl active:scale-95"
       >
         <span className="flex h-14 w-14 shrink-0 items-center justify-center">
           {open ? (
@@ -592,15 +628,29 @@ export default function ChatBot() {
         </span>
       </button>
 
+      {/* ===== BACKDROP ===== */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-30 bg-ink/30 backdrop-blur-sm"
+          />
+        )}
+      </AnimatePresence>
+
       {/* ===== CHAT PANEL ===== */}
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 right-6 z-40 w-[380px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-8rem)] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-3 sm:right-6 z-40 w-[calc(100vw-1.5rem)] sm:w-[380px] h-[600px] max-h-[calc(100vh-10rem)] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden"
           >
             {/* ===== HEADER ===== */}
             <div className="bg-brand-500 text-white px-5 py-4 flex items-center gap-3 shrink-0">
@@ -731,7 +781,7 @@ export default function ChatBot() {
             {/* ===== INPUT BAR ===== */}
             <form
               onSubmit={handleInputSubmit}
-              className="px-3 py-3 border-t border-gray-100 bg-white shrink-0 flex items-center gap-2"
+              className="px-2 sm:px-3 py-2 sm:py-3 border-t border-gray-100 bg-white shrink-0 flex items-center gap-1.5 sm:gap-2"
             >
               <input
                 ref={inputRef}
@@ -739,16 +789,16 @@ export default function ChatBot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder={t("chatbot.inputPlaceholder")}
-                className="flex-1 border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-brand-400 transition-colors"
+                className="flex-1 border border-gray-200 rounded-xl px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm outline-none focus:border-brand-400 transition-colors"
                 autoComplete="off"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="w-9 h-9 rounded-full bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors shrink-0 active:scale-95"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors shrink-0 active:scale-95"
                 aria-label={t("chatbot.formSubmit")}
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
             </form>
           </motion.div>

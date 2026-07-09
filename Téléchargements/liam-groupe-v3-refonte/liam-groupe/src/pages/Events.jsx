@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { supabase } from "../lib/supabase.js";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import EventCard from "../components/EventCard";
@@ -85,6 +86,26 @@ export default function Events() {
         initialSubject={t('home.contact.formSubjectEventOption')}
         initialMessage={registerEvent ? t('events.registerModalMessage', { title: registerEvent.title, date: registerEvent.date }) : ''}
         successMessageKey="events.registerSuccessText"
+        onSubmit={async (data) => {
+          const firstName = data.firstname || data.name || "";
+          const lastName = data.lastname || "";
+          const email = data.email || "";
+          const phone = data.phone || "";
+          const message = data.message || "";
+          const { error } = await supabase.from("registrations").insert({
+            event_slug: registerEvent?.slug || null,
+            event_title: registerEvent?.title || null,
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone,
+            message,
+          });
+          if (error) {
+            console.error("Events — Erreur d'inscription :", error);
+            throw error;
+          }
+        }}
       />
 
       <Footer />

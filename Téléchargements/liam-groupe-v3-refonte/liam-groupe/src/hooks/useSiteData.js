@@ -1,20 +1,39 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../lib/supabase.js'
+import { useTranslation } from 'react-i18next'
+import { computeEventStatus } from '../lib/utils.js'
 import {
-  siteInfo as fallbackSiteInfo,
-  navLinks as fallbackNavLinks,
-  domains as fallbackDomains,
+  siteInfo as fallbackSiteInfoFr,
+  navLinks as fallbackNavLinksFr,
+  domains as fallbackDomainsFr,
   homeHeroImages as fallbackHomeHeroImages,
-  events as fallbackEvents,
-  news as fallbackNews,
-  team as fallbackTeam,
-  partners as fallbackPartners,
-  testimonials as fallbackTestimonials,
-  footerLinks as fallbackFooterLinks,
+  events as fallbackEventsFr,
+  news as fallbackNewsFr,
+  team as fallbackTeamFr,
+  partners as fallbackPartnersFr,
+  testimonials as fallbackTestimonialsFr,
+  footerLinks as fallbackFooterLinksFr,
   img,
 } from '../data/siteData.js'
+import {
+  siteInfo as fallbackSiteInfoEn,
+  navLinks as fallbackNavLinksEn,
+  domains as fallbackDomainsEn,
+  events as fallbackEventsEn,
+  news as fallbackNewsEn,
+  team as fallbackTeamEn,
+  partners as fallbackPartnersEn,
+  testimonials as fallbackTestimonialsEn,
+  footerLinks as fallbackFooterLinksEn,
+} from '../data/siteData.en.js'
 
 const STALE_TIME = 5 * 60 * 1000
+
+function useFallback(frData, enData) {
+  const { i18n } = useTranslation()
+  const lang = i18n.language?.startsWith('en') ? 'en' : 'fr'
+  return { data: lang === 'en' ? enData : frData, lang }
+}
 
 async function fetchSetting(key, fallback) {
   const { data, error } = await supabase
@@ -35,39 +54,43 @@ async function fetchAll(table, fallback) {
 }
 
 export function useSiteInfo() {
+  const { data: fallback, lang } = useFallback(fallbackSiteInfoFr, fallbackSiteInfoEn)
   return useQuery({
-    queryKey: ['siteInfo'],
-    queryFn: () => fetchSetting('siteInfo', fallbackSiteInfo),
+    queryKey: ['siteInfo', lang],
+    queryFn: () => fetchSetting('siteInfo', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function useNavLinks() {
+  const { data: fallback, lang } = useFallback(fallbackNavLinksFr, fallbackNavLinksEn)
   return useQuery({
-    queryKey: ['navLinks'],
-    queryFn: () => fetchSetting('navLinks', fallbackNavLinks),
+    queryKey: ['navLinks', lang],
+    queryFn: () => fetchSetting('navLinks', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function useDomains() {
+  const { data: fallback, lang } = useFallback(fallbackDomainsFr, fallbackDomainsEn)
   return useQuery({
-    queryKey: ['domains'],
-    queryFn: () => fetchAll('domains', fallbackDomains),
+    queryKey: ['domains', lang],
+    queryFn: () => fetchAll('domains', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function useDomain(slug) {
+  const { data: fallback, lang } = useFallback(fallbackDomainsFr, fallbackDomainsEn)
   return useQuery({
-    queryKey: ['domain', slug],
+    queryKey: ['domain', slug, lang],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('domains')
         .select('*')
         .eq('slug', slug)
         .single()
-      return error ? fallbackDomains.find((d) => d.slug === slug) || null : data
+      return error ? fallback.find((d) => d.slug === slug) || null : data
     },
     staleTime: STALE_TIME,
   })
@@ -82,49 +105,67 @@ export function useHomeHeroImages() {
 }
 
 export function useEvents() {
+  const { data: fallback, lang } = useFallback(fallbackEventsFr, fallbackEventsEn)
   return useQuery({
-    queryKey: ['events'],
-    queryFn: () => fetchAll('events', fallbackEvents),
+    queryKey: ['events', lang],
+    queryFn: async () => {
+      const data = await fetchAll('events', fallback);
+      if (!Array.isArray(data)) return data;
+      // Corrige automatiquement le statut des événements dont la date est passée
+      return data.map((evt) => {
+        const correctStatus = computeEventStatus(evt.date, evt.status, evt.end_date);
+        if (correctStatus !== evt.status && evt.id) {
+          // Mise à jour en base de façon silencieuse (fire-and-forget)
+          supabase.from('events').update({ status: correctStatus }).eq('id', evt.id).then().catch((err) => console.error('useSiteData — Erreur mise à jour statut événement:', err));
+        }
+        return { ...evt, status: correctStatus };
+      });
+    },
     staleTime: STALE_TIME,
   })
 }
 
 export function useNews() {
+  const { data: fallback, lang } = useFallback(fallbackNewsFr, fallbackNewsEn)
   return useQuery({
-    queryKey: ['news'],
-    queryFn: () => fetchAll('news', fallbackNews),
+    queryKey: ['news', lang],
+    queryFn: () => fetchAll('news', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function useTeam() {
+  const { data: fallback, lang } = useFallback(fallbackTeamFr, fallbackTeamEn)
   return useQuery({
-    queryKey: ['team'],
-    queryFn: () => fetchAll('team', fallbackTeam),
+    queryKey: ['team', lang],
+    queryFn: () => fetchAll('team', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function usePartners() {
+  const { data: fallback, lang } = useFallback(fallbackPartnersFr, fallbackPartnersEn)
   return useQuery({
-    queryKey: ['partners'],
-    queryFn: () => fetchAll('partners', fallbackPartners),
+    queryKey: ['partners', lang],
+    queryFn: () => fetchAll('partners', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function useTestimonials() {
+  const { data: fallback, lang } = useFallback(fallbackTestimonialsFr, fallbackTestimonialsEn)
   return useQuery({
-    queryKey: ['testimonials'],
-    queryFn: () => fetchAll('testimonials', fallbackTestimonials),
+    queryKey: ['testimonials', lang],
+    queryFn: () => fetchAll('testimonials', fallback),
     staleTime: STALE_TIME,
   })
 }
 
 export function useFooterLinks() {
+  const { data: fallback, lang } = useFallback(fallbackFooterLinksFr, fallbackFooterLinksEn)
   return useQuery({
-    queryKey: ['footerLinks'],
-    queryFn: () => fetchSetting('footerLinks', fallbackFooterLinks),
+    queryKey: ['footerLinks', lang],
+    queryFn: () => fetchSetting('footerLinks', fallback),
     staleTime: STALE_TIME,
   })
 }

@@ -70,7 +70,7 @@ export const siteInfo = {
   foundingYear: 2015,
   social: {
     whatsapp: "23676000000",
-    facebook: "https://facebook.com/profile.php?id=61585885973346",
+    facebook: "https://www.facebook.com/people/LIAM-Groupe/61585885973346/",
     instagram: "https://instagram.com/liamgroupe",
     x: "https://x.com/liamgroupe",
     youtube: "https://youtube.com/@liamgroupe",

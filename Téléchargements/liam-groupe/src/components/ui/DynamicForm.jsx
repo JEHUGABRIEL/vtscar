@@ -97,7 +97,7 @@ export default function DynamicForm({
             )}
             <div className="relative">
               {hasIcon && (
-                <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <Icon className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 pointer-events-none" />
               )}
 
               {f.type === "textarea" ? (
@@ -108,7 +108,7 @@ export default function DynamicForm({
                   value={values[f.name] || ""}
                   onChange={handleChange(f.name)}
                   placeholder={f.placeholder ? t(f.placeholder) : ""}
-                  className={`w-full border rounded-xl px-4 py-3 text-sm outline-none resize-none transition-colors ${
+                  className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm outline-none resize-none transition-colors ${
                     errors[f.name]
                       ? "border-red-300 focus:border-red-400"
                       : "border-gray-200 focus:border-brand-400"
@@ -120,7 +120,7 @@ export default function DynamicForm({
                   name={f.name}
                   value={values[f.name] || ""}
                   onChange={handleChange(f.name)}
-                  className={`w-full border rounded-xl pl-10 pr-4 py-3 text-sm outline-none bg-white appearance-none transition-colors ${
+                  className={`w-full border rounded-xl pl-8 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 text-xs sm:text-sm outline-none bg-white appearance-none transition-colors ${
                     errors[f.name]
                       ? "border-red-300 focus:border-red-400 text-red-600"
                       : "border-gray-200 focus:border-brand-400 text-gray-600"
@@ -139,8 +139,8 @@ export default function DynamicForm({
                   value={values[f.name] || ""}
                   onChange={handleChange(f.name)}
                   placeholder={f.placeholder ? t(f.placeholder) : ""}
-                  className={`w-full border rounded-xl py-3 text-sm outline-none transition-colors ${
-                    hasIcon ? "pl-10 pr-4" : "px-4"
+                  className={`w-full border rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm outline-none transition-colors ${
+                    hasIcon ? "pl-8 sm:pl-10 pr-3 sm:pr-4" : "px-3 sm:px-4"
                   } ${
                     errors[f.name]
                       ? "border-red-300 focus:border-red-400"

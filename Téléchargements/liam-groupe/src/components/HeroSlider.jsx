@@ -400,7 +400,10 @@ export default function HeroSlider({
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/40 to-transparent" />
+      {/* Couche sombre uniforme pour atténuer l'image */}
+      <div className="absolute inset-0 bg-ink/60" />
+      {/* Gradient renforcé pour la lisibilité du texte */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/60 to-transparent" />
 
       {/* Texte hero */}
       <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-20 md:pb-24">

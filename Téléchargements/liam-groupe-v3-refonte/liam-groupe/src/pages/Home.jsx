@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLangPath } from "../lib/langPath";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SectionHeading from "../components/SectionHeading";
@@ -25,12 +26,14 @@ import FAQSection from "../components/FAQSection";
 import { JoinCTA } from "../components/CTASection";
 import HeroSlider from "../components/HeroSlider";
 import { imgHero, imgBlur, imgSrcSet, imgSizes } from "../data/siteData";
+import ContactForm from "../components/ContactForm";
 import { useDomains, useEvents, useNews, useSiteInfo, useHomeHeroImages } from "../hooks/useSiteData";
 import useScrollReveal from "../hooks/useScrollReveal";
 import useUnsavedChanges from "../hooks/useUnsavedChanges";
 
 export default function Home() {
   const { t } = useTranslation();
+  const p = useLangPath();
   const { data: domains = [] } = useDomains();
   const { data: events = [] } = useEvents();
   const { data: news = [] } = useNews();
@@ -52,39 +55,43 @@ export default function Home() {
     <div className="font-body">
       <Navbar />
 
-      {/* HERO SLIDER avec images multiples */}
+      {/* HERO SLIDER avec images multiples en fond */}
       <HeroSlider
         slides={(() => {
           const raw = t('hero.slides', { returnObjects: true });
           const images = homeHeroImages.length > 0 ? homeHeroImages : [imgHero("home-hero")];
-          return Array.isArray(raw) ? raw.map((s, i) => ({
-            image: images[i % images.length],
-            imageBlur: imgBlur("home-hero"),
-            imageSrcSet: imgSrcSet("home-hero", [480, 768, 1024, 1280, 1600], 900, 'fill'),
-            sizes: imgSizes('full'),
-            cta: (
-              <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  to="/domaines"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
-                >
-                  {t('home.domains.eyebrow', 'Nos domaines')}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/evenements"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/30 text-white hover:bg-white/10 font-semibold transition-colors backdrop-blur-sm"
-                >
-                  {t('hero.ctaEvents')}
-                </Link>
-              </div>
-            ),
-            ...s,
-          })) : [];
+          return Array.isArray(raw) ? raw.map((s, i) => {
+            const imgUrl = images[i % images.length];
+            return {
+              image: imgUrl,
+              imageBlur: imgBlur("home-hero"),
+              imageSrcSet: imgSrcSet("home-hero", [480, 768, 1024, 1280, 1600], 900, 'fill'),
+              sizes: imgSizes('full'),
+              width: 1920,
+              height: 1080,
+              cta: (
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link
+                    to={p("/domaines")}
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
+                  >
+                    {t('home.domains.eyebrow', 'Nos domaines')}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    to={p("/evenements")}
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/30 text-white hover:bg-white/10 font-semibold transition-colors backdrop-blur-sm"
+                  >
+                    {t('hero.ctaEvents')}
+                  </Link>
+                </div>
+              ),
+              ...s,
+            };
+          }) : [];
         })()}
         heightClass="min-h-[600px]"
         preloadSeed="home-hero"
-        showcaseMode
         defaultBg={{ type: "gradient", value: "from-brand-800/60 via-ink/80 to-ink" }}
       />
 
@@ -124,7 +131,7 @@ export default function Home() {
               <h2 className="font-heading font-bold text-3xl md:text-4xl">{t('home.events.title')}</h2>
             </div>
             <Link
-              to="/evenements"
+              to={p("/evenements")}
               className="text-brand-600 font-semibold inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
             >
               {t('home.events.viewAll')} <ArrowRight className="w-4 h-4" />
@@ -151,7 +158,7 @@ export default function Home() {
               <h2 className="font-heading font-bold text-3xl md:text-4xl">{t('home.news.title')}</h2>
             </div>
             <Link
-              to="/actualites"
+              to={p("/actualites")}
               className="text-brand-600 font-semibold inline-flex items-center gap-1.5 hover:gap-2.5 transition-all"
             >
               {t('home.news.viewAll')} <ArrowRight className="w-4 h-4" />
@@ -232,42 +239,7 @@ export default function Home() {
               <div className="reveal"><ContactItem icon={Mail} label={t('home.contact.email')} lines={siteInfo.emails} /></div>
               <div className="reveal"><ContactItem icon={Clock} label={t('home.contact.hours')} lines={siteInfo.hours} /></div>
             </div>
-            <form
-              onSubmit={(e) => { e.preventDefault(); setContactDirty(false); }}
-              className="bg-white border border-gray-100 shadow-card rounded-2xl p-8 space-y-5 reveal"
-              onInput={() => setContactDirty(true)}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Field label={t('home.contact.formName')} placeholder={t('home.contact.formNamePlaceholder')} name="contact-name" />
-                <Field label={t('home.contact.formEmail')} placeholder={t('home.contact.formEmailPlaceholder')} type="email" name="contact-email" />
-              </div>
-              <div>
-                <label htmlFor="home-subject" className="block text-sm font-medium mb-2">{t('home.contact.formSubject')}</label>
-                <select id="home-subject" name="subject" className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400 text-gray-600">
-                  <option>{t('home.contact.formSubjectPlaceholder')}</option>
-                  <option>{t('home.contact.formSubjectOption1')}</option>
-                  <option>{t('home.contact.formSubjectOption2')}</option>
-                  <option>{t('home.contact.formSubjectOption3')}</option>
-                  <option>{t('home.contact.formSubjectOption4')}</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="home-message" className="block text-sm font-medium mb-2">{t('home.contact.formMessage')}</label>
-                <textarea
-                  id="home-message"
-                  name="message"
-                  rows={5}
-                  placeholder={t('home.contact.formMessagePlaceholder')}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400 resize-none"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold inline-flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:shadow-brand-500/25"
-              >
-                <Send className="w-4 h-4" /> {t('home.contact.formSubmit')}
-              </button>
-            </form>
+            <ContactForm page="home" onDirty={setContactDirty} formId="home" />
 
             {/* Blocker modal — changements non sauvegardés */}
             {blocker.state === "blocked" && (
@@ -327,18 +299,4 @@ function ContactItem({ icon: Icon, label, lines = [] }) {
   );
 }
 
-function Field({ label, placeholder, type = "text", name }) {
-  const fieldId = name || `field-${label?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
-  return (
-    <div>
-      <label htmlFor={fieldId} className="block text-sm font-medium mb-2">{label}</label>
-      <input
-        id={fieldId}
-        name={fieldId}
-        type={type}
-        placeholder={placeholder}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400"
-      />
-    </div>
-  );
-}
+

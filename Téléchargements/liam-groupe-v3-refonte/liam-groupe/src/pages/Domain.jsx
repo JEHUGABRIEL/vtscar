@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { Layers, Image as ImageIcon, Calendar, Newspaper } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLang, langPath } from "../lib/langPath";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SectionHeading from "../components/SectionHeading";
@@ -17,6 +18,7 @@ import GalleryLightbox from "../components/GalleryLightbox";
 export default function Domain() {
   const { t } = useTranslation();
   const { slug } = useParams();
+  const lang = useLang();
   const { data: domain } = useDomain(slug);
   const { data: events = [] } = useEvents();
   const { data: news = [] } = useNews();
@@ -33,22 +35,22 @@ export default function Domain() {
         image: domain.heroImage,
         width: 1920,
         height: 700,
-        eyebrow: domain.category,
-        title: domain.name,
+        eyebrow: t(`domains.data.${domain.slug}.category`, domain.category),
+        title: t(`domains.data.${domain.slug}.name`, domain.name),
       },
       ...(domain.programs || []).slice(0, 3).map((p, i) => ({
         image: domain.heroImage,
         width: 1920,
         height: 700,
         eyebrow: `${t('domain.programs.eyebrow')} ${i + 1}`,
-        title: p.title,
-        description: p.description,
+        title: t(`domains.data.${domain.slug}.programs.${i}.title`, p.title),
+        description: t(`domains.data.${domain.slug}.programs.${i}.description`, p.description),
       })),
     ];
     return slides;
   }, [domain, t]);
 
-  if (!domain) return <Navigate to="/domaines" replace />;
+  if (!domain) return <Navigate to={langPath(lang, "/domaines")} replace />;
 
   return (
     <div className="font-body">
@@ -66,13 +68,13 @@ export default function Domain() {
         <div className="max-w-6xl mx-auto">
           <div className="reveal"><SectionHeading icon={Layers} eyebrow={t('domain.programs.eyebrow')} title={t('domain.programs.title')} /></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-7 stagger-children">
-            {domain.programs.map((p) => (
+            {domain.programs.map((p, idx) => (
               <div key={p.title} className="bg-white rounded-2xl border border-gray-100 shadow-card p-7 reveal hover:lift transition-all duration-300">
                 <span className="w-12 h-12 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mb-5">
                   <DomainIcon icon={domain.icon} className="w-6 h-6" />
                 </span>
-                <h3 className="font-heading font-bold text-lg mb-2">{p.title}</h3>
-                <p className="text-gray-500 leading-relaxed">{p.description}</p>
+                <h3 className="font-heading font-bold text-lg mb-2">{t(`domains.data.${domain.slug}.programs.${idx}.title`, p.title)}</h3>
+                <p className="text-gray-500 leading-relaxed">{t(`domains.data.${domain.slug}.programs.${idx}.description`, p.description)}</p>
               </div>
             ))}
           </div>
@@ -182,7 +184,7 @@ export default function Domain() {
         />
       )}
 
-      <ActCTA title={`${t('domain.cta.support')} ${domain.name}`} />
+      <ActCTA title={`${t('domain.cta.support')} ${t(`domains.data.${domain.slug}.name`, domain.name)}`} />
 
       <Footer />
     </div>

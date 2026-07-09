@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Send, MessageSquare, Phone, MapPin, Mail, Clock, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLangPath } from "../lib/langPath";
 import { FacebookIcon, InstagramIcon, XIcon, YoutubeIcon } from "./SocialIcons";
 import { useSiteInfo, useFooterLinks } from "../hooks/useSiteData";
 import useScrollReveal from "../hooks/useScrollReveal";
 
 export default function Footer() {
   const { t } = useTranslation();
+  const p = useLangPath();
   const { data: siteInfo = {} } = useSiteInfo();
   const { data: footerLinks = {} } = useFooterLinks();
   const fLinks = { liamGroupe: [], domaines: [], agir: [], ...footerLinks };
@@ -83,7 +85,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-16 pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr] gap-10">
           <div>
-            <Link to="/" className="flex items-center gap-2.5 no-underline">
+            <Link to={p("/")} className="flex items-center gap-2.5 no-underline">
               <span className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl leading-none tracking-tight text-white">
                 LIAM<span className="text-brand-500">.</span>
               </span>
@@ -119,9 +121,19 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               {fLinks.liamGroupe.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to} className="hover:text-white transition-colors">
+                  <NavLink
+                    to={p(l.to)}
+                    end={l.to === "/"}
+                    className={({ isActive }) =>
+                      `transition-colors block ${
+                        isActive
+                          ? "text-brand-400 font-semibold border-l-4 border-brand-500 -ml-1 pl-4"
+                          : "text-white/60 hover:text-white pl-4"
+                      }`
+                    }
+                  >
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -132,9 +144,19 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               {fLinks.domaines.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to} className="hover:text-white transition-colors">
+                  <NavLink
+                    to={p(l.to)}
+                    end={l.to === "/"}
+                    className={({ isActive }) =>
+                      `transition-colors block ${
+                        isActive
+                          ? "text-brand-400 font-semibold border-l-4 border-brand-500 -ml-1 pl-4"
+                          : "text-white/60 hover:text-white pl-4"
+                      }`
+                    }
+                  >
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -145,9 +167,19 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               {fLinks.agir.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to} className="hover:text-white transition-colors">
+                  <NavLink
+                    to={p(l.to)}
+                    end={l.to === "/"}
+                    className={({ isActive }) =>
+                      `transition-colors block ${
+                        isActive
+                          ? "text-brand-400 font-semibold border-l-4 border-brand-500 -ml-1 pl-4"
+                          : "text-white/60 hover:text-white pl-4"
+                      }`
+                    }
+                  >
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -223,12 +255,12 @@ export default function Footer() {
             ))}
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <Link to="/mentions-legales" className="text-white/50 hover:text-white transition-colors">
+            <NavLink to={p("/mentions-legales")} className={({ isActive }) => `transition-colors ${isActive ? "text-brand-400 font-semibold" : "text-white/50 hover:text-white"}`}>
               {t('footer.legal')}
-            </Link>
-            <Link to="/politique-de-confidentialite" className="text-white/50 hover:text-white transition-colors">
+            </NavLink>
+            <NavLink to={p("/politique-de-confidentialite")} className={({ isActive }) => `transition-colors ${isActive ? "text-brand-400 font-semibold" : "text-white/50 hover:text-white"}`}>
               {t('footer.privacy')}
-            </Link>
+            </NavLink>
           </div>
         </div>
       </div>

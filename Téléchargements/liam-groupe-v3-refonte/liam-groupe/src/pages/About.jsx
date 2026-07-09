@@ -7,6 +7,7 @@ import SectionHeading from "../components/SectionHeading";
 import TeamCard from "../components/TeamCard";
 import HeroSlider from "../components/HeroSlider";
 import { FacebookIcon, InstagramIcon, XIcon, YoutubeIcon } from "../components/SocialIcons";
+import ContactForm from "../components/ContactForm";
 import { useSiteInfo, useTeam } from "../hooks/useSiteData";
 import { img, imgHero, imgBlur, imgSrcSet, imgSizes } from "../data/siteData";
 import useScrollReveal from "../hooks/useScrollReveal";
@@ -199,46 +200,7 @@ export default function About() {
               </div>
             </div>
 
-            <form
-              onSubmit={(e) => { e.preventDefault(); setContactDirty(false); }}
-              className="bg-white border border-gray-100 shadow-card rounded-2xl p-8 space-y-5 h-fit reveal"
-              onInput={() => setContactDirty(true)}
-            >
-              <h3 className="font-heading font-bold text-lg">{t('contact.formTitle')}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Field label={t('contact.formFirstName')} placeholder={t('contact.formFirstNamePlaceholder')} name="contact-firstname" />
-                <Field label={t('contact.formLastName')} placeholder={t('contact.formLastNamePlaceholder')} name="contact-lastname" />
-              </div>
-              <Field label={t('contact.formEmail')} placeholder={t('contact.formEmailPlaceholder')} type="email" name="contact-email" />
-              <div>
-                <label htmlFor="about-subject" className="block text-sm font-medium mb-2">{t('contact.formSubject')}</label>
-                <select id="about-subject" name="subject" className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400 text-gray-600">
-                  <option>{t('contact.formSubjectPlaceholder')}</option>
-                  <option>{t('contact.formSubjectOption1')}</option>
-                  <option>{t('contact.formSubjectOption2')}</option>
-                  <option>{t('contact.formSubjectOption3')}</option>
-                  <option>{t('contact.formSubjectOption4')}</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="about-message" className="block text-sm font-medium mb-2">{t('contact.formMessage')}</label>
-                <textarea
-                  id="about-message"
-                  name="message"
-                  rows={5}
-                  maxLength={500}
-                  placeholder={t('contact.formMessagePlaceholder')}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400 resize-none"
-                />
-                <p className="text-gray-400 text-xs mt-1.5">{t('contact.formMessageMax')}</p>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white font-semibold inline-flex items-center justify-center gap-2 transition-colors"
-              >
-                {t('contact.formSubmit')} <Send className="w-4 h-4" />
-              </button>
-            </form>
+            <ContactForm page="about" onDirty={setContactDirty} formId="about" />
 
             {/* Blocker modal — changements non sauvegardés */}
             {blocker.state === "blocked" && (
@@ -313,18 +275,4 @@ function ContactItem({ icon: Icon, label, lines = [] }) {
   );
 }
 
-function Field({ label, placeholder, type = "text", name }) {
-  const fieldId = name || `field-${label?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
-  return (
-    <div>
-      <label htmlFor={fieldId} className="block text-sm font-medium mb-2">{label}</label>
-      <input
-        id={fieldId}
-        name={fieldId}
-        type={type}
-        placeholder={placeholder}
-        className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-brand-400"
-      />
-    </div>
-  );
-}
+
