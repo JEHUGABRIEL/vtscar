@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   LayoutGrid,
@@ -27,7 +28,9 @@ import { JoinCTA } from "../components/CTASection";
 import HeroSlider from "../components/HeroSlider";
 import { imgHero, imgBlur, imgSrcSet, imgSizes } from "../data/siteData";
 import ContactForm from "../components/ContactForm";
+import { domains as staticDomains } from "../data/siteData";
 import { useDomains, useEvents, useNews, useSiteInfo, useHomeHeroImages } from "../hooks/useSiteData";
+import { FacebookIcon, InstagramIcon, XIcon, YoutubeIcon } from "../components/SocialIcons";
 import useScrollReveal from "../hooks/useScrollReveal";
 import useUnsavedChanges from "../hooks/useUnsavedChanges";
 
@@ -38,6 +41,7 @@ export default function Home() {
   const { data: events = [] } = useEvents();
   const { data: news = [] } = useNews();
   const { data: siteInfo = {} } = useSiteInfo();
+  const info = siteInfo?.contactPage ?? {};
   const upcomingAndRecent = events.slice(0, 3);
   const domainsRef = useScrollReveal();
   const eventsRef = useScrollReveal();
@@ -45,11 +49,33 @@ export default function Home() {
   const partnersRef = useScrollReveal();
   const testimonialRef = useScrollReveal();
   const contactRef = useScrollReveal();
+  const featuredRef = useScrollReveal();
 
   // Unsaved changes — formulaire de contact
   const [contactDirty, setContactDirty] = useState(false);
   const { blocker } = useUnsavedChanges(contactDirty);
   const { data: homeHeroImages = [] } = useHomeHeroImages();
+
+  // Carousel des 3 domaines phares — données statiques
+  const featured = useMemo(() => {
+    const slugs = ["ogab", "g-fitness", "miss-centrafrique"];
+    return slugs
+      .map((slug) => staticDomains.find((d) => d.slug === slug))
+      .filter(Boolean);
+  }, []);
+  const [featuredIdx, setFeaturedIdx] = useState(0);
+  const [featuredPaused, setFeaturedPaused] = useState(false);
+
+  // Auto-play
+  useEffect(() => {
+    if (featured.length <= 1 || featuredPaused) return;
+    const id = setInterval(() => {
+      setFeaturedIdx((prev) => (prev + 1) % featured.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [featured.length, featuredPaused]);
+
+  const fd = featured[featuredIdx];
 
   return (
     <div className="font-body">
@@ -90,13 +116,79 @@ export default function Home() {
             };
           }) : [];
         })()}
-        heightClass="min-h-[600px]"
+        heightClass="h-screen"
         preloadSeed="home-hero"
         defaultBg={{ type: "gradient", value: "from-brand-800/60 via-ink/80 to-ink" }}
       />
 
       {/* CHIFFRES CLES */}
       <StatsSection />
+
+      {/* DOMAINES À LA UNE — Carousel simple */}
+      <section className="py-24 px-6 bg-gray-50" ref={featuredRef}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 reveal">
+            <p className="text-brand-500 italic font-medium mb-2">
+              {t('home.featured.eyebrow', 'Nos domaines phares')}
+            </p>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-ink">
+              {t('home.featured.title', 'Découvrez nos projets emblématiques')}
+            </h2>
+            <p className="text-gray-500 mt-3 max-w-lg mx-auto">
+              {t('home.featured.description', 'Des initiatives qui transforment la Centrafrique, du sport à la gastronomie en passant par la culture.')}
+            </p>
+          </div>
+
+          <div
+            className="relative h-[440px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl reveal group"
+            onMouseEnter={() => setFeaturedPaused(true)}
+            onMouseLeave={() => setFeaturedPaused(false)}
+          >
+            <AnimatePresence mode="wait">
+              {fd && (
+                <motion.div
+                  key={featuredIdx}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  {/* Image de fond */}
+                  <img
+                    src={fd.heroImage}
+                    alt={t(`domains.data.${fd.slug}.name`, fd.name)}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+
+                  {/* Overlay dégradé */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/10" />
+
+                  {/* Texte */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-10">
+                    <p className="text-brand-400 text-xs font-bold tracking-[0.25em] uppercase">
+                      {t(`domains.data.${fd.slug}.category`, fd.category)}
+                    </p>
+                    <h3 className="text-white font-heading font-bold text-3xl md:text-4xl lg:text-5xl mt-2 leading-tight">
+                      {t(`domains.data.${fd.slug}.name`, fd.name)}
+                    </h3>
+                    <p className="text-white/70 mt-4 max-w-xl leading-relaxed line-clamp-2">
+                      {t(`domains.data.${fd.slug}.shortDescription`, fd.shortDescription)}
+                    </p>
+                    <Link
+                      to={p(`/domaines/${fd.slug}`)}
+                      className="inline-flex items-center gap-2 mt-6 px-7 py-3.5 bg-white text-ink font-semibold rounded-full hover:bg-white/90 transition-all"
+                    >
+                      {t('common.discover', 'Découvrir')}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
 
       {/* DOMAINES */}
       <section className="py-24 px-6" ref={domainsRef}>
@@ -220,25 +312,52 @@ export default function Home() {
       {/* FAQ */}
       <FAQSection />
 
-      {/* CONTACT */}
-      <section className="py-24 px-6" id="contact" ref={contactRef}>
+      {/* CONTACT — coordonnées + formulaire */}
+      <section className="py-24 px-6 bg-gray-50" id="contact" ref={contactRef}>
         <div className="max-w-6xl mx-auto">
           <div className="reveal">
-            <SectionHeading
-              icon={Mail}
-              eyebrow={t('home.contact.eyebrow')}
-              variant="brand"
-              title={t('home.contact.title')}
-              description={t('home.contact.description')}
-            />
+            <SectionHeading icon={MapPin} eyebrow={t('contact.eyebrow')} title={t('contact.title')} align="left" />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start reveal">
-            <div className="space-y-7 stagger-children">
-              <div className="reveal"><ContactItem icon={MapPin} label={t('home.contact.address')} lines={siteInfo.address} /></div>
-              <div className="reveal"><ContactItem icon={Phone} label={t('home.contact.phone')} lines={siteInfo.phones} /></div>
-              <div className="reveal"><ContactItem icon={Mail} label={t('home.contact.email')} lines={siteInfo.emails} /></div>
-              <div className="reveal"><ContactItem icon={Clock} label={t('home.contact.hours')} lines={siteInfo.hours} /></div>
+          <div className="grid grid-cols-1 gap-12">
+            <div className="reveal">
+              <p className="text-gray-500 leading-relaxed mb-8 -mt-4">
+                {t('contact.intro')}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 stagger-children">
+                <div className="space-y-6">
+                  <div className="reveal"><ContactItem icon={MapPin} label={t('contact.address')} lines={info.address} /></div>
+                  <div className="reveal"><ContactItem icon={Clock} label={t('contact.hours')} lines={info.hours} /></div>
+                </div>
+                <div className="space-y-6">
+                  <div className="reveal"><ContactItem icon={Phone} label={t('contact.phone')} lines={info.phones} /></div>
+                  <div className="reveal"><ContactItem icon={Mail} label={t('contact.email')} lines={info.emails} /></div>
+                </div>
+                <div className="reveal bg-brand-50/60 rounded-2xl p-7">
+                  <h3 className="font-heading font-bold mb-1">{t('contact.socialTitle')}</h3>
+                  <p className="text-gray-500 mb-5">{t('contact.socialText')}</p>
+                  <div className="flex items-center gap-3">
+                    {[
+                      { Icon: FacebookIcon, href: siteInfo.social?.facebook },
+                      { Icon: InstagramIcon, href: siteInfo.social?.instagram },
+                      { Icon: XIcon, href: siteInfo.social?.x },
+                      { Icon: YoutubeIcon, href: siteInfo.social?.youtube },
+                    ].map(({ Icon, href }, i) => (
+                      <a
+                        key={i}
+                        href={href || '#'}
+                        target={href ? '_blank' : undefined}
+                        rel={href ? 'noopener noreferrer' : undefined}
+                        aria-label="social"
+                        className="w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors"
+                      >
+                        <Icon className="w-4 h-4" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
+
             <ContactForm page="home" onDirty={setContactDirty} formId="home" />
 
             {/* Blocker modal — changements non sauvegardés */}
@@ -250,23 +369,23 @@ export default function Home() {
                     <Send className="w-6 h-6 text-amber-500" />
                   </div>
                   <h3 className="font-heading font-bold text-lg mb-2">
-                    {t('home.contact.blockerTitle')}
+                    {t('contact.blockerTitle')}
                   </h3>
                   <p className="text-gray-500 text-sm mb-6">
-                    {t('home.contact.blockerText')}
+                    {t('contact.blockerText')}
                   </p>
                   <div className="flex items-center justify-center gap-3">
                     <button
                       onClick={() => blocker.reset()}
                       className="px-5 py-2.5 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition-colors"
                     >
-                      {t('home.contact.blockerStay')}
+                      {t('contact.blockerStay')}
                     </button>
                     <button
                       onClick={() => blocker.proceed()}
                       className="px-5 py-2.5 rounded-full bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold transition-colors"
                     >
-                      {t('home.contact.blockerLeave')}
+                      {t('contact.blockerLeave')}
                     </button>
                   </div>
                 </div>

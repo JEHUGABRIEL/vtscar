@@ -57,7 +57,21 @@ export function useSiteInfo() {
   const { data: fallback, lang } = useFallback(fallbackSiteInfoFr, fallbackSiteInfoEn)
   return useQuery({
     queryKey: ['siteInfo', lang],
-    queryFn: () => fetchSetting('siteInfo', fallback),
+    queryFn: async () => {
+      const data = await fetchSetting('siteInfo', fallback)
+      // Surcharger les emails avec la bonne adresse
+      if (data) {
+        return {
+          ...data,
+          emails: ['liamgroupe236@gmail.com'],
+          contactPage: data.contactPage ? {
+            ...data.contactPage,
+            emails: ['liamgroupe236@gmail.com'],
+          } : undefined,
+        }
+      }
+      return data
+    },
     staleTime: STALE_TIME,
   })
 }
@@ -90,7 +104,25 @@ export function useDomain(slug) {
         .select('*')
         .eq('slug', slug)
         .single()
-      return error ? fallback.find((d) => d.slug === slug) || null : data
+      if (error) return fallback.find((d) => d.slug === slug) || null
+      // Fusion : on complète les données Supabase avec le fallback local
+      // car certains champs (restaurantInfo, menu, cardImage, pricing,
+      // trainers, schedule) n'ont pas de colonne dédiée dans la DB et
+      // ne sont disponibles que dans les données statiques locales.
+      const local = fallback.find((d) => d.slug === slug) || {}
+      return {
+        ...data,
+        shortDescription: data.short_description ?? local.shortDescription,
+        heroImage: data.hero_image ?? local.heroImage,
+        // Champs spécifiques aux domaines personnalisés (O'GAB, G-Fitness, …)
+        // qui ne sont pas encore dans le schéma de la table `domains`.
+        cardImage: local.cardImage,
+        restaurantInfo: local.restaurantInfo,
+        menu: local.menu,
+        pricing: local.pricing,
+        trainers: local.trainers,
+        schedule: local.schedule,
+      }
     },
     staleTime: STALE_TIME,
   })

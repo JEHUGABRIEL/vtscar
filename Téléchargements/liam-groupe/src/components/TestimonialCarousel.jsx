@@ -155,27 +155,6 @@ export default function TestimonialCarousel() {
             </button>
           </>
         )}
-
-        {/* Indicateurs de page (dots) */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
-            {Array.from({ length: totalPages }).map((_, i) => {
-              const isActive = i === (page % totalPages);
-              return (
-                <button
-                  key={i}
-                  onClick={() => goTo(i)}
-                  aria-label={t("carousel.page", { page: i + 1 })}
-                  className={`rounded-full transition-all duration-300 ${
-                    isActive
-                      ? "w-7 h-2.5 bg-brand-500"
-                      : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
-                  }`}
-                />
-              );
-            })}
-          </div>
-        )}
       </div>
 
     </div>
