@@ -4,6 +4,7 @@ import { useToast } from '../context/ToastContext'
 import { adminFetch, formatFCFA } from './helpers'
 import ConfirmModal from '../components/ConfirmModal'
 import ImageUpload from '../components/ImageUpload'
+import AdminFormModal from './AdminFormModal'
 
 export default function ProductsSection() {
   const [products, setProducts] = useState([])
@@ -77,16 +78,16 @@ export default function ProductsSection() {
         </button>
       </div>
 
-      {showForm && (
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5">
-          <div className="grid gap-3 sm:grid-cols-3">
-            <input value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} placeholder="ID (ex: tvs-mon-produit)" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" disabled={!!edit} />
-            <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="Slug (ex: mon-produit)" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nom du produit" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} placeholder="Tagline" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Prix (FCFA)" type="number" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="Stock" type="number" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none">
+      <AdminFormModal open={showForm} onClose={() => setShowForm(false)} title={edit ? 'Modifier le produit' : 'Nouveau produit'}>
+        <div className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <input value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} placeholder="ID (ex: tvs-mon-produit)" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" disabled={!!edit} />
+            <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="Slug (ex: mon-produit)" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nom du produit" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} placeholder="Tagline" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Prix (FCFA)" type="number" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="Stock" type="number" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none">
               <option value="motos">Motos</option>
               <option value="moteurs">Moteurs</option>
               <option value="tricycles">Tricycles</option>
@@ -96,12 +97,12 @@ export default function ProductsSection() {
               En vedette
             </label>
           </div>
-          <div className="mt-3">
+          <div>
             <ImageUpload value={form.images} onChange={(v) => setForm({ ...form, images: v })} label="Image du produit" />
           </div>
-          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={2} className="mt-3 w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-          <div className="mt-3 flex gap-2">
-            <button onClick={save} disabled={saving} className={'rounded-lg px-4 py-2 text-xs font-semibold text-white transition-all focus:outline-none focus:ring-2 focus:ring-tvs-red/40 ' + (saving ? 'cursor-not-allowed bg-tvs-red/60' : 'bg-tvs-red hover:bg-tvs-red-dark')}>
+          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={3} className="w-full rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+          <div className="flex gap-2 pt-1">
+            <button onClick={save} disabled={saving} className={'rounded-lg px-5 py-2.5 text-xs font-semibold text-white transition-all focus:outline-none focus:ring-2 focus:ring-tvs-red/40 ' + (saving ? 'cursor-not-allowed bg-tvs-red/60' : 'bg-tvs-red hover:bg-tvs-red-dark')}>
               {saving ? (
                 <span className="flex items-center gap-2">
                   <Loader2 size={14} className="animate-spin" />
@@ -111,10 +112,10 @@ export default function ProductsSection() {
                 edit ? 'Mettre \u00e0 jour' : 'Cr\u00e9er'
               )}
             </button>
-            <button onClick={() => setShowForm(false)} className="rounded-lg border border-white/15 px-4 py-2 text-xs text-white/60 hover:bg-white/10">Annuler</button>
+            <button onClick={() => setShowForm(false)} className="rounded-lg border border-white/15 px-5 py-2.5 text-xs text-white/60 hover:bg-white/10">Annuler</button>
           </div>
         </div>
-      )}
+      </AdminFormModal>
 
       <div className="mt-4 space-y-1">
         {filtered.map((p) => (

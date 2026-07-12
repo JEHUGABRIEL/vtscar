@@ -4,6 +4,7 @@ import { useToast } from '../context/ToastContext'
 import { adminFetch, formatFCFA } from './helpers'
 import ConfirmModal from '../components/ConfirmModal'
 import ImageUpload from '../components/ImageUpload'
+import AdminFormModal from './AdminFormModal'
 
 export default function PartsSection() {
   const [parts, setParts] = useState([])
@@ -74,30 +75,30 @@ export default function PartsSection() {
         <button onClick={openNew} className="flex items-center gap-1.5 rounded-lg bg-tvs-red px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-tvs-red-dark"><Plus size={14} /> Ajouter</button>
       </div>
 
-      {showForm && (
-        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5">
-          <div className="grid gap-3 sm:grid-cols-3">
-            <input value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} placeholder="ID (ex: piece-frein)" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" disabled={!!edit} />
-            <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="Slug (ex: piece-frein)" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nom de la pi\u00e8ce" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Cat\u00e9gorie" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Prix (FCFA)" type="number" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
-            <input value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="Stock" type="number" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30" />
+      <AdminFormModal open={showForm} onClose={() => setShowForm(false)} title={edit ? 'Modifier la pi\u00e8ce' : 'Nouvelle pi\u00e8ce'}>
+        <div className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <input value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value })} placeholder="ID (ex: piece-frein)" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" disabled={!!edit} />
+            <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="Slug (ex: piece-frein)" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nom de la pi\u00e8ce" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Cat\u00e9gorie" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Prix (FCFA)" type="number" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
+            <input value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="Stock" type="number" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30" />
             <div className="sm:col-span-2">
               <ImageUpload value={form.image} onChange={(v) => setForm({ ...form, image: v })} label="Image de la pi\u00e8ce" />
             </div>
-            <input value={form.compatibleModels} onChange={(e) => setForm({ ...form, compatibleModels: e.target.value })} placeholder="Mod\u00e8les compatibles (s\u00e9par\u00e9s par des virgules)" className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/30 sm:col-span-3" />
+            <input value={form.compatibleModels} onChange={(e) => setForm({ ...form, compatibleModels: e.target.value })} placeholder="Mod\u00e8les compatibles (s\u00e9par\u00e9s par des virgules)" className="rounded-lg border border-white/15 bg-zinc-800/80 px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/30 sm:col-span-2" />
           </div>
-          <div className="mt-3 flex gap-2">
-            <button onClick={save} disabled={saving} className={'rounded-lg px-4 py-2 text-xs font-semibold text-white transition-all focus:outline-none focus:ring-2 focus:ring-tvs-red/40 ' + (saving ? 'cursor-not-allowed bg-tvs-red/60' : 'bg-tvs-red hover:bg-tvs-red-dark')}>
+          <div className="flex gap-2 pt-1">
+            <button onClick={save} disabled={saving} className={'rounded-lg px-5 py-2.5 text-xs font-semibold text-white transition-all focus:outline-none focus:ring-2 focus:ring-tvs-red/40 ' + (saving ? 'cursor-not-allowed bg-tvs-red/60' : 'bg-tvs-red hover:bg-tvs-red-dark')}>
               {saving ? (
                 <span className="flex items-center gap-2"><Loader2 size={14} className="animate-spin" />{edit ? 'Mise \u00e0 jour\u2026' : 'Cr\u00e9ation\u2026'}</span>
               ) : (edit ? 'Mettre \u00e0 jour' : 'Cr\u00e9er')}
             </button>
-            <button onClick={() => setShowForm(false)} className="rounded-lg border border-white/15 px-4 py-2 text-xs text-white/60 hover:bg-white/10">Annuler</button>
+            <button onClick={() => setShowForm(false)} className="rounded-lg border border-white/15 px-5 py-2.5 text-xs text-white/60 hover:bg-white/10">Annuler</button>
           </div>
         </div>
-      )}
+      </AdminFormModal>
 
       <div className="mt-4 space-y-1">
         {filtered.map((p) => (

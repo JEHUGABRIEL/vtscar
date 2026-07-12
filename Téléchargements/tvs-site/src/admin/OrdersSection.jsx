@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import {
-  CheckCircle, XCircle, Truck, ChevronDown, ChevronUp, Loader2,
+  CheckCircle, XCircle, Truck, ChevronDown, Loader2,
 } from 'lucide-react'
 import { useToast } from '../context/ToastContext'
 import { adminFetch, formatFCFA, formatDate, formatDateTime, STATUS_LABELS, STATUS_COLORS } from './helpers'
+import AdminFormModal from './AdminFormModal'
 
 export default function OrdersSection() {
   const addToast = useToast()
@@ -37,14 +38,15 @@ export default function OrdersSection() {
     }
   }
 
-  const toggleExpand = async (id) => {
-    if (expanded === id) { setExpanded(null); return }
+  const openDetail = async (id) => {
     setExpanded(id)
     if (!items[id]) {
       const data = await adminFetch(`/orders/${id}/items`)
       setItems((prev) => ({ ...prev, [id]: data }))
     }
   }
+
+  const closeDetail = () => setExpanded(null)
 
   return (
     <div className="mt-8">
@@ -70,8 +72,8 @@ export default function OrdersSection() {
         {orders.map((o) => (
           <div key={o.id} className="rounded-xl border border-white/10 bg-white/5">
             <button
-              onClick={() => toggleExpand(o.id)}
-              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+              onClick={() => openDetail(o.id)}
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left hover:bg-white/5 transition-colors"
             >
               <div className="flex items-center gap-4">
                 <span className="font-mono text-xs text-white/40">{o.reference}</span>
@@ -83,45 +85,54 @@ export default function OrdersSection() {
               <div className="flex items-center gap-3">
                 <span className="font-display text-sm font-semibold text-white">{formatFCFA(o.total)}</span>
                 <span className="font-mono text-[10px] text-white/30">{formatDate(o.created_at)}</span>
-                {expanded === o.id ? <ChevronUp size={16} className="text-white/40" /> : <ChevronDown size={16} className="text-white/40" />}
+                <ChevronDown size={16} className="text-white/40" />
               </div>
             </button>
 
-            {expanded === o.id && (
-              <div className="border-t border-white/10 px-5 pb-4 pt-3">
-                <div className="grid gap-3 text-sm sm:grid-cols-2">
-                  <div>
+            <AdminFormModal open={expanded === o.id} onClose={closeDetail} title={`Commande ${o.reference}`}>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className={`rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase ${STATUS_COLORS[o.status] || 'bg-white/10 text-white/60'}`}>
+                    {STATUS_LABELS[o.status] || o.status}
+                  </span>
+                  <span className="font-display text-sm font-bold text-white">{formatFCFA(o.total)}</span>
+                </div>
+
+                <div className="grid gap-4 text-sm sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <p className="font-mono text-[10px] uppercase tracking-wider text-white/40">Client</p>
                     <p className="text-white">{o.nom}</p>
                     <p className="text-white/60">{o.telephone}</p>
                     {o.quartier && <p className="text-white/60">{o.quartier}</p>}
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <p className="font-mono text-[10px] uppercase tracking-wider text-white/40">Infos</p>
-                    <p className="text-white/60">Réception : {o.fulfillment === 'livraison' ? 'Livraison' : 'Retrait showroom'}</p>
-                    <p className="text-white/60">Date : {formatDateTime(o.created_at)}</p>
+                    <p className="text-white/60">Mode : {o.fulfillment === 'livraison' ? 'Livraison' : 'Retrait showroom'}</p>
+                    <p className="text-white/60">Passée le : {formatDateTime(o.created_at)}</p>
                     {o.notes && <p className="text-white/60">Notes : {o.notes}</p>}
                   </div>
                 </div>
 
                 {items[o.id] && items[o.id].length > 0 && (
-                  <div className="mt-3 rounded-lg border border-white/10 bg-white/5 p-3">
+                  <div className="rounded-lg border border-white/10 bg-zinc-800/80 p-3">
                     <p className="font-mono text-[10px] uppercase tracking-wider text-white/40">Articles</p>
-                    {items[o.id].map((item) => (
-                      <div key={item.id} className="mt-1 flex items-center justify-between text-sm">
-                        <span className="text-white/80">{item.qty}× {item.item_name}</span>
-                        <span className="font-mono text-white/60">{formatFCFA(item.price * item.qty)}</span>
-                      </div>
-                    ))}
+                    <div className="mt-2 divide-y divide-white/5">
+                      {items[o.id].map((item) => (
+                        <div key={item.id} className="flex items-center justify-between py-1.5 text-sm">
+                          <span className="text-white/80">{item.qty}× {item.item_name}</span>
+                          <span className="font-mono text-white/60">{formatFCFA(item.price * item.qty)}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 pt-2">
                   {o.status === 'en_attente' && (
                     <button
                       onClick={() => updateStatus(o.id, 'confirmee')}
                       disabled={processingId === o.id}
-                      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                         processingId === o.id
                           ? 'cursor-not-allowed bg-blue-500/10 text-blue-400/60'
                           : 'bg-blue-500/15 text-blue-400 hover:bg-blue-500/25'
@@ -139,7 +150,7 @@ export default function OrdersSection() {
                     <button
                       onClick={() => updateStatus(o.id, 'livree')}
                       disabled={processingId === o.id}
-                      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                         processingId === o.id
                           ? 'cursor-not-allowed bg-green-500/10 text-green-400/60'
                           : 'bg-green-500/15 text-green-400 hover:bg-green-500/25'
@@ -157,7 +168,7 @@ export default function OrdersSection() {
                     <button
                       onClick={() => updateStatus(o.id, 'annulee')}
                       disabled={processingId === o.id}
-                      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+                      className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                         processingId === o.id
                           ? 'cursor-not-allowed bg-red-500/10 text-red-400/60'
                           : 'bg-red-500/15 text-red-400 hover:bg-red-500/25'
@@ -173,7 +184,7 @@ export default function OrdersSection() {
                   )}
                 </div>
               </div>
-            )}
+            </AdminFormModal>
           </div>
         ))}
       </div>
