@@ -36,6 +36,35 @@ const LOCAL_IMAGES = {
   ],
   'king-passenger': '/images/motos/king_kargo_1.jpeg',
 
+  // ── Événements ───────────────────────────────────────────────────
+  'coupe-du-monde': [
+    '/images/evenements/coupe_du_monde/france_vs_espagne_1.jpeg',
+    '/images/evenements/coupe_du_monde/france_vs_espagne_2.jpeg',
+    '/images/evenements/coupe_du_monde/france_vs_espagne_3.jpeg',
+    '/images/evenements/coupe_du_monde/france_vs_espagne_4.jpeg',
+    '/images/evenements/coupe_du_monde/france_vs_espagne_5.jpeg',
+  ],
+  tombola: [
+    '/images/evenements/tombola/images.jpeg',
+    '/images/evenements/tombola/images (1).jpeg',
+  ],
+  'essai-libre': '/images/evenements/essai-libre/essai-moto.jpg',
+  'lancement-king-cargo': '/images/evenements/lancement-king-cargo/concession-moto.jpg',
+  'tournee-regionale': '/images/evenements/tournee-regionale/groupe-moto.jpg',
+
+  // ── Pièces détachées ──────────────────────────────────────────────
+  'plaquettes-frein': [
+    '/images/piece_detachees/Plaquettes de frein — Apache RTR/images.jpeg',
+    '/images/piece_detachees/Plaquettes de frein — Apache RTR/images (1).jpeg',
+    '/images/piece_detachees/Plaquettes de frein — Apache RTR/images (2).jpeg',
+    '/images/piece_detachees/Plaquettes de frein — Apache RTR/images-3.jpeg',
+  ],
+  'kit-chaine': '/images/piece_detachees/kit-chaine.jpg',
+  'filtre-air': '/images/piece_detachees/filtre-air.jpg',
+  batterie: '/images/piece_detachees/batterie.png',
+  'pneu-arriere': '/images/piece_detachees/pneu-arriere.jpg',
+  'kit-embrayage': '/images/piece_detachees/kit-embrayage.jpg',
+
   // ── Catégories ────────────────────────────────────────────────────
   motos: '/images/motos/HJ110/Haojue__HJ110-6.png',
   tricycles: '/images/motos/TVS-Kargo-Box-Van-black-right.jpg',
