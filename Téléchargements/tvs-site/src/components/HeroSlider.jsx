@@ -87,7 +87,7 @@ export default function HeroSlider({ slides, interval = 5000, className = '', fu
                     </p>
                   )}
                   <h1
-                    className={`mt-4 font-display text-5xl font-bold leading-[0.95] sm:text-6xl lg:text-7xl ${
+                    className={`mt-4 font-display text-5xl font-bold leading-[0.95] sm:text-6xl lg:text-7xl text-tvs-blue ${
                       isActive ? 'animate-hero-title' : 'opacity-0'
                     }`}
                     style={isActive ? { animationDelay: '120ms' } : undefined}

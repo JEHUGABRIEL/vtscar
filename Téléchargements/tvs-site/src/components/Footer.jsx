@@ -91,9 +91,11 @@ export default function Footer() {
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* ── COLONNE : Marque ── */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <span className="font-display text-3xl font-bold tracking-tight">
-              TVS<span className="text-tvs-red">.</span>
-            </span>
+            <img
+              src="/logo.png"
+              alt="TVS Bangui"
+              className="h-8 w-auto object-contain sm:h-12"
+            />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-steel-light/70">
               Distributeur officiel TVS Motor à Bangui. Motos, scooters, tricycles utilitaires
               et pièces détachées d'origine — vente, entretien et réparation.

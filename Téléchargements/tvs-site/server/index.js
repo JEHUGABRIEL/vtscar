@@ -3,6 +3,7 @@ import cors from 'cors'
 import 'dotenv/config'
 import { sql } from './db.js'
 import { chatReply } from './chatbot.js'
+import adminRouter from './admin.js'
 
 const app = express()
 app.use(cors())
@@ -139,6 +140,9 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ reply: "Désolé, une erreur s'est produite. Veuillez réessayer ou nous contacter au +236 70 00 00 00." })
   }
 })
+
+// Routes admin
+app.use('/api/admin', adminRouter)
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {

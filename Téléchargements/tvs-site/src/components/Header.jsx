@@ -60,30 +60,14 @@ export default function Header() {
           }`}
         >
           <Wrench size={12} className="shrink-0" />
-          {/* Texte qui défile sur mobile, statique sur desktop */}
-          <span className="flex-1 overflow-hidden lg:truncate">
-            <span className="inline-flex animate-[marquee_12s_linear_infinite] gap-8 whitespace-nowrap lg:animate-none lg:gap-0 lg:whitespace-normal">
-              <span>
-                Pièces détachées disponibles en boutique —{' '}
-                <Link
-                  to="/quincaillerie"
-                  className="animate-[pulse-soft_2s_ease-in-out_infinite,bounce-soft_2s_ease-in-out_infinite] font-semibold underline underline-offset-2 hover:no-underline hover:animate-none"
-                >
-                  Voir les pièces
-                </Link>
-              </span>
-              {/* Duplicate pour effet de défilement continu */}
-              <span aria-hidden="true">
-                Pièces détachées disponibles en boutique —{' '}
-                <Link
-                  to="/quincaillerie"
-                  tabIndex={-1}
-                  className="font-semibold underline underline-offset-2"
-                >
-                  Voir les pièces
-                </Link>
-              </span>
-            </span>
+          <span className="flex-1 overflow-hidden truncate">
+            Pièces détachées disponibles en boutique —{' '}
+            <Link
+              to="/quincaillerie"
+              className="font-semibold underline underline-offset-2 hover:no-underline"
+            >
+              Voir les pièces
+            </Link>
           </span>
           <button
             onClick={closeBanner}
@@ -96,10 +80,12 @@ export default function Header() {
       )}
 
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 lg:px-8">
-        <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="font-display text-3xl font-bold tracking-tight">
-            TVS<span className="text-tvs-red">.</span>
-          </span>
+        <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+          <img
+            src="/logo.png"
+            alt="TVS Bangui"
+            className="h-8 w-auto object-contain sm:h-10"
+          />
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.2em] text-steel sm:block">
             Bangui
           </span>

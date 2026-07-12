@@ -14,6 +14,8 @@ import Events from './pages/Events.jsx'
 import EventDetail from './pages/EventDetail.jsx'
 import About from './pages/About.jsx'
 import ChatBot from './components/ChatBot.jsx'
+import AdminLogin from './pages/AdminLogin.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
 
 export default function App() {
   const [contactOpen, setContactOpen] = useState(false)
@@ -35,6 +37,8 @@ export default function App() {
           <Route path="/evenements" element={<Events />} />
           <Route path="/evenements/:slug" element={<EventDetail />} />
           <Route path="/a-propos" element={<About />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>
 
